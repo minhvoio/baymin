@@ -1,0 +1,42 @@
+// ~->[DNET-1]->~
+
+bnet Unnamed {
+    title = "Unnamed";
+    visual V1 {
+	drawingbounds = (50, 50);
+    };
+
+node Smoking {
+    kind = NATURE;
+    discrete = TRUE;
+    chance = CHANCE;
+    title = "Smoking";
+    parents = ();
+    states = (True, False);
+    probs = 
+        (0.25651476, 0.74348524);
+    user U1 {
+    };
+visual V1 {
+	drawingbounds = (50, 50);
+    center = (0, 0);
+};
+};
+
+node LungCancer {
+    kind = NATURE;
+    discrete = TRUE;
+    chance = CHANCE;
+    title = "LungCancer";
+    parents = (Smoking);
+    states = (True, False);
+    probs = 
+        ((0.72175582, 0.27824418),
+        (0.03101335, 0.96898665));
+    user U1 {
+    };
+visual V1 {
+	drawingbounds = (50, 50);
+    center = (0, 0);
+};
+};

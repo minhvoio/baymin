@@ -1,0 +1,59 @@
+// ~->[DNET-1]->~
+
+bnet V1 {
+    title = "Sub0";
+    comment = "";
+    visual V1 {
+    };
+
+node A {
+    kind = NATURE;
+    discrete = TRUE;
+    chance = CHANCE;
+    title = "A";
+    parents = ();
+    states = (T, F);
+    probs = 
+        (0.99975660, 0.00024339);
+    user U1 {
+    };
+visual V1 {
+    center = (186, 90);
+};
+};
+
+node B {
+    kind = NATURE;
+    discrete = TRUE;
+    chance = CHANCE;
+    title = "B";
+    parents = ();
+    states = (T, F);
+    probs = 
+        (0.47477490, 0.52522510);
+    user U1 {
+    };
+visual V1 {
+    center = (408, 90);
+};
+};
+
+node C {
+    kind = NATURE;
+    discrete = TRUE;
+    chance = CHANCE;
+    title = "C";
+    parents = (A, B);
+    states = (True, False);
+    probs = 
+        (((0.50000000, 0.50000000),
+        (0.50000000, 0.50000000)),
+        ((0.50000000, 0.50000000),
+        (0.50000000, 0.50000000)));
+    user U1 {
+    };
+visual V1 {
+    center = (288, 204);
+};
+};
+};

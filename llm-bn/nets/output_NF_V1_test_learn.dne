@@ -1,0 +1,314 @@
+// ~->[DNET-1]->~
+
+// File created by someone at MonashU using Netica 5.04 on 07/16/25 at 07:41:38.
+
+bnet NFAV1 {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+title = "Native Fish A V1";
+
+visual V1 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "Arial"; size= 9;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	windowposn = (26, 26, 1381, 894);
+	resolution = 72;
+	drawingbounds = (1316, 800);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00E1E1E1;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00F8EED2;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00D3CAA6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00C8C8C8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00FFFFFF;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00FFFFB4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00FFBDBD;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00DEE8FF;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00F0FAFA;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00FFFFFF;};
+	PrinterSetting A {
+		margins = (1270, 1270, 1270, 1270);
+		};
+	};
+
+node Rainfall {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Below_average, Average, Above_average);
+	parents = ();
+	probs = 
+		// Below average Average     Above average 
+		  (0.099996,    0.699991,    0.200013);
+	numcases = 1.001e+06;
+	title = "Annual Rainfall";
+	belief = (0.07657278, 0.6515093, 0.271918);
+	visual V1 {
+		center = (528, 54);
+		height = 1;
+		};
+	};
+
+node Drought {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Yes, No);
+	parents = ();
+	probs = 
+		// Yes          No           
+		  (0.249985,    0.750015);
+	numcases = 1.001e+06;
+	title = "Drought Conditions";
+	comment = "prolonged period of well-below average rainfall";
+	belief = (0.1814173, 0.8185827);
+	visual V1 {
+		center = (306, 54);
+		height = 2;
+		};
+	};
+
+node TreeCond {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Good, Damaged, Dead);
+	parents = (Drought, Rainfall);
+	probs = 
+		// Good         Damaged      Dead          // Drought Rainfall      
+		  (0.1999992,   0.6000006,   0.2,          // Yes     Below average 
+		   0.2500083,   0.5999954,   0.1499964,    // Yes     Average       
+		   0.299996,    0.600003,    0.100001,     // Yes     Above average 
+		   0.6999966,   0.249998,    0.0500054,    // No      Below average 
+		   0.8,         0.1800064,   0.0199936,    // No      Average       
+		   0.8999993,   0.08999943,  0.01000127);  // No      Above average ;
+	numcases = 
+		                 // Drought Rainfall      
+		  (1.000024e6,   // Yes     Below average 
+		   1.000171e6,   // Yes     Average       
+		   1.00004e6,    // Yes     Above average 
+		   1.000072e6,   // No      Below average 
+		   1.00052e6,    // No      Average       
+		   1.000173e6);  // No      Above average ;
+	title = "Tree Condition";
+	belief = (0.7173401, 0.2416921, 0.04096779);
+	visual V1 {
+		center = (540, 210);
+		height = 5;
+		};
+	};
+
+node PesticideUse {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = ();
+	probs = 
+		// High         Low          
+		  (0.900021,    0.09997902);
+	numcases = 1.001e+06;
+	title = "Pesticide Use";
+	belief = (0.900021, 0.09997903);
+	visual V1 {
+		center = (102, 54);
+		height = 3;
+		};
+	};
+
+node PesticideInRiver {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = (PesticideUse, Rainfall);
+	probs = 
+		// High         Low           // PesticideUse Rainfall      
+		  (0.300001,    0.699999,     // High         Below average 
+		   0.5999968,   0.4000032,    // High         Average       
+		   0.7999938,   0.2000062,    // High         Above average 
+		   0.0999994,   0.9000006,    // Low          Below average 
+		   0.2,         0.8,          // Low          Average       
+		   0.2999978,   0.7000022);   // Low          Above average ;
+	numcases = 
+		                 // PesticideUse Rainfall      
+		  (1.00009e6,    // High         Below average 
+		   1.000642e6,   // High         Average       
+		   1.000189e6,   // High         Above average 
+		   1.000006e6,   // Low          Below average 
+		   1.000049e6,   // Low          Average       
+		   1.000024e6);  // Low          Above average ;
+	title = "Pesticide in river";
+	belief = (0.5902293, 0.4097707);
+	visual V1 {
+		center = (102, 210);
+		height = 4;
+		};
+	};
+
+node RiverFlow {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Good, Poor);
+	parents = (Drought, Rainfall);
+	probs = 
+		// Good         Poor          // Drought Rainfall      
+		  (0.05000185,  0.9499981,    // Yes     Below average 
+		   0.1500152,   0.8499848,    // Yes     Average       
+		   0.8000038,   0.1999962,    // Yes     Above average 
+		   0.4000072,   0.5999928,    // No      Below average 
+		   0.6000725,   0.3999275,    // No      Average       
+		   0.9900012,   0.009998828); // No      Above average ;
+	numcases = 
+		                 // Drought Rainfall      
+		  (1.000024e6,   // Yes     Below average 
+		   1.000171e6,   // Yes     Average       
+		   1.00004e6,    // Yes     Above average 
+		   1.000072e6,   // No      Below average 
+		   1.00052e6,    // No      Average       
+		   1.000173e6);  // No      Above average ;
+	title = "River Flow";
+	likelihood = (0.12, 0.04);
+	belief = (0.7931557, 0.2068443);
+	visual V1 {
+		center = (120, 400);
+		height = 6;
+		};
+	};
+
+node TestC {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (a, b, c);
+	parents = (RiverFlow);
+	probs = 
+		// a            b            c             // RiverFlow 
+		  (0.1666667,   0.5,         0.3333333,    // Good      
+		   0.2,         0.4,         0.4);         // Poor      ;
+	numcases = 
+		                 // RiverFlow 
+		  (1.000673e6,   // Good      
+		   1.000327e6);  // Poor      ;
+	belief = (0.1735615, 0.4793155, 0.347123);
+	visual V1 {
+		center = (74, 33);
+		height = 10;
+		};
+	};
+
+node FishAbundance {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Medium, Low);
+	parents = (PesticideInRiver, RiverFlow, TestC);
+	probs = 
+		// High         Medium       Low           // PesticideInRiver RiverFlow TestC 
+		  (0.1999986,   0.399994,    0.4000074,    // High             Good      a     
+		   0.1999957,   0.3999822,   0.4000221,    // High             Good      b     
+		   0.1999971,   0.3999881,   0.4000148,    // High             Good      c     
+		   0.009999804, 0.09999903,  0.8900012,    // High             Poor      a     
+		   0.00999961,  0.09999805,  0.8900023,    // High             Poor      b     
+		   0.00999961,  0.09999805,  0.8900023,    // High             Poor      c     
+		   0.7999967,   0.1500012,   0.05000211,   // Low              Good      a     
+		   0.7999902,   0.1500034,   0.05000631,   // Low              Good      b     
+		   0.7999935,   0.1500023,   0.05000421,   // Low              Good      c     
+		   0.04999898,  0.1499987,   0.8000023,    // Low              Poor      a     
+		   0.04999796,  0.1499974,   0.8000046,    // Low              Poor      b     
+		   0.04999796,  0.1499974,   0.8000046);   // Low              Poor      c     ;
+	numcases = 
+		                 // PesticideInRiver RiverFlow TestC 
+		  (1.000069e6,   // High             Good      a     
+		   1.000208e6,   // High             Good      b     
+		   1.000138e6,   // High             Good      c     
+		   1.000031e6,   // High             Poor      a     
+		   1.000062e6,   // High             Poor      b     
+		   1.000062e6,   // High             Poor      c     
+		   1.000043e6,   // Low              Good      a     
+		   1.000129e6,   // Low              Good      b     
+		   1.000086e6,   // Low              Good      c     
+		   1.000034e6,   // Low              Poor      a     
+		   1.000069e6,   // Low              Poor      b     
+		   1.000069e6);  // Low              Poor      c     ;
+	title = "Native Fish Abundance";
+	comment = "might need to include an \"absent\" state in here";
+	belief = (0.351089, 0.2652132, 0.3836978);
+	visual V1 {
+		center = (204, 396);
+		height = 7;
+		};
+	};
+
+node TestA {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (three, one, two);
+	parents = ();
+	probs = 
+		// three        one          two          
+		  (0.3333333,   0.3333333,   0.3333333);
+	numcases = 3e-05;
+	belief = (0.3333333, 0.3333333, 0.3333333);
+	visual V1 {
+		center = (74, 26);
+		height = 8;
+		};
+	};
+
+node TestB {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = DETERMIN;
+	states = (a);
+	parents = ();
+	functable = 
+		  (a);
+	numcases = 1e-05;
+	belief = (1);
+	visual V1 {
+		center = (74, 19);
+		height = 9;
+		};
+	};
+
+node TestD {
+	kind = NATURE;
+	discrete = FALSE;
+	chance = CHANCE;
+	levels = (0.2, 0.6, 1.8, 3.4, 9.7);
+	parents = ();
+	probs = 
+		// 0.2 to 0.6   0.6 to 1.8   1.8 to 3.4   3.4 to 9.7   
+		  (0.25,        0.25,        0.25,        0.25);
+	numcases = 4e-05;
+	belief = (0.25, 0.25, 0.25, 0.25);
+	visual V1 {
+		center = (135, 50);
+		height = 11;
+		};
+	};
+
+node TestE {
+	kind = NATURE;
+	discrete = FALSE;
+	chance = CHANCE;
+	levels = (3, 7, 10);
+	parents = ();
+	probs = 
+		// 3 to 7       7 to 10      
+		  (0.5,         0.5);
+	numcases = 2e-05;
+	belief = (0.5, 0.5);
+	visual V1 {
+		center = (135, 36);
+		height = 12;
+		};
+	};
+ElimOrder = (TestB, TestE, TestA, TestD, PesticideUse, TreeCond, Drought, Rainfall, PesticideInRiver, RiverFlow, TestC, FishAbundance);
+};

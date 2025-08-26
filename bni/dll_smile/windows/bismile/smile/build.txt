@@ -1,0 +1,8 @@
+SMILE build information: 
+product edition: ACADEMIC 
+library version: "2.3.2" 
+release date: 2024-11-22 
+commit: e971faba194e 
+Visual C++ toolkit: v143 
+built on: Fri 11/22/2024 
+operating system: Windows 

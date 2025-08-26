@@ -1,0 +1,94 @@
+// ~->[DNET-1]->~
+
+// File created by NicholsonA at BayesIntel using Netica 5.02 on Jan 20, 2014 at 17:16:55.
+
+bnet netica5parens {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1390198615;
+
+visual V1 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLENAME;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "Arial"; size= 9;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	windowposn = (25, 25, 1138, 497);
+	resolution = 72;
+	drawingbounds = (1403, 720);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00C0C0C0;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00F8EED2;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00D3CAA6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00C8C8C8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00FFFFFF;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00FFFFB4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00FFBDBD;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00DEE8FF;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00F0FAFA;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00FFFFFF;};
+	PrinterSetting A {
+		margins = (1270, 1270, 1270, 1270);
+		landscape = FALSE;
+		PagesHorizontal = 1;
+		PagesVertical = 1;
+		};
+	};
+
+node A {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (T, F);
+	parents = ();
+	probs = 
+		// T            F            
+		  (0.9997566,   2.433921e-4);
+	whenchanged = 1390198575;
+	belief = (0.9997566, 2.433922e-4);
+	visual V1 {
+		center = (186, 90);
+		height = 1;
+		};
+	};
+
+node B {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (T, F);
+	parents = ();
+	probs = 
+		// T            F            
+		  (0.4747749,   0.5252251);
+	whenchanged = 1390198575;
+	belief = (0.4747749, 0.5252251);
+	visual V1 {
+		center = (408, 90);
+		height = 2;
+		};
+	};
+
+node C {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (True, False);
+	parents = (A, B);
+	probs = 
+		// True         False         // A B 
+		  (0.5241409,   0.475859,     // T T 
+		   0.6052302,   0.3947698,    // T F 
+		   0.5973358,   0.4026642,    // F T 
+		   0.1851707,   0.8148293);   // F F ;
+	whenchanged = 1390198575;
+	belief = (0.5666858, 0.4333142);
+	visual V1 {
+		center = (288, 204);
+		height = 3;
+		};
+	};
+ElimOrder = (A, B, C);
+};

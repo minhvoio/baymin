@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smile version="1.0" id="Network1" numsamples="10000" discsamples="10000">
+	<nodes>
+		<equation id="Subscriptions">
+			<definition lower="0" upper="20">Subscriptions=TruncNormal(3,5,0)</definition>
+			<discretization>
+				<interval label="Low" upper="5" />
+				<interval label="Med" upper="10" />
+				<interval label="High" upper="20" />
+			</discretization>
+		</equation>
+		<equation id="Subscription_Fee">
+			<definition lower="0" upper="200">Subscription_Fee=TruncNormal(50,20,0)</definition>
+			<discretization>
+				<interval upper="20" />
+				<interval upper="40" />
+				<interval upper="70" />
+				<interval upper="100" />
+				<interval upper="150" />
+				<interval upper="200" />
+			</discretization>
+		</equation>
+		<equation id="Total_Fees">
+			<parents>Subscriptions Subscription_Fee</parents>
+			<definition lower="0" upper="2000">Total_Fees=Subscriptions*Subscription_Fee</definition>
+			<discretization>
+				<interval upper="50" />
+				<interval upper="200" />
+				<interval upper="500" />
+				<interval upper="1000" />
+				<interval upper="1500" />
+				<interval upper="2000" />
+			</discretization>
+		</equation>
+		<equation id="NumberEmailsPerDay">
+			<parents>Subscriptions</parents>
+			<definition lower="0" upper="35">NumberEmailsPerDay=Poisson(Subscriptions/2)</definition>
+			<discretization>
+				<interval upper="5" />
+				<interval upper="10" />
+				<interval upper="15" />
+				<interval upper="20" />
+				<interval upper="25" />
+				<interval upper="30" />
+				<interval upper="35" />
+			</discretization>
+		</equation>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="SMILE 2.3.2@e971faba194e " name="Network1">
+			<node id="Subscriptions">
+				<name>Subscriptions</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>422 160 485 198</position>
+				<barchart active="true" width="171" height="126">
+				</barchart>
+			</node>
+			<node id="Subscription_Fee">
+				<name>Subscription Fee</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>155 142 284 222</position>
+				<barchart active="true" width="186" height="126">
+				</barchart>
+			</node>
+			<node id="Total_Fees">
+				<name>Total Fees</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>410 357 505 419</position>
+				<barchart active="true" width="162" height="126">
+				</barchart>
+			</node>
+			<node id="NumberEmailsPerDay">
+				<name>NumberEmailsPerDay</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>-38 -18 38 18</position>
+			</node>
+			<textbox>
+				<caption>Enter different total fees, eg: 30, 150, 600, and see the impact on individual subscriptions and individual fess</caption>
+				<font color="000000" name="MS Sans Serif" size="10" bold="true" />
+				<position>598 336 794 441</position>
+			</textbox>
+			<textbox>
+				<caption>Then enter a low (or high) number of subscriptions, and see the impact on the estimated distribution of subscription fees.</caption>
+				<font color="000000" name="MS Sans Serif" size="10" bold="true" />
+				<position>598 466 787 592</position>
+			</textbox>
+		</genie>
+	</extensions>
+</smile>

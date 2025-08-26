@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smile version="1.0" id="Unnamed" numsamples="10000" discsamples="10000">
+	<nodes>
+		<demorgan id="RiverFlow">
+			<priorbelief>0.5</priorbelief>
+		</demorgan>
+		<demorgan id="PesticideInRiver">
+			<priorbelief>0.5</priorbelief>
+		</demorgan>
+		<demorgan id="FishAbundance">
+			<parents>RiverFlow PesticideInRiver</parents>
+			<types>requirement barrier</types>
+			<weights>0.3 0.7</weights>
+			<priorbelief>0.2</priorbelief>
+		</demorgan>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="SMILE 2.3.2@e971faba194e " name="Unnamed">
+			<node id="FishAbundance">
+				<name>FishAbundance</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>-38 -18 38 18</position>
+			</node>
+			<node id="RiverFlow">
+				<name>RiverFlow</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>-38 -18 38 18</position>
+			</node>
+			<node id="PesticideInRiver">
+				<name>PesticideInRiver</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>-38 -18 38 18</position>
+			</node>
+		</genie>
+	</extensions>
+</smile>
