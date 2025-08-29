@@ -1,2 +1,0 @@
-#define BISMILE_API __declspec(dllexport)
-#define BISMILE_API __declspec(dllimport)
