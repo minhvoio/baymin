@@ -1,0 +1,113 @@
+// ~->[DNET-1]->~
+
+// File created by someone at MonashU using Netica 5.04 on 07/16/25 at 12:54:55.
+
+bnet Rats_NoisyOr {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+
+visual V1 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "Arial"; size= 9;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	windowposn = (29, 29, 1061, 527);
+	resolution = 72;
+	drawingbounds = (1080, 720);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00E1E1E1;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00F8EED2;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00D3CAA6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00C8C8C8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00FFFFFF;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00FFFFB4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00FFBDBD;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00DEE8FF;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00F0FAFA;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00FFFFFF;};
+	PrinterSetting A {
+		margins = (1270, 1270, 1270, 1270);
+		};
+	};
+
+node Ecstazine {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (given, not_given);
+	parents = ();
+	probs = 
+		// given        not given    
+		  (0.2,         0.8);
+	whenchanged = 1751955710;
+	belief = (0.2, 0.8);
+	visual V1 {
+		center = (510, 42);
+		height = 2;
+		};
+	};
+
+node Neurofill {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (high, low);
+	parents = (Ecstazine);
+	probs = 
+		// high         low           // Ecstazine 
+		  (0.2,         0.8,          // given     
+		   0.2,         0.8);         // not given ;
+	whenchanged = 1751955889;
+	belief = (0.2, 0.8);
+	visual V1 {
+		center = (342, 144);
+		height = 3;
+		};
+	};
+
+node Social_Activity {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (high, low);
+	parents = (Ecstazine, Neurofill);
+	probs = 
+		// high         low           // Ecstazine Neurofill 
+		  (0.9178055,   0.08219449,   // given     high      
+		   0.6605591,   0.3394409,    // given     low       
+		   0.8373378,   0.1626622,    // not given high      
+		   0.07690375,  0.9230962);   // not given low       ;
+	comment = "P(Social_Activity | Ecstazine, Neurofill) = NoisyOrDist(Social_Activity, 0.1, Ecstazine == \
+		given, 0.6, Neurofill == high, 0.8)";
+	belief = (0.3255942, 0.6744059);
+	visual V1 {
+		center = (510, 234);
+		height = 1;
+		link 2 {
+			path = ((390, 171), (461, 208));
+			};
+		};
+	};
+
+node Squeaking {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (short, long);
+	parents = (Social_Activity);
+	probs = 
+		// short        long          // Social_Activity 
+		  (0.2,         0.8,          // high            
+		   0.2,         0.8);         // low             ;
+	whenchanged = 1751955955;
+	belief = (0.2, 0.8);
+	visual V1 {
+		center = (510, 330);
+		height = 4;
+		};
+	};
+ElimOrder = (Squeaking, Ecstazine, Neurofill, Social_Activity);
+};

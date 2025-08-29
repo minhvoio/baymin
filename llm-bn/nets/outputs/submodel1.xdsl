@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smile version="1.0" id="Unnamed" numsamples="10000" discsamples="10000">
+	<nodes>
+		<cpt id="Treatment">
+			<state id="Yes" />
+			<state id="No" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="Healthy">
+			<state id="Yes" />
+			<state id="No" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="Infection">
+			<state id="Yes" />
+			<state id="No" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="Pumping">
+			<state id="Yes" />
+			<state id="No" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="Ventilation">
+			<state id="Yes" />
+			<state id="No" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="SMILE 2.3.2@e971faba194e " name="Unnamed">
+			<submodel id="HumanBody">
+				<name>HumanBody</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" width="3" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>275 275 525 525</position>
+				<window>0 0 0 0</window>
+				<submodel id="Lungs">
+					<name>Lungs</name>
+					<interior color="e5f6f7" />
+					<outline color="0000bb" width="3" />
+					<font color="000000" name="MS Sans Serif" size="8" />
+					<position>262 182 338 218</position>
+					<window>0 0 0 0</window>
+					<submodel id="Alveoli">
+						<name>Alveoli</name>
+						<interior color="e5f6f7" />
+						<outline color="0000bb" width="3" />
+						<font color="000000" name="MS Sans Serif" size="8" />
+						<position>342 182 418 218</position>
+						<window>0 0 0 0</window>
+						<node id="Ventilation">
+							<name>Ventilation</name>
+							<interior color="e5f6f7" />
+							<outline color="0000bb" />
+							<font color="000000" name="MS Sans Serif" size="8" />
+							<position>342 182 418 218</position>
+						</node>
+					</submodel>
+					<node id="Infection">
+						<name>Infection</name>
+						<interior color="e5f6f7" />
+						<outline color="0000bb" />
+						<font color="000000" name="MS Sans Serif" size="8" />
+						<position>162 182 238 218</position>
+					</node>
+				</submodel>
+				<node id="Healthy">
+					<name>Healthy</name>
+					<interior color="e5f6f7" />
+					<outline color="0000bb" />
+					<font color="000000" name="MS Sans Serif" size="8" />
+					<position>162 182 238 218</position>
+				</node>
+				<node id="Pumping">
+					<name>Pumping</name>
+					<interior color="e5f6f7" />
+					<outline color="0000bb" />
+					<font color="000000" name="MS Sans Serif" size="8" />
+					<position>-38 -18 38 18</position>
+				</node>
+			</submodel>
+			<node id="Treatment">
+				<name>Treatment</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>-38 -18 38 18</position>
+			</node>
+		</genie>
+	</extensions>
+</smile>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smile version="1.0" id="Unnamed" numsamples="10000" discsamples="10000">
+	<nodes>
+		<decision id="UsePesticide">
+			<state id="Yes" />
+			<state id="No" />
+		</decision>
+		<cpt id="PesticideInRiver">
+			<state id="True" />
+			<state id="False" />
+			<parents>UsePesticide</parents>
+			<probabilities>0.7 0.3 0.1 0.9</probabilities>
+		</cpt>
+		<utility id="Util">
+			<parents>PesticideInRiver</parents>
+			<utilities>-8 -1</utilities>
+		</utility>
+		<utility id="PU_Util">
+			<parents>UsePesticide</parents>
+			<utilities>-5 0</utilities>
+		</utility>
+		<maux id="Total_Util">
+			<parents>PU_Util Util</parents>
+			<expression>2*Util+PU_Util</expression>
+		</maux>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="SMILE 2.3.2@e971faba194e " name="Unnamed">
+			<node id="PesticideInRiver">
+				<name>PesticideInRiver</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>-38 -18 38 18</position>
+			</node>
+			<node id="Util">
+				<name>Util</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>-38 -18 38 18</position>
+			</node>
+			<node id="UsePesticide">
+				<name>UsePesticide</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>-38 -18 38 18</position>
+			</node>
+			<node id="PU_Util">
+				<name>PU_Util</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>-38 -18 38 18</position>
+			</node>
+			<node id="Total_Util">
+				<name>Total_Util</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="MS Sans Serif" size="8" />
+				<position>-38 -18 38 18</position>
+			</node>
+		</genie>
+	</extensions>
+</smile>

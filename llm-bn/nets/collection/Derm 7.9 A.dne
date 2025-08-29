@@ -1,0 +1,235 @@
+// ~->[DNET-1]->~
+
+// File created by someone at MonashU using Netica 6.06 on Nov 28, 2024 at 11:27:09 UTC.
+
+bnet XBN_Hesslow_2 {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1732793228;
+
+visual V1 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "Arial"; size= 9;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	ShowLinkStrengths = 1;
+	windowposn = (868, 561, 1620, 1188);
+	resolution = 72;
+	drawingbounds = (14560, 7816);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00e1e1e1;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00f8eed2;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00d3caa6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00c8c8c8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00ffffb4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00f18d8d;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00dee8ff;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00f0fafa;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet Norm {Color = 0x00ffffff;};
+	NodeSet dSep {Color = 0x00d4d4d4;};
+	NodeSet Sens1 {Color = 0x00fcf3d8;};
+	NodeSet Sens2 {Color = 0x00f7e3a8;};
+	NodeSet Sens3 {Color = 0x00efc850;};
+	NodeSet Sens4 {Color = 0x00cd9e12;};
+	NodeSet Con1 {Color = 0x00d7e3ff;};
+	NodeSet Con2 {Color = 0x005f91ff;};
+	NodeSet Con3 {Color = 0x000038b4;};
+	NodeSet Nature_light {Color = 0x00fcf8ed;};
+	NodeSet Pro1 {Color = 0x00dfffa5;};
+	NodeSet Pro2 {Color = 0x008ddc00;};
+	NodeSet Pro3 {Color = 0x00476e00;};
+	NodeSet Finding_light {Color = 0x00d4d4d4;};
+	NodeSet Ev1 {Color = 0x00d8fcf9;};
+	NodeSet Ev2 {Color = 0x00a8f7f0;};
+	NodeSet Ev3 {Color = 0x0050efe3;};
+	NodeSet Ev4 {Color = 0x0012cdbf;};
+	NodeSet Targ1 {Color = 0x00ff8a55;};
+	NodeSet Targ2 {Color = 0x00f7a8a8;};
+	NodeSet Targ3 {Color = 0x00ffff80;};
+	NodeSet Targ4 {Color = 0x00cd1212;};
+	PrinterSetting A {
+		margins = (1270, 1270, 1270, 1270);
+		};
+	};
+
+node Podunk_Beach {
+	discrete = TRUE;
+	states = (visited, not_visited);
+	statetitles = ("visited", "not visited");
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// visited      not visited  
+		  (0.25,        0.75);
+	title = "Podunk Beach";
+	whenchanged = 1710992968;
+	belief = (0.25, 0.75);
+	visual V1 {
+		center = (288, 60);
+		height = 3;
+		};
+	};
+
+node Dunkalot_Sunscreen {
+	discrete = TRUE;
+	states = (used, not_used);
+	statetitles = ("used", "not used");
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (Podunk_Beach);
+	probs = 
+		// used         not used      // Podunk_Beach 
+		  (0.75,        0.25,         // visited      
+		   0.08,        0.92);        // not visited  ;
+	numcases = 1;
+	title = "Dunkalot Sunscreen";
+	whenchanged = 1732793228;
+	belief = (0.2475, 0.7525);
+	visual V1 {
+		center = (144, 174);
+		height = 2;
+		};
+	};
+
+node Jumbos_Ice_Cream {
+	discrete = TRUE;
+	states = (eaten, not_eaten);
+	statetitles = ("eaten", "not eaten");
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (Podunk_Beach);
+	probs = 
+		// eaten        not eaten     // Podunk_Beach 
+		  (0.664,       0.336,        // visited      
+		   0.05,        0.95);        // not visited  ;
+	numcases = 1;
+	title = "Jumbo's Ice Cream";
+	whenchanged = 1710992972;
+	belief = (0.2035, 0.7965);
+	visual V1 {
+		center = (474, 174);
+		height = 1;
+		};
+	};
+
+node Dermascare {
+	discrete = TRUE;
+	states = (present, absent);
+	statetitles = ("present", "absent");
+	StateComments = ("This is a comment in the \"State Comment\" field that Erik entered via the Netica node \
+		specification GUI.", );
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (Podunk_Beach, Dunkalot_Sunscreen);
+	probs = 
+		// present      absent        // Podunk_Beach Dunkalot_Sunscreen 
+		  (0.656364,    0.343636,     // visited      used               
+		   0.7575411,   0.2424589,    // visited      not used           
+		   0.05212119,  0.9478788,    // not visited  used               
+		   0.08584744,  0.9141526);   // not visited  not used           ;
+	numcases = 1;
+	title = "Dermascare";
+	whenchanged = 1732792999;
+	belief = (0.2327766, 0.7672234);
+	user U1 {
+		X_CBN_info = "This is a comment in a new \"User Defined\" field (called \"X_CBN_info\") that Erik created \
+			via the Netica node specification GUI.";
+		};
+	visual V1 {
+		center = (396, 288);
+		height = 7;
+		};
+	};
+
+node Mutation {
+	discrete = TRUE;
+	states = (inherited, not_inherited);
+	statetitles = ("inherited", "not inherited");
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// inherited    not inherited 
+		  (0.2,         0.8);
+	numcases = 1.92;
+	title = "Mutation";
+	whenchanged = 1732793228;
+	belief = (0.2, 0.8);
+	visual V1 {
+		center = (144, 288);
+		height = 6;
+		};
+	};
+
+node Peeling {
+	discrete = TRUE;
+	states = (persistent, not_persistent);
+	statetitles = ("persistent", "not persistent");
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (Mutation, Dermascare);
+	probs = 
+		// persistent   not persistent  // Mutation      Dermascare 
+		  (0.77,        0.23,         // inherited     present    
+		   0.48,        0.52,         // inherited     absent     
+		   0.3,         0.7,          // not inherited present    
+		   0.01,        0.99);        // not inherited absent     ;
+	title = "Peeling";
+	whenchanged = 1732793228;
+	belief = (0.1715052, 0.8284948);
+	visual V1 {
+		center = (204, 402);
+		height = 4;
+		};
+	};
+
+node Bruising {
+	discrete = TRUE;
+	states = (visible, not_visible);
+	statetitles = ("visible", "not visible");
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (Dermascare);
+	probs = 
+		// visible      not visible   // Dermascare 
+		  (0.3825,      0.6175,       // present    
+		   0.01,        0.99);        // absent     ;
+	numcases = 1;
+	title = "Bruising";
+	whenchanged = 1732793228;
+	belief = (0.09670927, 0.9032907);
+	visual V1 {
+		center = (474, 402);
+		height = 5;
+		};
+	};
+NodeSet Norm {Nodes = ();};
+NodeSet Targ1 {Nodes = ();};
+NodeSet Ev2 {Nodes = ();};
+NodeSet dSep {Nodes = ();};
+NodeSet Con2 {Nodes = ();};
+NodeSet Con3 {Nodes = ();};
+NodeSet Con1 {Nodes = ();};
+NodeSet Pro1 {Nodes = ();};
+NodeSet Pro2 {Nodes = ();};
+NodeSet Pro3 {Nodes = ();};
+NodeSet Sens1 {Nodes = ();};
+NodeSet Sens2 {Nodes = ();};
+NodeSet Sens3 {Nodes = ();};
+NodeSet Ev1 {Nodes = ();};
+NodeSet Ev3 {Nodes = ();};
+NodeSet Ev4 {Nodes = ();};
+NodeSet Nature_light {Nodes = (Podunk_Beach, Jumbos_Ice_Cream, Dermascare, Dunkalot_Sunscreen, Mutation, Bruising, Peeling);};
+NodeSet Finding_light {Nodes = ();};
+NodeSet Sens4 {Nodes = ();};
+NodeSet Targ2 {Nodes = ();};
+NodeSet Targ3 {Nodes = ();};
+NodeSet Targ4 {Nodes = ();};
+ElimOrder = (Jumbos_Ice_Cream, Bruising, Podunk_Beach, Dunkalot_Sunscreen, Dermascare, Mutation, Peeling);
+};
