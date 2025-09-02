@@ -203,6 +203,7 @@ def utilsTests():
 	import bni_utils
 	myNet = Net(netDir+"NF_V1.dne")
 	print('[d-connected nodes between PesticideUse and Rainfall]')
+
 	nodes = bni_utils.findAllDConnectedNodes(myNet, "PesticideUse", "Rainfall")
 	print([n.name() for n in nodes])
 
