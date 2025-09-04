@@ -22,3 +22,10 @@ def get_nets():
 def printNet(net):
     for node in net.nodes():
         print(f"{node.name()} -> {[child.name() for child in node.children()]}")
+
+def get_BN_structure(net):
+    structure = ""
+    for node in net.nodes():
+        children_names = [child.name() for child in node.children()]
+        structure += f"{node.name()} -> {children_names}\n"
+    return structure
