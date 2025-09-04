@@ -1,0 +1,114 @@
+// ~->[DNET-1]->~
+
+// File created by someone at MonashU using Netica 5.04 on 09/04/25 at 09:58:19.
+
+bnet CommonCauseEffectDemo {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+
+node Z {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (false, true);
+	parents = ();
+	probs = 
+		// false        true         
+		  (0.5,         0.5);
+	belief = (0.5, 0.5);
+	};
+
+node X {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (false, true);
+	parents = (Z);
+	probs = 
+		// false        true          // Z     
+		  (0.5,         0.5,          // false 
+		   0.5,         0.5);         // true  ;
+	belief = (0.5, 0.5);
+	};
+
+node A {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (false, true);
+	parents = (X);
+	probs = 
+		// false        true          // X     
+		  (0.5,         0.5,          // false 
+		   0.5,         0.5);         // true  ;
+	belief = (0.5, 0.5);
+	};
+
+node B {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (false, true);
+	parents = (A);
+	probs = 
+		// false        true          // A     
+		  (0.5,         0.5,          // false 
+		   0.5,         0.5);         // true  ;
+	belief = (0.5, 0.5);
+	};
+
+node Y {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (false, true);
+	parents = (Z);
+	probs = 
+		// false        true          // Z     
+		  (0.5,         0.5,          // false 
+		   0.5,         0.5);         // true  ;
+	belief = (0.5, 0.5);
+	};
+
+node E {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (false, true);
+	parents = (Y);
+	probs = 
+		// false        true          // Y     
+		  (0.5,         0.5,          // false 
+		   0.5,         0.5);         // true  ;
+	belief = (0.5, 0.5);
+	};
+
+node D {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (false, true);
+	parents = (E);
+	probs = 
+		// false        true          // E     
+		  (0.5,         0.5,          // false 
+		   0.5,         0.5);         // true  ;
+	belief = (0.5, 0.5);
+	};
+
+node C {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (false, true);
+	parents = (B, D);
+	probs = 
+		// false        true          // B     D     
+		  (0.5,         0.5,          // false false 
+		   0.5,         0.5,          // false true  
+		   0.5,         0.5,          // true  false 
+		   0.5,         0.5);         // true  true  ;
+	belief = (0.5, 0.5);
+	};
+ElimOrder = (Z, X, A, Y, E, B, D, C);
+};

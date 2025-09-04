@@ -1,0 +1,24 @@
+from bni_netica.bni_netica import Net
+
+def get_nets():
+    bn_path = "./nets/collection/"
+
+    CancerNeapolitanNet = Net(bn_path+"Cancer Neapolitan.neta")
+    ChestClinicNet = Net(bn_path+"ChestClinic.neta")
+    ClassifierNet = Net(bn_path+"Classifier.neta")
+    CoronaryRiskNet = Net(bn_path+"Coronary Risk.neta")
+    FireNet = Net(bn_path+"Fire.neta")
+    MendelGeneticsNet = Net(bn_path+"Mendel Genetics.neta")
+    RatsNet = Net(bn_path+"Rats.neta")
+    WetGrassNet = Net(bn_path+"Wet Grass.neta")
+    RatsNoisyOr = Net(bn_path+"Rats_NoisyOr.dne")
+    Derm = Net(bn_path+"Derm 7.9 A.dne")
+    CauseEffectNet = Net("./nets/outputs/common_cause_effect.neta")
+
+    net_list = [CancerNeapolitanNet, ChestClinicNet, ClassifierNet, CoronaryRiskNet,
+                FireNet, MendelGeneticsNet, RatsNet, WetGrassNet, RatsNoisyOr, Derm, CauseEffectNet]
+    return net_list
+
+def printNet(net):
+    for node in net.nodes():
+        print(f"{node.name()} -> {[child.name() for child in node.children()]}")
