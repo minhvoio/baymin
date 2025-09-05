@@ -125,3 +125,4 @@ def findAllDConnectedNodes(bn, source_node, dest_node, o=None):
         return list(arcs)
     uniq_nodes = {n for n in resolved.values() if n}
     return [bn.node(n.id) for n in uniq_nodes]
+

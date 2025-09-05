@@ -2,6 +2,7 @@ from bni_netica.bni_netica import Net
 
 def get_nets():
     bn_path = "./nets/collection/"
+    netDir = "./nets/"
 
     CancerNeapolitanNet = Net(bn_path+"Cancer Neapolitan.neta")
     ChestClinicNet = Net(bn_path+"ChestClinic.neta")
@@ -14,9 +15,10 @@ def get_nets():
     RatsNoisyOr = Net(bn_path+"Rats_NoisyOr.dne")
     Derm = Net(bn_path+"Derm 7.9 A.dne")
     CauseEffectNet = Net("./nets/outputs/common_cause_effect.neta")
+    NF_V1_Net = Net(netDir+"NF_V1.dne")
 
     net_list = [CancerNeapolitanNet, ChestClinicNet, ClassifierNet, CoronaryRiskNet,
-                FireNet, MendelGeneticsNet, RatsNet, WetGrassNet, RatsNoisyOr, Derm, CauseEffectNet]
+                FireNet, MendelGeneticsNet, RatsNet, WetGrassNet, RatsNoisyOr, Derm, CauseEffectNet, NF_V1_Net]
     return net_list
 
 def printNet(net):
