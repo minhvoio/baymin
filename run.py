@@ -1,11 +1,64 @@
 from bni_netica.support_tools import get_nets, printNet, get_BN_structure, get_BN_node_states
-from bni_netica.bn_helpers import BnHelper, ParamExtractor
+from bni_netica.bn_helpers import BnHelper, ParamExtractor, AnswerStructure
 from ollama.prompt import answer_this_prompt
 from bni_netica.scripts import HELLO_SCRIPT, MENU_SCRIPT, GET_FN_SCRIPT
 
-def execute_query(BN_string, net, user_query):
-    pre_query = f"In this Bayesian Network:\n{BN_string}\n"
+def _current_net_for_mode(base_net, prev_ctx, mode):
+    if mode == "continue" and prev_ctx and prev_ctx.get("last_net") is not None:
+        print("Continuing with the previous network state...")
+        return prev_ctx["last_net"]
+    return base_net
+
+def _format_and_explain(BN_string, user_query, fn, ans, template=None, schema=None, prev_ctx=None, concise=False):
+    prev_block = ""
+    if prev_ctx and prev_ctx.get("last_user_query") and prev_ctx.get("last_answer"):
+        prev_block = (
+            f"\nPrevious QA context:\n"
+            f"Q: {prev_ctx['last_user_query']}\n"
+            f"A: {prev_ctx['last_answer']}\n"
+        )
+
+    if concise:
+        explain_prompt = (
+            f"In this Bayesian Network:\n{BN_string}\n"
+            f"{prev_block}\n"
+            f"User asked: '{user_query}'.\n"
+            f"The raw probability output is:\n{ans}\n"
+            f"Give a concise, human-friendly explanation."
+        )
+    else:
+        explain_prompt = (
+            f"In this Bayesian Network:\n{BN_string}\n"
+            f"{prev_block}\n"
+            f"User asked: '{user_query}'. "
+            f"We used {fn} and the raw result is: '{ans}'. "
+            f"Follow this exact template to provide the answer: '{template}'."
+        )
+
+    if schema:
+        return answer_this_prompt(explain_prompt, format=schema)
+    return answer_this_prompt(explain_prompt)
+
+def _with_states_if_needed(pre_query, net, add_states):
+    return pre_query + (f"\nThe states of nodes are:\n{get_BN_node_states(net)}" if add_states else "")
+
+def execute_query(base_net, user_query, prev_ctx=None, mode="new"):
+    continue_flag = False
+    current_net = _current_net_for_mode(base_net, prev_ctx, mode)
+    BN_string = get_BN_structure(current_net)
+
+    prev_block = ""
+    if mode == "continue" and prev_ctx and prev_ctx.get("last_user_query") and prev_ctx.get("last_answer"):
+        continue_flag = True
+        prev_block = (
+            f"\nPrevious QA context:\n"
+            f"Q: {prev_ctx['last_user_query']}\n"
+            f"A: {prev_ctx['last_answer']}\n"
+        )
+
+    pre_query = f"In this Bayesian Network:\n{BN_string}\n{prev_block}"
     get_fn_prompt = pre_query + "\n" + user_query + GET_FN_SCRIPT
+
     raw = answer_this_prompt(get_fn_prompt, format=BnHelper.model_json_schema())
     print("\nBayMin:")
     print(raw)
@@ -15,99 +68,130 @@ def execute_query(BN_string, net, user_query):
     bn_helper = BnHelper(function_name=fn)
     param_extractor = ParamExtractor()
 
-    if fn == "is_XY_connected":
-        get_params = param_extractor.extract_two_nodes_from_query(pre_query, user_query)
-        print(get_params)
-        ans = bn_helper.is_XY_connected(net, get_params.from_node, get_params.to_node)
+    ctx = {
+        "fn": fn,
+        "last_user_query": user_query,
+        "last_answer": None,
+        "last_net": prev_ctx.get("last_net") if prev_ctx else None
+    }
+
+    if fn == "is_XY_dconnected":
+        params = param_extractor.extract_two_nodes_from_query(pre_query, user_query)
+        print(params)
+        ans = bn_helper.is_XY_dconnected(current_net, params.from_node, params.to_node)
         if ans:
-            template = f"Yes, {get_params.from_node} is d-connected to {get_params.to_node}, which means that entering evidence for {get_params.from_node} would change the probability of {get_params.to_node} and vice versa."
+            template = (f"Yes, {params.from_node} is d-connected to {params.to_node}, "
+                        f"which means that entering evidence for {params.from_node} would "
+                        f"change the probability of {params.to_node} and vice versa.")
         else:
-            template = f"No, {get_params.from_node} is not d-connected to {get_params.to_node}, which means that entering evidence for {get_params.from_node} would not change the probability of {get_params.to_node}."
-        explain_prompt = f"""User asked: In this '{BN_string}', '{user_query}'. We use {fn} function and the output is: '{ans}'. Follow this exact template to provide the answer: '{template}'."""
-        final_answer = answer_this_prompt(explain_prompt)
-        return final_answer
+            template = (f"No, {params.from_node} is not d-connected to {params.to_node}, "
+                        f"which means that entering evidence for {params.from_node} would not "
+                        f"change the probability of {params.to_node}.")
+        final_answer = _format_and_explain(BN_string, user_query, fn, ans, template, schema=AnswerStructure.model_json_schema(), prev_ctx=ctx)
+        ctx["last_answer"] = final_answer
+        return final_answer, ctx
 
     elif fn == "get_common_cause":
-        get_params = param_extractor.extract_two_nodes_from_query(pre_query, user_query)
-        print(get_params)
-        ans = bn_helper.get_common_cause(net, get_params.from_node, get_params.to_node)
+        params = param_extractor.extract_two_nodes_from_query(pre_query, user_query)
+        print(params)
+        ans = bn_helper.get_common_cause(current_net, params.from_node, params.to_node)
         if ans:
-            template = f"The common cause(s) of {get_params.from_node} and {get_params.to_node} is/are: {', '.join(ans)}."
+            template = f"The common cause(s) of {params.from_node} and {params.to_node} is/are: {', '.join(ans)}."
         else:
-            template = f"There is no common cause between {get_params.from_node} and {get_params.to_node}."
-        explain_prompt = f"""User asked: In this '{BN_string}', '{user_query}'. We use {fn} function and the output is: '{ans}'. Follow this exact template to provide the answer: '{template}'."""
-        final_answer = answer_this_prompt(explain_prompt)
-        return final_answer
+            template = f"There is no common cause between {params.from_node} and {params.to_node}."
+        final_answer = _format_and_explain(BN_string, user_query, fn, ans, template, schema=AnswerStructure.model_json_schema(), prev_ctx=ctx)
+        ctx["last_answer"] = final_answer
+        return final_answer, ctx
 
     elif fn == "get_common_effect":
-        get_params = param_extractor.extract_two_nodes_from_query(pre_query, user_query)
-        print(get_params)
-        ans = bn_helper.get_common_effect(net, get_params.from_node, get_params.to_node)
+        params = param_extractor.extract_two_nodes_from_query(pre_query, user_query, is_prev_qa=continue_flag)
+        print(params)
+        ans = bn_helper.get_common_effect(current_net, params.from_node, params.to_node)
         if ans:
-            template = f"The common effect(s) of {get_params.from_node} and {get_params.to_node} is/are: {', '.join(ans)}."
+            template = f"The common effect(s) of {params.from_node} and {params.to_node} is/are: {', '.join(ans)}."
         else:
-            template = f"There is no common effect between {get_params.from_node} and {get_params.to_node}."
-        explain_prompt = f"""User asked: In this '{BN_string}', '{user_query}'. We use {fn} function and the output is: '{ans}'. Follow this exact template to provide the answer: '{template}'."""
-        final_answer = answer_this_prompt(explain_prompt)
-        return final_answer
+            template = f"There is no common effect between {params.from_node} and {params.to_node}."
+        final_answer = _format_and_explain(BN_string, user_query, fn, ans, template, schema=AnswerStructure.model_json_schema(), prev_ctx=ctx)
+        ctx["last_answer"] = final_answer
+        return final_answer, ctx
 
     elif fn == "does_Z_change_dependency_XY":
-        get_params = param_extractor.extract_three_nodes_from_query(pre_query, user_query)
-        print(get_params)
-        ans, details = bn_helper.does_Z_change_dependency_XY(net, get_params.from_node, get_params.to_node, get_params.evidence_node)
+        params = param_extractor.extract_three_nodes_from_query(pre_query, user_query, is_prev_qa=continue_flag)
+        print(params)
+        ans, details = bn_helper.does_Z_change_dependency_XY(current_net, params.from_node, params.to_node, params.evidence_node)
         print(f"Output: {ans}, details: {details}")
         if ans:
-            template = f"Yes, observing {get_params.evidence_node} changes the dependency between {get_params.from_node} and {get_params.to_node}. Before observing {get_params.evidence_node}, {get_params.from_node} and {get_params.to_node} were {'d-connected' if details['before'] else 'd-separated'}. After observing {get_params.evidence_node}, they are {'d-connected' if details['after'] else 'd-separated'}."
+            template = (f"Yes, observing {params.evidence_node} changes the dependency between {params.from_node} and {params.to_node}. "
+                        f"Before observing {params.evidence_node}, {params.from_node} and {params.to_node} were "
+                        f"{'d-connected' if details['before'] else 'd-separated'}. After observing {params.evidence_node}, they are "
+                        f"{'d-connected' if details['after'] else 'd-separated'}.")
         else:
-            template = f"No, observing {get_params.evidence_node} does not change the dependency between {get_params.from_node} and {get_params.to_node}. Before observing {get_params.evidence_node}, {get_params.from_node} and {get_params.to_node} were {'d-connected' if details['before'] else 'd-separated'}. After observing {get_params.evidence_node}, they remain {'d-connected' if details['after'] else 'd-separated'}."
-        explain_prompt = f"""User asked: In this '{BN_string}', '{user_query}'. We use {fn} function and the output is: '{ans}', details: '{details}'. Follow this exact template to provide the answer: '{template}'."""
-        final_answer = answer_this_prompt(explain_prompt)
-        return final_answer
+            template = (f"No, observing {params.evidence_node} does not change the dependency between {params.from_node} and {params.to_node}. "
+                        f"Before observing {params.evidence_node}, {params.from_node} and {params.to_node} were "
+                        f"{'d-connected' if details['before'] else 'd-separated'}. After observing {params.evidence_node}, they remain "
+                        f"{'d-connected' if details['after'] else 'd-separated'}.")
+        final_answer = _format_and_explain(BN_string, user_query, fn, ans, template, schema=AnswerStructure.model_json_schema(), prev_ctx=ctx)
+        ctx["last_answer"] = final_answer
+        return final_answer, ctx
 
     elif fn == "evidences_block_XY":
-        get_params = param_extractor.extract_two_nodes_from_query(pre_query, user_query)
-        print(get_params)
-        ans = bn_helper.evidences_block_XY(net, get_params.from_node, get_params.to_node)
+        params = param_extractor.extract_two_nodes_from_query(pre_query, user_query, is_prev_qa=continue_flag)
+        print(params)
+        ans = bn_helper.evidences_block_XY(current_net, params.from_node, params.to_node)
         print(f"Output: {ans}")
         if ans:
-            template = f"The evidences that would block the dependency between {get_params.from_node} and {get_params.to_node} are: {', '.join(ans)}."
+            template = f"The evidences that would block the dependency between {params.from_node} and {params.to_node} are: {', '.join(ans)}."
         else:
-            template = f"There is no evidence that would block the dependency between {get_params.from_node} and {get_params.to_node}."
-        explain_prompt = f"""User asked: In this '{BN_string}', '{user_query}'. We use {fn} function and the output is: '{ans}'. Follow this exact template to provide the answer: '{template}'."""
-        final_answer = answer_this_prompt(explain_prompt)
-        return final_answer
+            template = f"There is no evidence that would block the dependency between {params.from_node} and {params.to_node}."
+        final_answer = _format_and_explain(BN_string, user_query, fn, ans, template, schema=AnswerStructure.model_json_schema(), prev_ctx=ctx)
+        ctx["last_answer"] = final_answer
+        return final_answer, ctx
 
     elif fn == "get_prob_X_given_Y":
-        pre_query2 = pre_query + f"\nThe states of nodes are:\n{get_BN_node_states(net)}"
-        get_params = param_extractor.extract_XY_and_Ystate_from_query(pre_query2, user_query)
-        print(get_params)
-        ans, net_after = bn_helper.get_prob_X_given_Y(net, get_params.target_node, get_params.evidence_node, get_params.evidence_state)
+        pre_query2 = _with_states_if_needed(pre_query, current_net, add_states=True)
+        params = param_extractor.extract_XY_and_Ystate_from_query(pre_query2, user_query, is_prev_qa=continue_flag)
+        print(params)
+        ans, net_after = bn_helper.get_prob_X_given_Y(current_net, params.target_node, params.evidence_node, params.evidence_state)
         print(f"Output:\n{ans}\n")
-        answer_prompt = f"""User asked: In this '{BN_string}', '{user_query}'. We use {fn} function and the output is: '{ans}'. Give an concise answer to the user."""
-        final_answer = answer_this_prompt(answer_prompt)
-        return final_answer
+
+        concise_prompt = (f"In this Bayesian Network:\n{BN_string}\n"
+                          f"User asked: '{user_query}'. We used {fn}. "
+                          f"The raw output is:\n{ans}\n"
+                          f"Give a concise answer.")
+        final_answer = _format_and_explain(BN_string, concise_prompt, fn, ans, concise=True, prev_ctx=ctx, schema=AnswerStructure.model_json_schema())
+        ctx["last_answer"] = final_answer
+        ctx["last_net"] = net_after
+        return final_answer, ctx
 
     elif fn == "get_prob_X_given_YZ":
-        pre_query2 = pre_query + f"\nThe states of nodes are:\n{get_BN_node_states(net)}"
-        get_params = param_extractor.extract_XYZ_and_YZstates_from_query(pre_query2, user_query)
-        print(get_params)
-        ans, net_after = bn_helper.get_prob_X_given_YZ(net, get_params.target_node, get_params.evidence_node1, get_params.evidence_state1, get_params.evidence_node2, get_params.evidence_state2)
+        pre_query2 = _with_states_if_needed(pre_query, current_net, add_states=True)
+        params = param_extractor.extract_XYZ_and_YZstates_from_query(pre_query2, user_query, is_prev_qa=continue_flag)
+        print(params)
+        ans, net_after = bn_helper.get_prob_X_given_YZ(
+            current_net,
+            params.target_node,
+            params.evidence_node1, params.evidence_state1,
+            params.evidence_node2, params.evidence_state2
+        )
         print(f"Output:\n{ans}\n")
-        answer_prompt = f"""User asked: In this '{BN_string}', '{user_query}'. We use {fn} function and the output is: '{ans}'. Give an concise answer to the user."""
-        final_answer = answer_this_prompt(answer_prompt)
-        return final_answer
+        concise_prompt = (f"In this Bayesian Network:\n{BN_string}\n"
+                          f"User asked: '{user_query}'. We used {fn}. "
+                          f"The raw output is:\n{ans}\n"
+                          f"Give a concise answer.")
+        final_answer = _format_and_explain(BN_string, concise_prompt, fn, ans, concise=True, prev_ctx=ctx, schema=AnswerStructure.model_json_schema())
+        ctx["last_answer"] = final_answer
+        ctx["last_net"] = net_after
+        return final_answer, ctx
 
-    return f"(Function '{fn}' not implemented yet.)"
+    return f"(Function '{fn}' not implemented yet.)", ctx
 
-def query_menu(BN_string, net):
-    prev_answer = None
-    prev_query = None
+def query_menu(net):
+    prev_ctx = None
     while True:
         user_query = input("Enter your query here (or press Enter to open menu): ").strip()
         if user_query:
-            prev_answer = execute_query(BN_string, net, user_query)
-            prev_query = user_query
-            print("\n" + str(prev_answer) + "\n")
+            answer, prev_ctx = execute_query(net, user_query, prev_ctx=prev_ctx, mode="new")
+            print("\n" + str(answer) + "\n")
 
         print(MENU_SCRIPT)
         choice_raw = input("Enter your choice: ").strip()
@@ -121,25 +205,34 @@ def query_menu(BN_string, net):
             continue
 
         if choice == 1:
-            if not prev_query:
+            if not prev_ctx:
                 print("No previous query to continue from.\n")
                 continue
-            refine = input("Enter your follow-up / refined query: ").strip()
+            
+            # show memory to the user
+            print("--- Previous query ---")
+            print(prev_ctx.get("last_user_query") or "<none>")
+            print("--- Previous answer ---")
+            print(prev_ctx.get("last_answer") or "<none>")
+            print("----------------------\n")
+
+            refine = input("Enter your follow-up / refined query (press Enter to reuse previous query): ").strip()
             if not refine:
-                print("No input. Returning to menu.\n")
-                continue
-            prev_answer = execute_query(BN_string, net, refine)
-            prev_query = refine
-            print("\n" + str(prev_answer) + "\n")
+                refine = prev_ctx.get("last_user_query") or ""
+                if not refine:
+                    print("No previous query to reuse. Returning to menu.\n")
+                    continue
+
+            answer, prev_ctx = execute_query(net, refine, prev_ctx=prev_ctx, mode="continue")
+            print("\n" + str(answer) + "\n")
 
         elif choice == 2:
             new_q = input("Enter your new query: ").strip()
             if not new_q:
                 print("No input. Returning to menu.\n")
                 continue
-            prev_answer = execute_query(BN_string, net, new_q)
-            prev_query = new_q
-            print("\n" + str(prev_answer) + "\n")
+            answer, prev_ctx = execute_query(net, new_q, prev_ctx=prev_ctx, mode="new")
+            print("\n" + str(answer) + "\n")
 
         elif choice == 3:
             print("Switching network...\n")
@@ -176,9 +269,8 @@ def main():
         printNet(net)
         print('\nBN states:\n')
         print(get_BN_node_states(net))
-        BN_string = get_BN_structure(net)
 
-        result = query_menu(BN_string=BN_string, net=net)
+        result = query_menu(net=net)
         if result == "change":
             continue
         else:

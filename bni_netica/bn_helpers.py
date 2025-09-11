@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from ollama.prompt import answer_this_prompt
 from contextlib import contextmanager
 from bni_netica.bni_utils import findAllDConnectedNodes
-from bni_netica.scripts import GET_PARAMS_SCRIPT
+from bni_netica.scripts import GET_PARAMS_SCRIPT, PREV_QUERY_SCRIPT
 
 # d_connected(X, Y) - True/False
 class QueryTwoNodes(BaseModel):
@@ -28,7 +28,7 @@ class QueryProbTargetGivenTwoEvidences(BaseModel):
     evidence_state2: str = "Yes"
 
 # explanation
-class Explanation(BaseModel):
+class AnswerStructure(BaseModel):
     answer: str
 
 class BnHelper(BaseModel):
@@ -174,29 +174,45 @@ class BnHelper(BaseModel):
 
 class ParamExtractor():
 
-    def extract_XY_and_Ystate_from_query(self, pre_query: str, user_query: str) -> QueryProbTargetGivenOneEvidence:
-        get_params_query = GET_PARAMS_SCRIPT["extract_XY_and_Ystate_from_query"]
+    def extract_XY_and_Ystate_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryProbTargetGivenOneEvidence:
+        get_params_query = ""
+        if is_prev_qa:
+            get_params_query += PREV_QUERY_SCRIPT
+        
+        get_params_query += GET_PARAMS_SCRIPT["extract_XY_and_Ystate_from_query"]
         get_params_prompt = pre_query + user_query + get_params_query
         get_params = answer_this_prompt(get_params_prompt, format=QueryProbTargetGivenOneEvidence.model_json_schema())
         get_params = QueryProbTargetGivenOneEvidence.model_validate_json(get_params)
         return get_params
 
-    def extract_XYZ_and_YZstates_from_query(self, pre_query: str, user_query: str) -> QueryProbTargetGivenTwoEvidences: 
-        get_params_query = GET_PARAMS_SCRIPT["extract_XYZ_and_YZstates_from_query"]
+    def extract_XYZ_and_YZstates_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryProbTargetGivenTwoEvidences: 
+        get_params_query = ""
+        if is_prev_qa:
+            get_params_query += PREV_QUERY_SCRIPT
+        
+        get_params_query += GET_PARAMS_SCRIPT["extract_XYZ_and_YZstates_from_query"]
         get_params_prompt = pre_query + user_query + get_params_query
         get_params = answer_this_prompt(get_params_prompt, format=QueryProbTargetGivenTwoEvidences.model_json_schema())
         get_params = QueryProbTargetGivenTwoEvidences.model_validate_json(get_params)
         return get_params
     
-    def extract_two_nodes_from_query(self, pre_query: str, user_query: str) -> QueryTwoNodes:
-        get_params_query = GET_PARAMS_SCRIPT["extract_two_nodes_from_query"]
+    def extract_two_nodes_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryTwoNodes:
+        get_params_query = ""
+        if is_prev_qa:
+            get_params_query += PREV_QUERY_SCRIPT
+
+        get_params_query += GET_PARAMS_SCRIPT["extract_two_nodes_from_query"]
         get_params_prompt = pre_query + user_query + get_params_query
         get_params = answer_this_prompt(get_params_prompt, format=QueryTwoNodes.model_json_schema())
         get_params = QueryTwoNodes.model_validate_json(get_params)
         return get_params
 
-    def extract_three_nodes_from_query(self, pre_query: str, user_query: str) -> QueryThreeNodes:
-        get_params_query = GET_PARAMS_SCRIPT["extract_three_nodes_from_query"]
+    def extract_three_nodes_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryThreeNodes:
+        get_params_query = ""
+        if is_prev_qa:
+            get_params_query += PREV_QUERY_SCRIPT
+
+        get_params_query += GET_PARAMS_SCRIPT["extract_three_nodes_from_query"]
         get_params_prompt = pre_query + user_query + get_params_query
         get_params = answer_this_prompt(get_params_prompt, format=QueryThreeNodes.model_json_schema())
         get_params = QueryThreeNodes.model_validate_json(get_params)
