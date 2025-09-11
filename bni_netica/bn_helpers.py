@@ -2,7 +2,9 @@ from pydantic import BaseModel
 from ollama.prompt import answer_this_prompt
 from contextlib import contextmanager
 from bni_netica.bni_utils import findAllDConnectedNodes
+from bni_netica.scripts import GET_PARAMS_SCRIPT
 
+# d_connected(X, Y) - True/False
 class QueryTwoNodes(BaseModel):
     from_node: str
     to_node: str
@@ -12,11 +14,28 @@ class QueryThreeNodes(BaseModel):
     to_node: str
     evidence_node: str
 
+# probabilities
+class QueryProbTargetGivenOneEvidence(BaseModel):
+    target_node: str
+    evidence_node: str
+    evidence_state: str = "Yes"
+
+class QueryProbTargetGivenTwoEvidences(BaseModel):
+    target_node: str
+    evidence_node1: str
+    evidence_state1: str = "Yes"
+    evidence_node2: str
+    evidence_state2: str = "Yes"
+
+# explanation
+class Explanation(BaseModel):
+    answer: str
+
 class BnHelper(BaseModel):
     function_name: str
 
     # XY CONNECT
-    def is_XY_connected(self, net, from_node, to_node):
+    def is_XY_dconnected(self, net, from_node, to_node):
       relatedNodes = net.node(from_node).getRelated("d_connected,exclude_self")
       for node in relatedNodes:
         if node.name() == to_node:
@@ -77,11 +96,11 @@ class BnHelper(BaseModel):
                 # ensure Z is not observed for the 'before' check
                 net.node(zname).retractFindings()
                 net.update()
-            dep_before = self.is_XY_connected(net, X, Y)
+            dep_before = self.is_XY_dconnected(net, X, Y)
 
             # ---- AFTER: dependency under Z observed ----
             with self._temporarily_set_findings(net, {zname: 0}): # using state index 0 for Z
-                dep_after = self.is_XY_connected(net, X, Y)
+                dep_after = self.is_XY_dconnected(net, X, Y)
 
             return (dep_before != dep_after), {"before": dep_before, "after": dep_after}
         finally:
@@ -104,7 +123,7 @@ class BnHelper(BaseModel):
     
 
     # PROBABILITIES
-    def _output_distribution(beliefs, node):
+    def _output_distribution(self, beliefs, node):
         """Pretty print a distribution (list of probabilities) with state names."""
         output = ""
         for i, p in enumerate(beliefs):
@@ -113,24 +132,24 @@ class BnHelper(BaseModel):
 
         return output
 
-    def prob_X_given_Y(self, net, X=None, Y=None, y_state="Yes"):
+    def _prob_X_given_Y(self, net, X=None, Y=None, y_state="Yes"):
         """
         Returns P(X | Y = y_state), net_after_observation
         y_state can be state names (str) or indices (int).
         """
         
-        with self._temporarily_set_findings(self, net, {Y: y_state}):
+        with self._temporarily_set_findings(net, {Y: y_state}):
             node_X = net.node(X)
             # beliefs() is P(X | current findings)
             return node_X.beliefs(), net
         
-    def prob_X_given_YZ(self, net, X=None, Y=None, y_state="Yes", Z=None, z_state="Yes"):
+    def _prob_X_given_YZ(self, net, X=None, Y=None, y_state="Yes", Z=None, z_state="Yes"):
         """
         Returns P(X = x_state | Y = y_state, Z = z_state), net_after_observation
         x_state, y_state and z_state can be state names (str) or indices (int).
         """
         
-        with self._temporarily_set_findings(self, net, {Y: y_state, Z: z_state}):
+        with self._temporarily_set_findings(net, {Y: y_state, Z: z_state}):
             node_X = net.node(X)
             # beliefs() is P(X | current findings)
             return node_X.beliefs(), net
@@ -139,7 +158,7 @@ class BnHelper(BaseModel):
         """
         Returns string output of prob_X_given_Y
         """
-        beliefs, net_after = self.prob_X_given_Y(self, net, X, Y, y_state)
+        beliefs, net_after = self._prob_X_given_Y(net, X, Y, y_state)
         output = f"P({X} | {Y}={y_state}):\n"
         output += self._output_distribution(beliefs, net_after.node(X))
         return output, net_after
@@ -148,24 +167,37 @@ class BnHelper(BaseModel):
         """
         Returns string output of prob_X_given_YZ
         """
-        beliefs, net_after = self.prob_X_given_YZ(self, net, X, Y, y_state, Z, z_state)
+        beliefs, net_after = self._prob_X_given_YZ(net, X, Y, y_state, Z, z_state)
         output = f"P({X} | {Y}={y_state}, {Z}={z_state}):\n"
         output += self._output_distribution(beliefs, net_after.node(X))
         return output, net_after
 
+class ParamExtractor():
 
+    def extract_XY_and_Ystate_from_query(self, pre_query: str, user_query: str) -> QueryProbTargetGivenOneEvidence:
+        get_params_query = GET_PARAMS_SCRIPT["extract_XY_and_Ystate_from_query"]
+        get_params_prompt = pre_query + user_query + get_params_query
+        get_params = answer_this_prompt(get_params_prompt, format=QueryProbTargetGivenOneEvidence.model_json_schema())
+        get_params = QueryProbTargetGivenOneEvidence.model_validate_json(get_params)
+        return get_params
 
-def extract_two_nodes_from_query(pre_query: str, user_query: str) -> QueryTwoNodes:
-    get_params_query = """\nExtract the two nodes from the user query and output in JSON format as: {"from_node": "node1", "to_node": "node2"}."""
-    get_params_prompt = pre_query + user_query + get_params_query
-    get_params = answer_this_prompt(get_params_prompt, format=QueryTwoNodes.model_json_schema())
-    get_params = QueryTwoNodes.model_validate_json(get_params)
-    return get_params
+    def extract_XYZ_and_YZstates_from_query(self, pre_query: str, user_query: str) -> QueryProbTargetGivenTwoEvidences: 
+        get_params_query = GET_PARAMS_SCRIPT["extract_XYZ_and_YZstates_from_query"]
+        get_params_prompt = pre_query + user_query + get_params_query
+        get_params = answer_this_prompt(get_params_prompt, format=QueryProbTargetGivenTwoEvidences.model_json_schema())
+        get_params = QueryProbTargetGivenTwoEvidences.model_validate_json(get_params)
+        return get_params
+    
+    def extract_two_nodes_from_query(self, pre_query: str, user_query: str) -> QueryTwoNodes:
+        get_params_query = GET_PARAMS_SCRIPT["extract_two_nodes_from_query"]
+        get_params_prompt = pre_query + user_query + get_params_query
+        get_params = answer_this_prompt(get_params_prompt, format=QueryTwoNodes.model_json_schema())
+        get_params = QueryTwoNodes.model_validate_json(get_params)
+        return get_params
 
-
-def extract_three_nodes_from_query(pre_query: str, user_query: str) -> QueryThreeNodes:
-    get_params_query = """\nExtract the three nodes from the user query and output in JSON format as: {"from_node": "node1", "to_node": "node2", "z_node": "node3"}."""
-    get_params_prompt = pre_query + user_query + get_params_query
-    get_params = answer_this_prompt(get_params_prompt, format=QueryThreeNodes.model_json_schema())
-    get_params = QueryThreeNodes.model_validate_json(get_params)
-    return get_params
+    def extract_three_nodes_from_query(self, pre_query: str, user_query: str) -> QueryThreeNodes:
+        get_params_query = GET_PARAMS_SCRIPT["extract_three_nodes_from_query"]
+        get_params_prompt = pre_query + user_query + get_params_query
+        get_params = answer_this_prompt(get_params_prompt, format=QueryThreeNodes.model_json_schema())
+        get_params = QueryThreeNodes.model_validate_json(get_params)
+        return get_params

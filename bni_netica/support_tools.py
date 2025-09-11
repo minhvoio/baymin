@@ -31,3 +31,10 @@ def get_BN_structure(net):
         children_names = [child.name() for child in node.children()]
         structure += f"{node.name()} -> {children_names}\n"
     return structure
+
+def get_BN_node_states(net):
+    structure = ""
+    for node in net.nodes():
+        states = [s.name() for s in node.states()]
+        structure += f"{node.name()} {states}\n"
+    return structure
