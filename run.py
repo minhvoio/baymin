@@ -13,7 +13,7 @@ def _format_and_explain(BN_string, user_query, fn, ans, template=None, schema=No
     prev_block = ""
     if prev_ctx and prev_ctx.get("last_user_query") and prev_ctx.get("last_answer"):
         prev_block = (
-            f"\nPrevious QA context:\n"
+            f"\nHere is the previous conversation with the user:\n"
             f"Q: {prev_ctx['last_user_query']}\n"
             f"A: {prev_ctx['last_answer']}\n"
         )
@@ -22,8 +22,8 @@ def _format_and_explain(BN_string, user_query, fn, ans, template=None, schema=No
         explain_prompt = (
             f"In this Bayesian Network:\n{BN_string}\n"
             f"{prev_block}\n"
-            f"User asked: '{user_query}'.\n"
-            f"The raw probability output is:\n{ans}\n"
+            f"User has now asked: '{user_query}'.\n"
+            f"The raw output is:\n{ans}\n"
             f"Give a concise, human-friendly explanation."
         )
     else:
