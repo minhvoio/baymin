@@ -4,6 +4,9 @@ from contextlib import contextmanager
 from bni_netica.bni_utils import findAllDConnectedNodes
 from bni_netica.scripts import GET_PARAMS_SCRIPT, PREV_QUERY_SCRIPT
 
+class QueryOneNode(BaseModel):
+    node: str
+
 # d_connected(X, Y) - True/False
 class QueryTwoNodes(BaseModel):
     from_node: str
@@ -132,6 +135,13 @@ class BnHelper(BaseModel):
 
         return output
 
+    def _prob_X(self, net, X=None):
+        """
+        Returns P(X), net_after_observation
+        """
+        node_X = net.node(X)
+        return node_X.beliefs(), net
+
     def _prob_X_given_Y(self, net, X=None, Y=None, y_state="Yes"):
         """
         Returns P(X | Y = y_state), net_after_observation
@@ -172,7 +182,27 @@ class BnHelper(BaseModel):
         output += self._output_distribution(beliefs, net_after.node(X))
         return output, net_after
 
+    def get_prob_X(self, net, X=None):
+        """
+        Returns string output of prob_X
+        """
+        beliefs, net_after = self._prob_X(net, X)
+        output = f"P({X}):\n"
+        output += self._output_distribution(beliefs, net_after.node(X))
+        return output, net_after
+
 class ParamExtractor():
+
+    def extract_one_node_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryOneNode:
+        get_params_query = ""
+        if is_prev_qa:
+            get_params_query += PREV_QUERY_SCRIPT
+        
+        get_params_query += GET_PARAMS_SCRIPT["extract_one_node_from_query"]
+        get_params_prompt = pre_query + user_query + get_params_query
+        get_params = answer_this_prompt(get_params_prompt, format=QueryOneNode.model_json_schema())
+        get_params = QueryOneNode.model_validate_json(get_params)
+        return get_params
 
     def extract_XY_and_Ystate_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryProbTargetGivenOneEvidence:
         get_params_query = ""

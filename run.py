@@ -9,7 +9,7 @@ def _current_net_for_mode(base_net, prev_ctx, mode):
         return prev_ctx["last_net"]
     return base_net
 
-def _format_and_explain(BN_string, user_query, fn, ans, template=None, schema=None, prev_ctx=None, concise=False):
+def _format_and_explain(BN_string, user_query, fn, ans, template=None, schema=None, prev_ctx=None, probQuestion=False):
     prev_block = ""
     if prev_ctx and prev_ctx.get("last_user_query") and prev_ctx.get("last_answer"):
         prev_block = (
@@ -18,7 +18,7 @@ def _format_and_explain(BN_string, user_query, fn, ans, template=None, schema=No
             f"A: {prev_ctx['last_answer']}\n"
         )
 
-    if concise:
+    if probQuestion:
         explain_prompt = (
             f"In this Bayesian Network:\n{BN_string}\n"
             f"{prev_block}\n"
@@ -154,11 +154,11 @@ def execute_query(base_net, user_query, prev_ctx=None, mode="new"):
         ans, net_after = bn_helper.get_prob_X_given_Y(current_net, params.target_node, params.evidence_node, params.evidence_state)
         print(f"Output:\n{ans}\n")
 
-        concise_prompt = (f"In this Bayesian Network:\n{BN_string}\n"
+        prob_prompt = (f"In this Bayesian Network:\n{BN_string}\n"
                           f"User asked: '{user_query}'. We used {fn}. "
                           f"The raw output is:\n{ans}\n"
                           f"Give a concise answer.")
-        final_answer = _format_and_explain(BN_string, concise_prompt, fn, ans, concise=True, prev_ctx=ctx, schema=AnswerStructure.model_json_schema())
+        final_answer = _format_and_explain(BN_string, prob_prompt, fn, ans, probQuestion=True, prev_ctx=ctx, schema=AnswerStructure.model_json_schema())
         ctx["last_answer"] = final_answer
         ctx["last_net"] = net_after
         return final_answer, ctx
@@ -174,13 +174,26 @@ def execute_query(base_net, user_query, prev_ctx=None, mode="new"):
             params.evidence_node2, params.evidence_state2
         )
         print(f"Output:\n{ans}\n")
-        concise_prompt = (f"In this Bayesian Network:\n{BN_string}\n"
+        prob_prompt = (f"In this Bayesian Network:\n{BN_string}\n"
                           f"User asked: '{user_query}'. We used {fn}. "
                           f"The raw output is:\n{ans}\n"
                           f"Give a concise answer.")
-        final_answer = _format_and_explain(BN_string, concise_prompt, fn, ans, concise=True, prev_ctx=ctx, schema=AnswerStructure.model_json_schema())
+        final_answer = _format_and_explain(BN_string, prob_prompt, fn, ans, probQuestion=True, prev_ctx=ctx, schema=AnswerStructure.model_json_schema())
         ctx["last_answer"] = final_answer
         ctx["last_net"] = net_after
+        return final_answer, ctx
+
+    elif fn == "get_prob_X":
+        params = param_extractor.extract_one_node_from_query(pre_query, user_query, is_prev_qa=continue_flag)
+        print(params)
+        ans = bn_helper.get_prob_X(current_net, params.node)
+        print(f"Output:\n{ans}\n")
+        prob_prompt = (f"In this Bayesian Network:\n{BN_string}\n"
+                          f"User asked: '{user_query}'. We used {fn}. "
+                          f"The raw output is:\n{ans}\n"
+                          f"Give a concise answer.")
+        final_answer = _format_and_explain(BN_string, prob_prompt, fn, ans, probQuestion=True, prev_ctx=ctx, schema=AnswerStructure.model_json_schema())
+        ctx["last_answer"] = final_answer
         return final_answer, ctx
 
     return f"(Function '{fn}' not implemented yet.)", ctx
