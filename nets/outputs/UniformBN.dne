@@ -1,23 +1,11 @@
 // ~->[DNET-1]->~
 
-// File created by someone at MonashU using Netica 5.04 on 09/13/25 at 15:27:52.
+// File created by someone at MonashU using Netica 5.04 on 09/18/25 at 03:36:49.
 
 bnet UniformBN {
 AutoCompile = TRUE;
 autoupdate = TRUE;
-
-node D {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.5,         0.5);
-	numcases = 1;
-	belief = (0.5, 0.5);
-	};
+whenchanged = 1758166609;
 
 node C {
 	kind = NATURE;
@@ -29,6 +17,21 @@ node C {
 		// False        True         
 		  (0.5,         0.5);
 	numcases = 1;
+	whenchanged = 1758166609;
+	belief = (0.5, 0.5);
+	};
+
+node D {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = ();
+	probs = 
+		// False        True         
+		  (0.5,         0.5);
+	numcases = 1;
+	whenchanged = 1758166609;
 	belief = (0.5, 0.5);
 	};
 
@@ -43,6 +46,7 @@ node F {
 		  (0.5,         0.5,          // False 
 		   0.5,         0.5);         // True  ;
 	numcases = 1;
+	whenchanged = 1758166609;
 	belief = (0.5, 0.5);
 	};
 
@@ -51,9 +55,9 @@ node H {
 	discrete = TRUE;
 	chance = CHANCE;
 	states = (False, True);
-	parents = (D, C, F);
+	parents = (C, F, D);
 	probs = 
-		// False        True          // D     C     F     
+		// False        True          // C     F     D     
 		  (0.5,         0.5,          // False False False 
 		   0.5,         0.5,          // False False True  
 		   0.5,         0.5,          // False True  False 
@@ -63,6 +67,7 @@ node H {
 		   0.5,         0.5,          // True  True  False 
 		   0.5,         0.5);         // True  True  True  ;
 	numcases = 1;
+	whenchanged = 1758166609;
 	belief = (0.5, 0.5);
 	};
 
@@ -77,6 +82,7 @@ node G {
 		  (0.5,         0.5,          // False 
 		   0.5,         0.5);         // True  ;
 	numcases = 1;
+	whenchanged = 1758166609;
 	belief = (0.5, 0.5);
 	};
 
@@ -85,9 +91,9 @@ node A {
 	discrete = TRUE;
 	chance = CHANCE;
 	states = (False, True);
-	parents = (G, D, C);
+	parents = (G, C, D);
 	probs = 
-		// False        True          // G     D     C     
+		// False        True          // G     C     D     
 		  (0.5,         0.5,          // False False False 
 		   0.5,         0.5,          // False False True  
 		   0.5,         0.5,          // False True  False 
@@ -97,6 +103,7 @@ node A {
 		   0.5,         0.5,          // True  True  False 
 		   0.5,         0.5);         // True  True  True  ;
 	numcases = 1;
+	whenchanged = 1758166609;
 	belief = (0.5, 0.5);
 	};
 
@@ -105,9 +112,9 @@ node E {
 	discrete = TRUE;
 	chance = CHANCE;
 	states = (False, True);
-	parents = (F, H, D, C);
+	parents = (F, D, C, H);
 	probs = 
-		// False        True          // F     H     D     C     
+		// False        True          // F     D     C     H     
 		  (0.5,         0.5,          // False False False False 
 		   0.5,         0.5,          // False False False True  
 		   0.5,         0.5,          // False False True  False 
@@ -125,6 +132,7 @@ node E {
 		   0.5,         0.5,          // True  True  True  False 
 		   0.5,         0.5);         // True  True  True  True  ;
 	numcases = 1;
+	whenchanged = 1758166609;
 	belief = (0.5, 0.5);
 	};
 
@@ -138,7 +146,8 @@ node B {
 		// False        True         
 		  (0.5,         0.5);
 	numcases = 1;
+	whenchanged = 1758166609;
 	belief = (0.5, 0.5);
 	};
-ElimOrder = (B, A, G, D, C, F, H, E);
+ElimOrder = (B, A, G, C, D, F, H, E);
 };

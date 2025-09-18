@@ -1,5 +1,5 @@
 from bni_netica.support_tools import get_nets, printNet, get_BN_structure, get_BN_node_states
-from bni_netica.bn_helpers import BnHelper, ParamExtractor, AnswerStructure
+from bn_helpers.bn_helpers import BnHelper, ParamExtractor, AnswerStructure
 from ollama.prompt import answer_this_prompt
 from bni_netica.scripts import HELLO_SCRIPT, MENU_SCRIPT, GET_FN_SCRIPT
 
@@ -147,6 +147,20 @@ def execute_query(base_net, user_query, prev_ctx=None, mode="new"):
         ctx["last_answer"] = final_answer
         return final_answer, ctx
 
+    elif fn == "get_prob_X":
+        params = param_extractor.extract_one_node_from_query(pre_query, user_query, is_prev_qa=continue_flag)
+        print(params)
+        ans = bn_helper.get_prob_X(current_net, params.node)
+        print(f"Output:\n{ans}\n")
+        prob_prompt = (f"In this Bayesian Network:\n{BN_string}\n"
+                          f"User asked: '{user_query}'. We used {fn}. "
+                          f"The raw output is:\n{ans}\n"
+                          f"Give a concise answer.")
+        final_answer = _format_and_explain(BN_string, prob_prompt, fn, ans, probQuestion=True, prev_ctx=ctx, schema=AnswerStructure.model_json_schema())
+        ctx["last_answer"] = final_answer
+        ctx["last_net"] = current_net
+        return final_answer, ctx
+
     elif fn == "get_prob_X_given_Y":
         pre_query2 = _with_states_if_needed(pre_query, current_net, add_states=True)
         params = param_extractor.extract_XY_and_Ystate_from_query(pre_query2, user_query, is_prev_qa=continue_flag)
@@ -182,17 +196,13 @@ def execute_query(base_net, user_query, prev_ctx=None, mode="new"):
         ctx["last_answer"] = final_answer
         ctx["last_net"] = net_after
         return final_answer, ctx
-
-    elif fn == "get_prob_X":
-        params = param_extractor.extract_one_node_from_query(pre_query, user_query, is_prev_qa=continue_flag)
+    
+    elif fn == "detect_relationship":
+        params = param_extractor.extract_child_and_two_parents_from_query(pre_query, user_query, is_prev_qa=continue_flag)
         print(params)
-        ans = bn_helper.get_prob_X(current_net, params.node)
+        ans = bn_helper.detect_relationship(current_net, params.child_node, params.parent1_node, params.parent2_node)
         print(f"Output:\n{ans}\n")
-        prob_prompt = (f"In this Bayesian Network:\n{BN_string}\n"
-                          f"User asked: '{user_query}'. We used {fn}. "
-                          f"The raw output is:\n{ans}\n"
-                          f"Give a concise answer.")
-        final_answer = _format_and_explain(BN_string, prob_prompt, fn, ans, probQuestion=True, prev_ctx=ctx, schema=AnswerStructure.model_json_schema())
+        final_answer = _format_and_explain(BN_string, user_query, fn, ans, schema=AnswerStructure.model_json_schema(), prev_ctx=ctx)
         ctx["last_answer"] = final_answer
         return final_answer, ctx
 
