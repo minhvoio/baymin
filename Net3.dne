@@ -1,0 +1,176 @@
+// ~->[DNET-1]->~
+
+// File created by someone at MonashU using Netica 5.04 on 09/18/25 at 12:44:41.
+
+bnet Net3 {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1758199481;
+
+node A {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = ();
+	probs = 
+		// False        True         
+		  (0.01157051,  0.9884295);
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.01157051, 0.9884295);
+	};
+
+node F {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = ();
+	probs = 
+		// False        True         
+		  (0.7161448,   0.2838552);
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.7161448, 0.2838552);
+	};
+
+node G {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (F, A);
+	probs = 
+		// False        True          // F     A     
+		  (0.1796406,   0.8203594,    // False False 
+		   0.3525119,   0.6474881,    // False True  
+		   0.4857015,   0.5142986,    // True  False 
+		   0.9501845,   0.04981551);  // True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.5192065, 0.4807936);
+	};
+
+node C {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (A, G);
+	probs = 
+		// False        True          // A     G     
+		  (0.7801372,   0.2198628,    // False False 
+		   0.7036495,   0.2963505,    // False True  
+		   0.3451773,   0.6548228,    // True  False 
+		   0.1877546,   0.8122454);   // True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.275209, 0.724791);
+	};
+
+node H {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (F, G, A);
+	probs = 
+		// False        True          // F     G     A     
+		  (0.519159,    0.480841,     // False False False 
+		   0.5926363,   0.4073637,    // False False True  
+		   0.298707,    0.701293,     // False True  False 
+		   0.9276888,   0.07231119,   // False True  True  
+		   0.3739835,   0.6260165,    // True  False False 
+		   0.105374,    0.894626,     // True  False True  
+		   0.2619035,   0.7380965,    // True  True  False 
+		   0.4712875,   0.5287125);   // True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.6115888, 0.3884113);
+	};
+
+node B {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (C, A, H);
+	probs = 
+		// False        True          // C     A     H     
+		  (0.8089789,   0.1910211,    // False False False 
+		   0.7650192,   0.2349808,    // False False True  
+		   0.5545871,   0.445413,     // False True  False 
+		   0.4125934,   0.5874066,    // False True  True  
+		   0.3312506,   0.6687493,    // True  False False 
+		   0.6308311,   0.3691689,    // True  False True  
+		   0.7314824,   0.2685176,    // True  True  False 
+		   0.04329646,  0.9567035);   // True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.49036, 0.50964);
+	};
+
+node E {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (H, C);
+	probs = 
+		// False        True          // H     C     
+		  (0.1566728,   0.8433272,    // False False 
+		   0.9672903,   0.03270965,   // False True  
+		   0.5521386,   0.4478614,    // True  False 
+		   0.5493208,   0.4506792);   // True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.6880848, 0.3119152);
+	};
+
+node D {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (B, H, G, C, E);
+	probs = 
+		// False        True          // B     H     G     C     E     
+		  (0.8654045,   0.1345955,    // False False False False False 
+		   0.4261995,   0.5738005,    // False False False False True  
+		   0.1603616,   0.8396384,    // False False False True  False 
+		   0.8330836,   0.1669164,    // False False False True  True  
+		   0.2174559,   0.7825441,    // False False True  False False 
+		   0.2944346,   0.7055654,    // False False True  False True  
+		   0.8063904,   0.1936096,    // False False True  True  False 
+		   0.1759683,   0.8240317,    // False False True  True  True  
+		   0.9000471,   0.09995287,   // False True  False False False 
+		   0.0126453,   0.9873547,    // False True  False False True  
+		   0.0717129,   0.9282871,    // False True  False True  False 
+		   0.9636761,   0.03632392,   // False True  False True  True  
+		   0.1071574,   0.8928426,    // False True  True  False False 
+		   0.7787809,   0.2212191,    // False True  True  False True  
+		   0.3216624,   0.6783376,    // False True  True  True  False 
+		   0.1138808,   0.8861192,    // False True  True  True  True  
+		   0.9782111,   0.02178889,   // True  False False False False 
+		   0.6072745,   0.3927254,    // True  False False False True  
+		   0.5664014,   0.4335986,    // True  False False True  False 
+		   0.9862509,   0.01374906,   // True  False False True  True  
+		   0.05506402,  0.944936,     // True  False True  False False 
+		   0.1787881,   0.8212119,    // True  False True  False True  
+		   0.510682,    0.489318,     // True  False True  True  False 
+		   0.5016358,   0.4983642,    // True  False True  True  True  
+		   0.3743113,   0.6256887,    // True  True  False False False 
+		   0.3102728,   0.6897272,    // True  True  False False True  
+		   0.5741913,   0.4258087,    // True  True  False True  False 
+		   0.6979623,   0.3020377,    // True  True  False True  True  
+		   0.913405,    0.08659498,   // True  True  True  False False 
+		   0.105156,    0.8948439,    // True  True  True  False True  
+		   0.4021596,   0.5978404,    // True  True  True  True  False 
+		   0.8327671,   0.1672329);   // True  True  True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.5508708, 0.4491293);
+	};
+ElimOrder = (F, A, G, C, H, B, E, D);
+};

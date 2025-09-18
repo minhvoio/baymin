@@ -1,0 +1,131 @@
+// ~->[DNET-1]->~
+
+// File created by someone at MonashU using Netica 5.04 on 09/18/25 at 12:44:41.
+
+bnet Net7 {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1758199481;
+
+node H {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = ();
+	probs = 
+		// False        True         
+		  (0.4844787,   0.5155212);
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.4844787, 0.5155212);
+	};
+
+node D {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (H);
+	probs = 
+		// False        True          // H     
+		  (0.4008696,   0.5991304,    // False 
+		   0.7301466,   0.2698534);   // True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.5706189, 0.4293811);
+	};
+
+node A {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (D);
+	probs = 
+		// False        True          // D     
+		  (0.4563303,   0.5436697,    // False 
+		   0.9080436,   0.09195646);  // True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.6502874, 0.3497126);
+	};
+
+node G {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = ();
+	probs = 
+		// False        True         
+		  (0.6801837,   0.3198163);
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.6801837, 0.3198163);
+	};
+
+node F {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = ();
+	probs = 
+		// False        True         
+		  (0.5588006,   0.4411993);
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.5588006, 0.4411994);
+	};
+
+node E {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (G, F);
+	probs = 
+		// False        True          // G     F     
+		  (0.4357992,   0.5642009,    // False False 
+		   0.7696386,   0.2303614,    // False True  
+		   0.1024114,   0.8975887,    // True  False 
+		   0.8495107,   0.1504893);   // True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.5347782, 0.4652218);
+	};
+
+node C {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (D, E);
+	probs = 
+		// False        True          // D     E     
+		  (0.8524351,   0.1475649,    // False False 
+		   0.1712904,   0.8287096,    // False True  
+		   0.9954621,   0.004537923,  // True  False 
+		   0.6096495,   0.3903505);   // True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.6559596, 0.3440404);
+	};
+
+node B {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (C);
+	probs = 
+		// False        True          // C     
+		  (0.9104578,   0.08954222,   // False 
+		   0.807058,    0.192942);    // True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.8748841, 0.1251159);
+	};
+ElimOrder = (H, A, B, D, C, G, F, E);
+};

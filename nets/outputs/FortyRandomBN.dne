@@ -1,13 +1,13 @@
 // ~->[DNET-1]->~
 
-// File created by someone at MonashU using Netica 5.04 on 09/18/25 at 03:36:49.
+// File created by someone at MonashU using Netica 5.04 on 09/18/25 at 06:53:27.
 
 bnet FortyRandomBN {
 AutoCompile = TRUE;
 autoupdate = TRUE;
-whenchanged = 1758166609;
+whenchanged = 1758178407;
 
-node A {
+node J {
 	kind = NATURE;
 	discrete = TRUE;
 	chance = CHANCE;
@@ -15,264 +15,10 @@ node A {
 	parents = ();
 	probs = 
 		// False        True         
-		  (0.2065801,   0.7934199);
+		  (0.4080716,   0.5919284);
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.2065801, 0.7934199);
-	};
-
-node B {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.7089921,   0.291008);
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.7089921, 0.291008);
-	};
-
-node V {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.4910055,   0.5089945);
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.4910055, 0.5089945);
-	};
-
-node L {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (V, B);
-	probs = 
-		// False        True          // V     B     
-		  (0.8467005,   0.1532994,    // False False 
-		   0.2064915,   0.7935085,    // False True  
-		   0.4887066,   0.5112934,    // True  False 
-		   0.4615498,   0.5384502);   // True  True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.5689839, 0.4310161);
-	};
-
-node X {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.3450131,   0.6549869);
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.3450131, 0.6549869);
-	};
-
-node R {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (X);
-	probs = 
-		// False        True          // X     
-		  (0.5501728,   0.4498272,    // False 
-		   0.4787438,   0.5212562);   // True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.5033878, 0.4966122);
-	};
-
-node B1 {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (L, R);
-	probs = 
-		// False        True          // L     R     
-		  (0.8592329,   0.1407671,    // False False 
-		   0.678013,    0.3219869,    // False True  
-		   0.06254079,  0.9374592,    // True  False 
-		   0.9720919,   0.02790808);  // True  True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.659327, 0.340673);
-	};
-
-node I1 {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.09770115,  0.9022989);
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.09770115, 0.9022989);
-	};
-
-node N {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (I1);
-	probs = 
-		// False        True          // I1    
-		  (0.5959277,   0.4040723,    // False 
-		   0.8899011,   0.1100989);   // True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.8611796, 0.1388204);
-	};
-
-node W {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (N, L);
-	probs = 
-		// False        True          // N     L     
-		  (0.9342427,   0.06575734,   // False False 
-		   0.324643,    0.675357,     // False True  
-		   0.4669799,   0.5330201,    // True  False 
-		   0.3834992,   0.6165008);   // True  True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.6381095, 0.3618905);
-	};
-
-node O {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.02571,     0.97429);
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.02571, 0.97429);
-	};
-
-node K {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (N, O);
-	probs = 
-		// False        True          // N     O     
-		  (0.7358972,   0.2641028,    // False False 
-		   0.5666708,   0.4333292,    // False True  
-		   0.6197379,   0.3802622,    // True  False 
-		   0.8959336,   0.1040664);   // True  True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.6151403, 0.3848597);
-	};
-
-node T {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (X);
-	probs = 
-		// False        True          // X     
-		  (0.06491959,  0.9350804,    // False 
-		   0.8302771,   0.1697229);   // True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.5662187, 0.4337813);
-	};
-
-node P {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.2193525,   0.7806475);
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.2193525, 0.7806475);
-	};
-
-node I {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.3061033,   0.6938967);
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.3061033, 0.6938967);
-	};
-
-node K1 {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.2539469,   0.746053);
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.2539469, 0.7460531);
-	};
-
-node U {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (P, I, I1, K1);
-	probs = 
-		// False        True          // P     I     I1    K1    
-		  (0.6566123,   0.3433878,    // False False False False 
-		   0.1918754,   0.8081246,    // False False False True  
-		   0.5947874,   0.4052126,    // False False True  False 
-		   0.3372964,   0.6627036,    // False False True  True  
-		   0.7256489,   0.2743511,    // False True  False False 
-		   0.4739259,   0.5260741,    // False True  False True  
-		   0.1426882,   0.8573118,    // False True  True  False 
-		   0.8180707,   0.1819293,    // False True  True  True  
-		   0.03443961,  0.9655604,    // True  False False False 
-		   0.739238,    0.260762,     // True  False False True  
-		   0.8818738,   0.1181262,    // True  False True  False 
-		   0.07518041,  0.9248196,    // True  False True  True  
-		   0.5382109,   0.4617891,    // True  True  False False 
-		   0.3648398,   0.6351603,    // True  True  False True  
-		   0.1897792,   0.8102208,    // True  True  True  False 
-		   0.9075,      0.09249976);  // True  True  True  True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.5727932, 0.4272068);
+	whenchanged = 1758178407;
+	belief = (0.4080716, 0.5919284);
 	};
 
 node Z {
@@ -280,133 +26,29 @@ node Z {
 	discrete = TRUE;
 	chance = CHANCE;
 	states = (False, True);
-	parents = (K1, T);
+	parents = (J);
 	probs = 
-		// False        True          // K1    T     
-		  (0.9419988,   0.05800122,   // False False 
-		   0.1492891,   0.8507109,    // False True  
-		   0.9806815,   0.01931848,   // True  False 
-		   0.1499325,   0.8500676);   // True  True  ;
+		// False        True          // J     
+		  (0.1172147,   0.8827853,    // False 
+		   0.4217525,   0.5782475);   // True  ;
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.6146851, 0.3853149);
+	whenchanged = 1758178407;
+	belief = (0.2974793, 0.7025207);
 	};
 
-node C1 {
+node I {
 	kind = NATURE;
 	discrete = TRUE;
 	chance = CHANCE;
 	states = (False, True);
-	parents = ();
+	parents = (Z);
 	probs = 
-		// False        True         
-		  (0.2797251,   0.7202749);
+		// False        True          // Z     
+		  (0.4299978,   0.5700022,    // False 
+		   0.6402089,   0.3597911);   // True  ;
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.2797251, 0.7202749);
-	};
-
-node Y {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (C1, K1);
-	probs = 
-		// False        True          // C1    K1    
-		  (0.1548189,   0.8451811,    // False False 
-		   0.6590667,   0.3409334,    // False True  
-		   0.7950052,   0.2049948,    // True  False 
-		   0.1003715,   0.8996285);   // True  True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.3478897, 0.6521103);
-	};
-
-node J1 {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (Z, Y, P);
-	probs = 
-		// False        True          // Z     Y     P     
-		  (0.6945547,   0.3054453,    // False False False 
-		   0.70277,     0.29723,      // False False True  
-		   0.6695582,   0.3304417,    // False True  False 
-		   0.204267,    0.795733,     // False True  True  
-		   0.5202649,   0.4797351,    // True  False False 
-		   0.02048763,  0.9795124,    // True  False True  
-		   0.400032,    0.599968,     // True  True  False 
-		   0.5979586,   0.4020414);   // True  True  True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.4282305, 0.5717695);
-	};
-
-node G1 {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.2267477,   0.7732523);
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.2267477, 0.7732523);
-	};
-
-node F {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (P, G1, C1);
-	probs = 
-		// False        True          // P     G1    C1    
-		  (0.8277794,   0.1722206,    // False False False 
-		   0.8065298,   0.1934702,    // False False True  
-		   0.2752921,   0.7247079,    // False True  False 
-		   0.4251831,   0.5748169,    // False True  True  
-		   0.7008874,   0.2991126,    // True  False False 
-		   0.5919014,   0.4080986,    // True  False True  
-		   0.3221345,   0.6778655,    // True  True  False 
-		   0.1820442,   0.8179558);   // True  True  True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.3491284, 0.6508716);
-	};
-
-node N1 {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (P);
-	probs = 
-		// False        True          // P     
-		  (0.512019,    0.4879811,    // False 
-		   0.5037071,   0.4962929);   // True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.5055304, 0.4944696);
-	};
-
-node D1 {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (P);
-	probs = 
-		// False        True          // P     
-		  (0.1860717,   0.8139283,    // False 
-		   0.3932216,   0.6067784);   // True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.3477827, 0.6522173);
+	whenchanged = 1758178407;
+	belief = (0.5776755, 0.4223246);
 	};
 
 node F1 {
@@ -414,34 +56,32 @@ node F1 {
 	discrete = TRUE;
 	chance = CHANCE;
 	states = (False, True);
-	parents = (J1);
+	parents = (I);
 	probs = 
-		// False        True          // J1    
-		  (0.3095191,   0.6904809,    // False 
-		   0.7425755,   0.2574245);   // True  ;
+		// False        True          // I     
+		  (0.5151048,   0.4848952,    // False 
+		   0.1181405,   0.8818595);   // True  ;
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.5571275, 0.4428724);
+	whenchanged = 1758178407;
+	belief = (0.3474571, 0.6525429);
 	};
 
-node E1 {
+node P {
 	kind = NATURE;
 	discrete = TRUE;
 	chance = CHANCE;
 	states = (False, True);
-	parents = (F, D1);
+	parents = (F1);
 	probs = 
-		// False        True          // F     D1    
-		  (0.9853742,   0.01462584,   // False False 
-		   0.8046266,   0.1953733,    // False True  
-		   0.1210786,   0.8789214,    // True  False 
-		   0.5011674,   0.4988326);   // True  True  ;
+		// False        True          // F1    
+		  (0.9779401,   0.02205991,   // False 
+		   0.1009679,   0.8990321);   // True  ;
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.5396727, 0.4603274);
+	whenchanged = 1758178407;
+	belief = (0.4056781, 0.5943219);
 	};
 
-node C {
+node B1 {
 	kind = NATURE;
 	discrete = TRUE;
 	chance = CHANCE;
@@ -449,10 +89,25 @@ node C {
 	parents = ();
 	probs = 
 		// False        True         
-		  (0.01521702,  0.984783);
+		  (0.276683,    0.723317);
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.01521702, 0.984783);
+	whenchanged = 1758178407;
+	belief = (0.276683, 0.723317);
+	};
+
+node V {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (B1);
+	probs = 
+		// False        True          // B1    
+		  (0.3098893,   0.6901107,    // False 
+		   0.3285649,   0.6714352);   // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.3233977, 0.6766024);
 	};
 
 node D {
@@ -463,13 +118,13 @@ node D {
 	parents = ();
 	probs = 
 		// False        True         
-		  (0.08630917,  0.9136908);
+		  (0.2735738,   0.7264262);
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.08630917, 0.9136908);
+	whenchanged = 1758178407;
+	belief = (0.2735737, 0.7264262);
 	};
 
-node L1 {
+node E1 {
 	kind = NATURE;
 	discrete = TRUE;
 	chance = CHANCE;
@@ -477,68 +132,25 @@ node L1 {
 	parents = ();
 	probs = 
 		// False        True         
-		  (0.7096627,   0.2903373);
+		  (0.8260858,   0.1739142);
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.7096627, 0.2903373);
+	whenchanged = 1758178407;
+	belief = (0.8260858, 0.1739142);
 	};
 
-node E {
+node Y {
 	kind = NATURE;
 	discrete = TRUE;
 	chance = CHANCE;
 	states = (False, True);
-	parents = (L1);
+	parents = (E1);
 	probs = 
-		// False        True          // L1    
-		  (0.6070716,   0.3929284,    // False 
-		   0.9370369,   0.06296312);  // True  ;
+		// False        True          // E1    
+		  (0.66289,     0.33711,      // False 
+		   0.4995471,   0.5004529);   // True  ;
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.7028729, 0.2971272);
-	};
-
-node J {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.6360769,   0.3639231);
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.6360769, 0.3639231);
-	};
-
-node G {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = (J);
-	probs = 
-		// False        True          // J     
-		  (0.9383102,   0.06168981,   // False 
-		   0.3954862,   0.6045138);   // True  ;
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.740764, 0.259236);
-	};
-
-node H1 {
-	kind = NATURE;
-	discrete = TRUE;
-	chance = CHANCE;
-	states = (False, True);
-	parents = ();
-	probs = 
-		// False        True         
-		  (0.5836129,   0.4163872);
-	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.5836129, 0.4163872);
+	whenchanged = 1758178407;
+	belief = (0.6344824, 0.3655176);
 	};
 
 node M {
@@ -546,14 +158,58 @@ node M {
 	discrete = TRUE;
 	chance = CHANCE;
 	states = (False, True);
-	parents = (H1);
+	parents = ();
 	probs = 
-		// False        True          // H1    
-		  (0.1806137,   0.8193862,    // False 
-		   0.6181084,   0.3818916);   // True  ;
+		// False        True         
+		  (0.4839109,   0.5160891);
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.3627809, 0.6372191);
+	whenchanged = 1758178407;
+	belief = (0.4839109, 0.5160891);
+	};
+
+node A {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (P, V, D, Y, M);
+	probs = 
+		// False        True          // P     V     D     Y     M     
+		  (0.6929563,   0.3070437,    // False False False False False 
+		   0.07590201,  0.924098,     // False False False False True  
+		   0.3502231,   0.6497769,    // False False False True  False 
+		   0.3750473,   0.6249527,    // False False False True  True  
+		   0.2228405,   0.7771595,    // False False True  False False 
+		   0.7780374,   0.2219626,    // False False True  False True  
+		   0.2450303,   0.7549697,    // False False True  True  False 
+		   0.7556661,   0.244334,     // False False True  True  True  
+		   0.7740375,   0.2259625,    // False True  False False False 
+		   0.3248506,   0.6751494,    // False True  False False True  
+		   0.3354742,   0.6645259,    // False True  False True  False 
+		   0.8024575,   0.1975425,    // False True  False True  True  
+		   0.4007048,   0.5992952,    // False True  True  False False 
+		   0.9632983,   0.03670168,   // False True  True  False True  
+		   0.668454,    0.331546,     // False True  True  True  False 
+		   0.05409599,  0.945904,     // False True  True  True  True  
+		   0.3890055,   0.6109945,    // True  False False False False 
+		   0.5567563,   0.4432437,    // True  False False False True  
+		   0.09266074,  0.9073393,    // True  False False True  False 
+		   0.5636195,   0.4363805,    // True  False False True  True  
+		   0.9923106,   0.007689331,  // True  False True  False False 
+		   0.329471,    0.670529,     // True  False True  False True  
+		   0.3971861,   0.6028139,    // True  False True  True  False 
+		   0.7073781,   0.2926219,    // True  False True  True  True  
+		   0.6469949,   0.3530051,    // True  True  False False False 
+		   0.2735128,   0.7264872,    // True  True  False False True  
+		   0.9060699,   0.09393013,   // True  True  False True  False 
+		   0.1655286,   0.8344714,    // True  True  False True  True  
+		   0.3843571,   0.6156429,    // True  True  True  False False 
+		   0.2894532,   0.7105468,    // True  True  True  False True  
+		   0.3449279,   0.6550721,    // True  True  True  True  False 
+		   0.5451164,   0.4548836);   // True  True  True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.4876488, 0.5123513);
 	};
 
 node A1 {
@@ -561,16 +217,81 @@ node A1 {
 	discrete = TRUE;
 	chance = CHANCE;
 	states = (False, True);
-	parents = (J, M);
+	parents = (A);
 	probs = 
-		// False        True          // J     M     
-		  (0.2401503,   0.7598497,    // False False 
-		   0.4309372,   0.5690628,    // False True  
-		   0.144437,    0.855563,     // True  False 
-		   0.5209348,   0.4790652);   // True  True  ;
+		// False        True          // A     
+		  (0.1210226,   0.8789774,    // False 
+		   0.6731812,   0.3268189);   // True  ;
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.3699572, 0.6300428);
+	whenchanged = 1758178407;
+	belief = (0.4039218, 0.5960783);
+	};
+
+node Q {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (P, E1);
+	probs = 
+		// False        True          // P     E1    
+		  (0.5264463,   0.4735537,    // False False 
+		   0.8734636,   0.1265363,    // False True  
+		   0.6211699,   0.3788301,    // True  False 
+		   0.5698524,   0.4301476);   // True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.6019216, 0.3980784);
+	};
+
+node K {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = ();
+	probs = 
+		// False        True         
+		  (0.03433833,  0.9656616);
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.03433833, 0.9656616);
+	};
+
+node R {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (K, Q, P);
+	probs = 
+		// False        True          // K     Q     P     
+		  (0.07480727,  0.9251927,    // False False False 
+		   0.3573736,   0.6426265,    // False False True  
+		   0.2029252,   0.7970748,    // False True  False 
+		   0.6262692,   0.3737307,    // False True  True  
+		   0.9026498,   0.09735023,   // True  False False 
+		   0.412689,    0.587311,     // True  False True  
+		   0.7749684,   0.2250316,    // True  True  False 
+		   0.6486427,   0.3513573);   // True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.6335, 0.3664996);
+	};
+
+node X {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (K);
+	probs = 
+		// False        True          // K     
+		  (0.2845636,   0.7154363,    // False 
+		   0.6339163,   0.3660837);   // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.6219202, 0.3780799);
 	};
 
 node H {
@@ -581,13 +302,49 @@ node H {
 	parents = ();
 	probs = 
 		// False        True         
-		  (0.3558593,   0.6441407);
+		  (0.7168112,   0.2831888);
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.3558593, 0.6441407);
+	whenchanged = 1758178407;
+	belief = (0.7168112, 0.2831888);
 	};
 
-node Q {
+node C {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (P, X, H);
+	probs = 
+		// False        True          // P     X     H     
+		  (0.6072964,   0.3927036,    // False False False 
+		   0.7382466,   0.2617534,    // False False True  
+		   0.1766318,   0.8233682,    // False True  False 
+		   0.9274908,   0.07250918,   // False True  True  
+		   0.002598269, 0.9974017,    // True  False False 
+		   0.5058731,   0.4941269,    // True  False True  
+		   0.1826194,   0.8173807,    // True  True  False 
+		   0.5062421,   0.4937579);   // True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.3375491, 0.6624509);
+	};
+
+node C1 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (I);
+	probs = 
+		// False        True          // I     
+		  (0.1517605,   0.8482395,    // False 
+		   0.4915246,   0.5084754);   // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.2952513, 0.7047487);
+	};
+
+node J1 {
 	kind = NATURE;
 	discrete = TRUE;
 	chance = CHANCE;
@@ -595,13 +352,188 @@ node Q {
 	parents = ();
 	probs = 
 		// False        True         
-		  (0.2052756,   0.7947243);
+		  (0.5629549,   0.4370451);
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.2052756, 0.7947243);
+	whenchanged = 1758178407;
+	belief = (0.5629549, 0.4370451);
 	};
 
-node S {
+node N {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (F1, C1, J1, P);
+	probs = 
+		// False        True          // F1    C1    J1    P     
+		  (0.618198,    0.381802,     // False False False False 
+		   0.8862594,   0.1137406,    // False False False True  
+		   0.007117841, 0.9928821,    // False False True  False 
+		   0.1965841,   0.8034159,    // False False True  True  
+		   0.5108142,   0.4891858,    // False True  False False 
+		   0.8332865,   0.1667134,    // False True  False True  
+		   0.2240157,   0.7759843,    // False True  True  False 
+		   0.8560227,   0.1439773,    // False True  True  True  
+		   0.8209266,   0.1790734,    // True  False False False 
+		   0.7958931,   0.2041069,    // True  False False True  
+		   0.9190017,   0.08099829,   // True  False True  False 
+		   0.2162295,   0.7837705,    // True  False True  True  
+		   0.003196323, 0.9968037,    // True  True  False False 
+		   0.551126,    0.448874,     // True  True  False True  
+		   0.3862908,   0.6137092,    // True  True  True  False 
+		   0.582172,    0.417828);    // True  True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.4885264, 0.5114735);
+	};
+
+node T {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (V);
+	probs = 
+		// False        True          // V     
+		  (0.6167467,   0.3832533,    // False 
+		   0.294077,    0.705923);    // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.3984276, 0.6015724);
+	};
+
+node F {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (Y, I, T, B1);
+	probs = 
+		// False        True          // Y     I     T     B1    
+		  (0.2882064,   0.7117936,    // False False False False 
+		   0.1590575,   0.8409426,    // False False False True  
+		   0.1320798,   0.8679202,    // False False True  False 
+		   0.8835687,   0.1164313,    // False False True  True  
+		   0.6480172,   0.3519828,    // False True  False False 
+		   0.5284497,   0.4715503,    // False True  False True  
+		   0.5616834,   0.4383166,    // False True  True  False 
+		   0.1447086,   0.8552914,    // False True  True  True  
+		   0.9385135,   0.06148647,   // True  False False False 
+		   0.06809857,  0.9319015,    // True  False False True  
+		   0.3273164,   0.6726836,    // True  False True  False 
+		   0.2569378,   0.7430623,    // True  False True  True  
+		   0.7095,      0.2905,       // True  True  False False 
+		   0.07755844,  0.9224415,    // True  True  False True  
+		   0.3454629,   0.6545371,    // True  True  True  False 
+		   0.5378373,   0.4621627);   // True  True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.4002692, 0.5997308);
+	};
+
+node E {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (Y, I);
+	probs = 
+		// False        True          // Y     I     
+		  (0.231446,    0.768554,     // False False 
+		   0.447254,    0.5527459,    // False True  
+		   0.127292,    0.872708,     // True  False 
+		   0.6177318,   0.3822682);   // True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.326911, 0.673089);
+	};
+
+node B {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (I, M, N);
+	probs = 
+		// False        True          // I     M     N     
+		  (0.9168526,   0.08314744,   // False False False 
+		   0.9881833,   0.01181669,   // False False True  
+		   0.1908883,   0.8091118,    // False True  False 
+		   0.5210077,   0.4789923,    // False True  True  
+		   0.8140006,   0.1859994,    // True  False False 
+		   0.3404742,   0.6595258,    // True  False True  
+		   0.4108067,   0.5891933,    // True  True  False 
+		   0.4039139,   0.5960861);   // True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.5868652, 0.4131347);
+	};
+
+node D1 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (F1, J1);
+	probs = 
+		// False        True          // F1    J1    
+		  (0.3958123,   0.6041877,    // False False 
+		   0.9534174,   0.04658258,   // False True  
+		   0.6400714,   0.3599286,    // True  False 
+		   0.2273475,   0.7726525);   // True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.5221716, 0.4778284);
+	};
+
+node L1 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (F1, F);
+	probs = 
+		// False        True          // F1    F     
+		  (0.1835664,   0.8164336,    // False False 
+		   0.2878356,   0.7121644,    // False True  
+		   0.2130458,   0.7869542,    // True  False 
+		   0.1100576,   0.8899424);   // True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.1836749, 0.8163251);
+	};
+
+node W {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (B1);
+	probs = 
+		// False        True          // B1    
+		  (0.5994915,   0.4005085,    // False 
+		   0.8055714,   0.1944286);   // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.7485526, 0.2514474);
+	};
+
+node I1 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (B1);
+	probs = 
+		// False        True          // B1    
+		  (0.324864,    0.675136,     // False 
+		   0.6906431,   0.3093569);   // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.5894383, 0.4105618);
+	};
+
+node K1 {
 	kind = NATURE;
 	discrete = TRUE;
 	chance = CHANCE;
@@ -609,10 +541,31 @@ node S {
 	parents = ();
 	probs = 
 		// False        True         
-		  (0.5621454,   0.4378546);
+		  (0.1760174,   0.8239826);
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.5621454, 0.4378546);
+	whenchanged = 1758178407;
+	belief = (0.1760174, 0.8239826);
+	};
+
+node L {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (H, K1, B);
+	probs = 
+		// False        True          // H     K1    B     
+		  (0.002649793, 0.9973502,    // False False False 
+		   0.09921787,  0.9007821,    // False False True  
+		   0.3430076,   0.6569924,    // False True  False 
+		   0.0643073,   0.9356927,    // False True  True  
+		   0.7082418,   0.2917583,    // True  False False 
+		   0.657263,    0.342737,     // True  False True  
+		   0.9845316,   0.01546841,   // True  True  False 
+		   0.7601885,   0.2398115);   // True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.3823147, 0.6176853);
 	};
 
 node M1 {
@@ -620,13 +573,121 @@ node M1 {
 	discrete = TRUE;
 	chance = CHANCE;
 	states = (False, True);
-	parents = ();
+	parents = (K);
 	probs = 
-		// False        True         
-		  (0.5994886,   0.4005114);
+		// False        True          // K     
+		  (0.2004813,   0.7995188,    // False 
+		   0.4071777,   0.5928223);   // True  ;
 	numcases = 1;
-	whenchanged = 1758166609;
-	belief = (0.5994886, 0.4005114);
+	whenchanged = 1758178407;
+	belief = (0.4000801, 0.5999199);
 	};
-ElimOrder = (A, C, D, H, Q, S, M1, N1, F1, L1, E, G, H1, B, V, X, B1, R, W, L, O, K, N, E1, D1, J, M, A1, T, J1, G1, F, C1, Y, Z, I1, P, I, K1, U);
+
+node U {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (K);
+	probs = 
+		// False        True          // K     
+		  (0.5717884,   0.4282116,    // False 
+		   0.3557453,   0.6442547);   // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.3631639, 0.6368361);
+	};
+
+node G {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (J1);
+	probs = 
+		// False        True          // J1    
+		  (0.8727996,   0.1272004,    // False 
+		   0.1209904,   0.8790095);   // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.5442251, 0.4557749);
+	};
+
+node O {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (I1, W);
+	probs = 
+		// False        True          // I1    W     
+		  (0.2896017,   0.7103983,    // False False 
+		   0.5647414,   0.4352586,    // False True  
+		   0.1693921,   0.830608,     // True  False 
+		   0.8807835,   0.1192165);   // True  True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.3610489, 0.6389511);
+	};
+
+node G1 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (Z);
+	probs = 
+		// False        True          // Z     
+		  (0.9882304,   0.01176961,   // False 
+		   0.2871068,   0.7128932);   // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.4956765, 0.5043235);
+	};
+
+node H1 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (U);
+	probs = 
+		// False        True          // U     
+		  (0.8014826,   0.1985175,    // False 
+		   0.735556,    0.264444);    // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.7594981, 0.2405019);
+	};
+
+node S {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (G);
+	probs = 
+		// False        True          // G     
+		  (0.9946961,   0.005303864,  // False 
+		   0.7414391,   0.2585609);   // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.8792679, 0.1207321);
+	};
+
+node N1 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (G);
+	probs = 
+		// False        True          // G     
+		  (0.114981,    0.8850189,    // False 
+		   0.4842983,   0.5157017);   // True  ;
+	numcases = 1;
+	whenchanged = 1758178407;
+	belief = (0.2833066, 0.7166934);
+	};
+ElimOrder = (J, A1, M1, G1, Z, H1, U, S, N1, G, E, D1, L1, O, W, I1, E1, R, Q, K, C, X, K1, L, H, J1, C1, F1, B1, T, D, A, V, Y, I, P, M, N, F, B);
 };

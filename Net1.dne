@@ -1,0 +1,369 @@
+// ~->[DNET-1]->~
+
+// File created by someone at MonashU using Netica 5.04 on 09/18/25 at 12:44:41.
+
+bnet Net1 {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1758199481;
+
+node E {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = ();
+	probs = 
+		// False        True         
+		  (0.6538463,   0.3461537);
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.6538463, 0.3461537);
+	};
+
+node C {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (E);
+	probs = 
+		// False        True          // E     
+		  (0.8540403,   0.1459597,    // False 
+		   0.01352118,  0.9864788);   // True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.5630915, 0.4369085);
+	};
+
+node A {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (C, E);
+	probs = 
+		// False        True          // C     E     
+		  (0.2647122,   0.7352878,    // False False 
+		   0.3834302,   0.6165698,    // False True  
+		   0.1351668,   0.8648332,    // True  False 
+		   0.2057957,   0.7942043);   // True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.2327862, 0.7672138);
+	};
+
+node G {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (C, A, E);
+	probs = 
+		// False        True          // C     A     E     
+		  (0.1670425,   0.8329576,    // False False False 
+		   0.5494498,   0.4505502,    // False False True  
+		   0.6299751,   0.3700249,    // False True  False 
+		   0.2133103,   0.7866897,    // False True  True  
+		   0.5058416,   0.4941584,    // True  False False 
+		   0.559411,    0.4405889,    // True  False True  
+		   0.2897549,   0.7102451,    // True  True  False 
+		   0.6870481,   0.3129519);   // True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.5410362, 0.4589638);
+	};
+
+node D {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (A, E, G, C);
+	probs = 
+		// False        True          // A     E     G     C     
+		  (0.2039571,   0.7960429,    // False False False False 
+		   0.3465197,   0.6534802,    // False False False True  
+		   0.9812062,   0.01879381,   // False False True  False 
+		   0.2358708,   0.7641292,    // False False True  True  
+		   0.285587,    0.714413,     // False True  False False 
+		   0.5246202,   0.4753798,    // False True  False True  
+		   0.3097888,   0.6902112,    // False True  True  False 
+		   0.4408111,   0.5591888,    // False True  True  True  
+		   0.125025,    0.874975,     // True  False False False 
+		   0.844595,    0.155405,     // True  False False True  
+		   0.1016257,   0.8983743,    // True  False True  False 
+		   0.5246031,   0.4753969,    // True  False True  True  
+		   0.5030734,   0.4969266,    // True  True  False False 
+		   0.4908125,   0.5091875,    // True  True  False True  
+		   0.7280897,   0.2719103,    // True  True  True  False 
+		   0.7677797,   0.2322203);   // True  True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.4217252, 0.5782748);
+	};
+
+node F {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (E, D, G, C, A);
+	probs = 
+		// False        True          // E     D     G     C     A     
+		  (0.2171415,   0.7828585,    // False False False False False 
+		   0.3785447,   0.6214553,    // False False False False True  
+		   0.7441473,   0.2558527,    // False False False True  False 
+		   0.01082609,  0.9891739,    // False False False True  True  
+		   0.001644204, 0.9983558,    // False False True  False False 
+		   0.2411601,   0.7588399,    // False False True  False True  
+		   0.2041697,   0.7958304,    // False False True  True  False 
+		   0.7681007,   0.2318992,    // False False True  True  True  
+		   0.6602076,   0.3397924,    // False True  False False False 
+		   0.7990572,   0.2009427,    // False True  False False True  
+		   0.08581666,  0.9141833,    // False True  False True  False 
+		   0.6734831,   0.3265169,    // False True  False True  True  
+		   0.5544436,   0.4455564,    // False True  True  False False 
+		   0.131502,    0.868498,     // False True  True  False True  
+		   0.3166911,   0.6833089,    // False True  True  True  False 
+		   0.1217805,   0.8782195,    // False True  True  True  True  
+		   0.4967664,   0.5032336,    // True  False False False False 
+		   0.8790045,   0.1209955,    // True  False False False True  
+		   0.7515246,   0.2484754,    // True  False False True  False 
+		   0.4807986,   0.5192014,    // True  False False True  True  
+		   0.6250699,   0.3749301,    // True  False True  False False 
+		   0.1057134,   0.8942866,    // True  False True  False True  
+		   0.9485266,   0.0514734,    // True  False True  True  False 
+		   0.6010014,   0.3989986,    // True  False True  True  True  
+		   0.249069,    0.750931,     // True  True  False False False 
+		   0.662363,    0.337637,     // True  True  False False True  
+		   0.8030372,   0.1969628,    // True  True  False True  False 
+		   0.2203173,   0.7796826,    // True  True  False True  True  
+		   0.7236615,   0.2763385,    // True  True  True  False False 
+		   0.624294,    0.375706,     // True  True  True  False True  
+		   0.6990244,   0.3009757,    // True  True  True  True  False 
+		   0.04677755,  0.9532225);   // True  True  True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.4263698, 0.5736302);
+	};
+
+node H {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (A, F, E, D, G, C);
+	probs = 
+		// False        True          // A     F     E     D     G     C     
+		  (0.5452967,   0.4547032,    // False False False False False False 
+		   0.6764794,   0.3235206,    // False False False False False True  
+		   0.5044712,   0.4955288,    // False False False False True  False 
+		   0.7762719,   0.223728,     // False False False False True  True  
+		   0.04935588,  0.9506441,    // False False False True  False False 
+		   0.7615902,   0.2384098,    // False False False True  False True  
+		   0.02014052,  0.9798595,    // False False False True  True  False 
+		   0.9826722,   0.01732783,   // False False False True  True  True  
+		   0.3692853,   0.6307147,    // False False True  False False False 
+		   0.5819995,   0.4180005,    // False False True  False False True  
+		   0.4735595,   0.5264405,    // False False True  False True  False 
+		   0.09425321,  0.9057468,    // False False True  False True  True  
+		   0.898778,    0.101222,     // False False True  True  False False 
+		   0.2521698,   0.7478302,    // False False True  True  False True  
+		   0.3088116,   0.6911884,    // False False True  True  True  False 
+		   0.7648222,   0.2351778,    // False False True  True  True  True  
+		   0.212064,    0.787936,     // False True  False False False False 
+		   0.1745054,   0.8254946,    // False True  False False False True  
+		   0.1418813,   0.8581187,    // False True  False False True  False 
+		   0.74562,     0.25438,      // False True  False False True  True  
+		   0.07569,     0.92431,      // False True  False True  False False 
+		   0.5082394,   0.4917606,    // False True  False True  False True  
+		   0.9139407,   0.0860593,    // False True  False True  True  False 
+		   0.1675555,   0.8324445,    // False True  False True  True  True  
+		   0.6118658,   0.3881342,    // False True  True  False False False 
+		   0.4414431,   0.5585569,    // False True  True  False False True  
+		   0.01116374,  0.9888362,    // False True  True  False True  False 
+		   0.5683842,   0.4316159,    // False True  True  False True  True  
+		   0.6664982,   0.3335018,    // False True  True  True  False False 
+		   0.1238684,   0.8761317,    // False True  True  True  False True  
+		   0.4037865,   0.5962135,    // False True  True  True  True  False 
+		   0.3827548,   0.6172451,    // False True  True  True  True  True  
+		   0.4364492,   0.5635508,    // True  False False False False False 
+		   0.3597502,   0.6402498,    // True  False False False False True  
+		   0.7062351,   0.293765,     // True  False False False True  False 
+		   0.1968985,   0.8031015,    // True  False False False True  True  
+		   0.5960579,   0.4039421,    // True  False False True  False False 
+		   0.6084532,   0.3915469,    // True  False False True  False True  
+		   0.3844612,   0.6155388,    // True  False False True  True  False 
+		   0.09137145,  0.9086285,    // True  False False True  True  True  
+		   0.3469383,   0.6530616,    // True  False True  False False False 
+		   0.8524277,   0.1475724,    // True  False True  False False True  
+		   0.3428271,   0.6571729,    // True  False True  False True  False 
+		   0.3557678,   0.6442322,    // True  False True  False True  True  
+		   0.9836091,   0.01639084,   // True  False True  True  False False 
+		   0.0168964,   0.9831036,    // True  False True  True  False True  
+		   0.5136026,   0.4863974,    // True  False True  True  True  False 
+		   0.5631161,   0.4368839,    // True  False True  True  True  True  
+		   0.205497,    0.794503,     // True  True  False False False False 
+		   0.7273831,   0.2726169,    // True  True  False False False True  
+		   0.2691874,   0.7308126,    // True  True  False False True  False 
+		   0.06132268,  0.9386773,    // True  True  False False True  True  
+		   0.5144514,   0.4855486,    // True  True  False True  False False 
+		   0.1195,      0.8805,       // True  True  False True  False True  
+		   0.7778913,   0.2221087,    // True  True  False True  True  False 
+		   0.7728288,   0.2271713,    // True  True  False True  True  True  
+		   0.9944177,   0.005582287,  // True  True  True  False False False 
+		   0.8318337,   0.1681663,    // True  True  True  False False True  
+		   0.144808,    0.855192,     // True  True  True  False True  False 
+		   0.1733057,   0.8266943,    // True  True  True  False True  True  
+		   0.6058487,   0.3941513,    // True  True  True  True  False False 
+		   0.4065484,   0.5934516,    // True  True  True  True  False True  
+		   0.743057,    0.256943,     // True  True  True  True  True  False 
+		   0.5049798,   0.4950202);   // True  True  True  True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.479807, 0.520193);
+	};
+
+node B {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (False, True);
+	parents = (C, A, H, D, F, E, G);
+	probs = 
+		// False        True          // C     A     H     D     F     E     G     
+		  (0.8965412,   0.1034588,    // False False False False False False False 
+		   0.7569833,   0.2430167,    // False False False False False False True  
+		   0.8347993,   0.1652006,    // False False False False False True  False 
+		   0.7781608,   0.2218392,    // False False False False False True  True  
+		   0.1464787,   0.8535213,    // False False False False True  False False 
+		   0.7326251,   0.2673749,    // False False False False True  False True  
+		   0.6542338,   0.3457662,    // False False False False True  True  False 
+		   0.1620842,   0.8379158,    // False False False False True  True  True  
+		   0.5675655,   0.4324345,    // False False False True  False False False 
+		   0.1800747,   0.8199253,    // False False False True  False False True  
+		   0.6500775,   0.3499225,    // False False False True  False True  False 
+		   0.651207,    0.348793,     // False False False True  False True  True  
+		   0.896674,    0.103326,     // False False False True  True  False False 
+		   0.5983145,   0.4016855,    // False False False True  True  False True  
+		   0.8438466,   0.1561535,    // False False False True  True  True  False 
+		   0.7395906,   0.2604094,    // False False False True  True  True  True  
+		   0.8050559,   0.1949441,    // False False True  False False False False 
+		   0.1026194,   0.8973806,    // False False True  False False False True  
+		   0.8966485,   0.1033515,    // False False True  False False True  False 
+		   0.2603402,   0.7396598,    // False False True  False False True  True  
+		   0.5574015,   0.4425985,    // False False True  False True  False False 
+		   0.2399632,   0.7600368,    // False False True  False True  False True  
+		   0.2023,      0.7977,       // False False True  False True  True  False 
+		   0.3979854,   0.6020145,    // False False True  False True  True  True  
+		   0.8841096,   0.1158904,    // False False True  True  False False False 
+		   0.6510255,   0.3489745,    // False False True  True  False False True  
+		   0.2957355,   0.7042645,    // False False True  True  False True  False 
+		   0.3124915,   0.6875085,    // False False True  True  False True  True  
+		   0.3514416,   0.6485584,    // False False True  True  True  False False 
+		   0.07208312,  0.9279169,    // False False True  True  True  False True  
+		   0.7543214,   0.2456786,    // False False True  True  True  True  False 
+		   0.8720968,   0.1279032,    // False False True  True  True  True  True  
+		   0.1689194,   0.8310806,    // False True  False False False False False 
+		   0.8434039,   0.156596,     // False True  False False False False True  
+		   0.7818632,   0.2181368,    // False True  False False False True  False 
+		   0.1463319,   0.8536682,    // False True  False False False True  True  
+		   0.1446832,   0.8553168,    // False True  False False True  False False 
+		   0.3216659,   0.6783341,    // False True  False False True  False True  
+		   0.4456546,   0.5543454,    // False True  False False True  True  False 
+		   0.6557931,   0.3442068,    // False True  False False True  True  True  
+		   0.4379392,   0.5620608,    // False True  False True  False False False 
+		   0.4624779,   0.5375221,    // False True  False True  False False True  
+		   0.619001,    0.380999,     // False True  False True  False True  False 
+		   0.713874,    0.286126,     // False True  False True  False True  True  
+		   0.4634948,   0.5365052,    // False True  False True  True  False False 
+		   0.4626754,   0.5373245,    // False True  False True  True  False True  
+		   0.1483889,   0.8516111,    // False True  False True  True  True  False 
+		   0.1763199,   0.8236801,    // False True  False True  True  True  True  
+		   0.521192,    0.478808,     // False True  True  False False False False 
+		   0.3266788,   0.6733212,    // False True  True  False False False True  
+		   0.9280336,   0.07196636,   // False True  True  False False True  False 
+		   0.4025588,   0.5974412,    // False True  True  False False True  True  
+		   0.4328955,   0.5671045,    // False True  True  False True  False False 
+		   0.295318,    0.7046819,    // False True  True  False True  False True  
+		   0.2639366,   0.7360634,    // False True  True  False True  True  False 
+		   0.1358445,   0.8641555,    // False True  True  False True  True  True  
+		   0.7005879,   0.2994121,    // False True  True  True  False False False 
+		   0.8264674,   0.1735326,    // False True  True  True  False False True  
+		   0.580297,    0.419703,     // False True  True  True  False True  False 
+		   0.7800831,   0.2199169,    // False True  True  True  False True  True  
+		   0.8581724,   0.1418276,    // False True  True  True  True  False False 
+		   0.5366951,   0.4633049,    // False True  True  True  True  False True  
+		   0.3554638,   0.6445362,    // False True  True  True  True  True  False 
+		   0.06868145,  0.9313185,    // False True  True  True  True  True  True  
+		   0.4390852,   0.5609148,    // True  False False False False False False 
+		   0.9341851,   0.06581493,   // True  False False False False False True  
+		   0.1181799,   0.8818201,    // True  False False False False True  False 
+		   0.6604764,   0.3395236,    // True  False False False False True  True  
+		   0.2891302,   0.7108698,    // True  False False False True  False False 
+		   0.317015,    0.6829851,    // True  False False False True  False True  
+		   0.7218142,   0.2781858,    // True  False False False True  True  False 
+		   0.01313148,  0.9868685,    // True  False False False True  True  True  
+		   0.7447309,   0.2552691,    // True  False False True  False False False 
+		   0.29592,     0.7040799,    // True  False False True  False False True  
+		   0.5052725,   0.4947275,    // True  False False True  False True  False 
+		   0.2974067,   0.7025933,    // True  False False True  False True  True  
+		   0.5674962,   0.4325037,    // True  False False True  True  False False 
+		   0.6001727,   0.3998273,    // True  False False True  True  False True  
+		   0.7531036,   0.2468965,    // True  False False True  True  True  False 
+		   0.4023789,   0.5976211,    // True  False False True  True  True  True  
+		   0.838598,    0.161402,     // True  False True  False False False False 
+		   0.1805589,   0.8194411,    // True  False True  False False False True  
+		   0.8311157,   0.1688843,    // True  False True  False False True  False 
+		   0.8678301,   0.1321699,    // True  False True  False False True  True  
+		   0.8852753,   0.1147247,    // True  False True  False True  False False 
+		   0.1848755,   0.8151245,    // True  False True  False True  False True  
+		   0.2076644,   0.7923356,    // True  False True  False True  True  False 
+		   0.2044666,   0.7955334,    // True  False True  False True  True  True  
+		   0.98913,     0.01087004,   // True  False True  True  False False False 
+		   0.05784504,  0.9421549,    // True  False True  True  False False True  
+		   0.8015346,   0.1984654,    // True  False True  True  False True  False 
+		   0.7087851,   0.2912149,    // True  False True  True  False True  True  
+		   0.1966198,   0.8033802,    // True  False True  True  True  False False 
+		   0.6138225,   0.3861775,    // True  False True  True  True  False True  
+		   0.9810315,   0.0189685,    // True  False True  True  True  True  False 
+		   0.7095975,   0.2904024,    // True  False True  True  True  True  True  
+		   0.3708487,   0.6291513,    // True  True  False False False False False 
+		   0.370213,    0.629787,     // True  True  False False False False True  
+		   0.3028192,   0.6971808,    // True  True  False False False True  False 
+		   0.2574746,   0.7425253,    // True  True  False False False True  True  
+		   0.2936481,   0.7063519,    // True  True  False False True  False False 
+		   0.417739,    0.582261,     // True  True  False False True  False True  
+		   0.9648579,   0.03514204,   // True  True  False False True  True  False 
+		   0.2289194,   0.7710806,    // True  True  False False True  True  True  
+		   0.349243,    0.650757,     // True  True  False True  False False False 
+		   0.8420234,   0.1579767,    // True  True  False True  False False True  
+		   0.9439592,   0.05604085,   // True  True  False True  False True  False 
+		   0.5461277,   0.4538723,    // True  True  False True  False True  True  
+		   0.6388261,   0.3611739,    // True  True  False True  True  False False 
+		   0.7901399,   0.2098601,    // True  True  False True  True  False True  
+		   0.8721599,   0.1278401,    // True  True  False True  True  True  False 
+		   0.2407947,   0.7592053,    // True  True  False True  True  True  True  
+		   0.8674744,   0.1325257,    // True  True  True  False False False False 
+		   0.5373048,   0.4626952,    // True  True  True  False False False True  
+		   0.8260362,   0.1739638,    // True  True  True  False False True  False 
+		   0.1547527,   0.8452473,    // True  True  True  False False True  True  
+		   0.6403764,   0.3596236,    // True  True  True  False True  False False 
+		   0.6099218,   0.3900782,    // True  True  True  False True  False True  
+		   0.6079191,   0.3920809,    // True  True  True  False True  True  False 
+		   0.6357845,   0.3642155,    // True  True  True  False True  True  True  
+		   0.2337441,   0.766256,     // True  True  True  True  False False False 
+		   0.7256963,   0.2743036,    // True  True  True  True  False False True  
+		   0.2605305,   0.7394695,    // True  True  True  True  False True  False 
+		   0.3068572,   0.6931428,    // True  True  True  True  False True  True  
+		   0.06026138,  0.9397386,    // True  True  True  True  True  False False 
+		   0.958,       0.04199976,   // True  True  True  True  True  False True  
+		   0.4737592,   0.5262408,    // True  True  True  True  True  True  False 
+		   0.5737535,   0.4262466);   // True  True  True  True  True  True  True  ;
+	numcases = 1;
+	whenchanged = 1758199481;
+	belief = (0.5118296, 0.4881704);
+	};
+ElimOrder = (E, C, A, G, D, F, H, B);
+};
