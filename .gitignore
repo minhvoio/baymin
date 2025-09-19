@@ -16,6 +16,4 @@ __pycache__/
 
 ./test/MegaTTS3/checkpoints
 
-test
-test/
 ../projects/
