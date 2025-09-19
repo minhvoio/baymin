@@ -33,10 +33,10 @@ def build_random_bn(
     seed=None,
     states=("False","True"),
     cpt_mode="random",
-    dirichlet_alpha=1.0,
+    dirichlet_alpha=1.0, # cpt params set up, 1 is uniform
     avg_edges_per_node=1.2,   
     max_in_degree=2,          
-    sprinkle_motifs=0, 
+    sprinkle_motifs=5, 
     save_path=None
 ):
     if seed is not None:

@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from ollama.prompt import answer_this_prompt
 from contextlib import contextmanager
 from bni_netica.bni_utils import findAllDConnectedNodes
-from bni_netica.scripts import GET_PARAMS_SCRIPT, PREV_QUERY_SCRIPT
+from bn_helpers.scripts import GET_PARAMS_SCRIPT, PREV_QUERY_SCRIPT
 from bn_helpers.utils import (output_distribution, prob_X, prob_X_given_Y, prob_X_given_YZ, ensure_keys, logical_or, \
     logical_and, logical_xor, logical_xnor, fit_noisy_or, fit_noisy_and, fit_additive, _rmse, temporarily_set_findings, \
         names, resolve_state_index, state_names_by_indices)
@@ -48,7 +48,7 @@ class BnHelper(BaseModel):
 
     # XY CONNECT
     def is_XY_dconnected(self, net, from_node, to_node):
-      relatedNodes = net.node(from_node).getRelated("d_connected,exclude_self")
+      relatedNodes = net.node(from_node).getRelated("d_connected, exclude_self")
       for node in relatedNodes:
         if node.name() == to_node:
           return True
