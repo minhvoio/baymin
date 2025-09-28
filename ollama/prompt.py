@@ -1,11 +1,11 @@
-MODEL = "qwen3:1.7b"
+# MODEL = "qwen3:1.7b"
 # MODEL = "gpt-oss-bn-json"
 
 import requests
 import json
 from IPython.display import display, Markdown, clear_output
 
-def answer_this_prompt(prompt, stream=False, model=MODEL, temperature=0, format=None):
+def answer_this_prompt(prompt, stream=False, model="qwen3:1.7b", temperature=0, format=None):
     payload = {
         "prompt": prompt,
         "model": model,

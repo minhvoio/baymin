@@ -47,7 +47,7 @@ class BnHelper(BaseModel):
     function_name: str
 
     # XY CONNECT
-    def is_XY_dconnected(self, net, from_node, to_node):
+    def is_XY_connected(self, net, from_node, to_node):
       relatedNodes = net.node(from_node).getRelated("d_connected, exclude_self")
       for node in relatedNodes:
         if node.name() == to_node:
@@ -84,11 +84,11 @@ class BnHelper(BaseModel):
                 # ensure Z is not observed for the 'before' check
                 net.node(zname).retractFindings()
                 net.update()
-            dep_before = self.is_XY_dconnected(net, X, Y)
+            dep_before = self.is_XY_connected(net, X, Y)
 
             # ---- AFTER: dependency under Z observed ----
             with temporarily_set_findings(net, {zname: 0}): # using state index 0 for Z
-                dep_after = self.is_XY_dconnected(net, X, Y)
+                dep_after = self.is_XY_connected(net, X, Y)
 
             return (dep_before != dep_after), {"before": dep_before, "after": dep_after}
         finally:

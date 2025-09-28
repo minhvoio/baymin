@@ -1,6 +1,7 @@
 import math
 import numpy as np
 from contextlib import contextmanager
+from itertools import product
 
 def names(self, nodes):
   return {n.name() for n in nodes}
@@ -195,3 +196,172 @@ def resolve_state_index(node, spec, use_title=False):
     if st is None:
         raise ValueError(f"Unknown state '{spec}' for node '{node.name()}'")
     return st.stateNum
+
+from bni_netica import *
+from collections import deque
+
+def findAllDConnectedNodes(bn, source_node, dest_node, o=None):
+    o = dict(o or {})
+    o.setdefault("arcTraversal", False)
+    o["arcs"] = o["arcTraversal"] or o.get("arcs", False)
+    o.setdefault("noSourceParents", False)
+    o.setdefault("noSourceChildren", False)
+
+    if isinstance(source_node, str):
+        source_node = bn.node(source_node)
+    if isinstance(dest_node, str):
+        dest_node = bn.node(dest_node)
+
+    PARENTS = 0b01
+    CHILDREN = 0b10
+    PARENTSANDCHILDREN = 0b11
+
+    def has_loop(path, end):
+        end_node = end[0]
+        for n, _d in reversed(path):
+            if end_node is n:
+                return True
+        return False
+
+    # Lightweight DAG view (Netica → DagNode)
+    class DagNode:
+        __slots__ = ("id", "parents", "children", "intervene", "_src")
+        def __init__(self, n):
+            self.id = n.name()
+            self.parents = list(n.parents())
+            self.children = list(n.children())
+            self.intervene = False
+            self._src = n
+        def hasEvidence(self):
+            return self._src.finding() is not None
+        def getDescendants(self):
+            descendants = set()
+            to_visit = deque([self])
+            while to_visit:
+                nx = to_visit.popleft()
+                for c in nx.children:
+                    if c not in descendants:
+                        descendants.add(c)
+                        to_visit.append(c)
+            return list(descendants)
+        def isParent(self, toNode):
+            return toNode in self.children
+
+    def make_dag(bn):
+        # Sort nodes for stable mapping
+        dag = {n.name(): DagNode(n) for n in sorted(bn.nodes(), key=lambda x: x.name())}
+        # Rewire parents/children to DagNode refs and sort for deterministic traversal
+        for dn in dag.values():
+            dn.parents  = sorted((dag[p.name()] for p in dn.parents),  key=lambda x: x.id)
+            dn.children = sorted((dag[c.name()] for c in dn.children), key=lambda x: x.id)
+        return dag
+
+    dag = make_dag(bn)
+    s = dag[source_node.name()]
+    t = dag[dest_node.name()]
+
+    # Precompute whether each node has evidence downstream (count of descendant evidence)
+    downstream_ev = {
+        n.id: sum(1 for d in n.getDescendants() if d.hasEvidence())
+        for n in dag.values()
+    }
+
+    # Traversal state
+    paths_q = deque([[(s, PARENTSANDCHILDREN)]])  # queue of paths (each path is list[(DagNode, dir_mask)])
+    resolved = {}                                 # node_dir_key -> DagNode | False
+    depth = {s.id: 0}                             # BFS depth (first-seen distance from source)
+
+    # Deterministic results (lists) with O(1) de-dup sets
+    seen_node_ids = set()
+    ordered_nodes = []                             # DagNode list in stable, outward-from-source order
+    seen_arc_keys = set()
+    ordered_arcs = []                              # arcs in discovery order
+
+    def node_dir_key(node_dir):
+        return f"{node_dir[0].id}-{node_dir[1]}"
+
+    def add_arc(par, child, swap):
+        if o["arcTraversal"]:
+            key = (par.id, child.id, 'up' if swap else 'down')
+            val = f"{par.id}-{child.id}|{'up' if swap else 'down'}"
+        else:
+            key = (par.id, child.id)
+            val = f"{par.id}-{child.id}"
+        if key not in seen_arc_keys:
+            seen_arc_keys.add(key)
+            ordered_arcs.append(val)
+
+    def resolve_path(path, how_resolved=True):
+        prev = None
+        for curr in path:
+            if prev is not None:
+                par, child = prev[0], curr[0]
+                swap = child.isParent(par)   # if we moved "up", swap for arc normalization
+                if swap:
+                    par, child = child, par
+                add_arc(par, child, swap)
+
+            if how_resolved:
+                dn = curr[0]
+                if dn.id not in seen_node_ids:
+                    seen_node_ids.add(dn.id)
+                    ordered_nodes.append(dn)
+            resolved[node_dir_key(curr)] = curr[0] if how_resolved else False
+            prev = curr
+
+    def node_dir_is_resolved(node_dir):
+        return bool(resolved.get(node_dir_key(node_dir)))
+
+    def enqueue(next_paths, parent_dn):
+        """Enqueue paths in deterministic order and record depth on first sight."""
+        parent_depth = depth[parent_dn.id]
+        for p in next_paths:
+            dn = p[-1][0]
+            if dn.id not in depth:
+                depth[dn.id] = parent_depth + 1
+            paths_q.append(p)
+
+    # Main traversal
+    while paths_q:
+        current_path = paths_q.popleft()
+        if node_dir_is_resolved(current_path[-1]):
+            resolve_path(current_path)
+            continue
+
+        current_node, dirmask = current_path[-1]
+        if current_node is t:
+            resolve_path(current_path)
+        else:
+            check_parents  = (not current_node.intervene) and (not o["noSourceParents"]  or current_node is not s)
+            check_children = (not o["noSourceChildren"] or current_node is not s)
+
+            if check_parents and (dirmask & PARENTS) == PARENTS:
+                next_paths = [
+                    current_path + [(p, PARENTSANDCHILDREN)]
+                    for p in current_node.parents
+                    if (not p.hasEvidence()) and (not has_loop(current_path, (p, PARENTSANDCHILDREN)))
+                ]
+                enqueue(next_paths, current_node)
+
+            if check_children and (dirmask & CHILDREN) == CHILDREN:
+                def child_dir(c):
+                    # follow your rule: if child has evidence, only go up to parents; else allow children if no downstream evidence
+                    return PARENTS if c.hasEvidence() else (PARENTSANDCHILDREN if downstream_ev[c.id] else CHILDREN)
+                next_paths = [
+                    current_path + [(c, child_dir(c))]
+                    for c in current_node.children
+                    if not has_loop(current_path, (c, child_dir(c)))
+                ]
+                enqueue(next_paths, current_node)
+
+    # Output
+    if o["arcs"]:
+        return ordered_arcs
+
+    ordered_nodes.sort(key=lambda dn: (depth.get(dn.id, 10**9), dn.id))
+    return [bn.node(dn.id) for dn in ordered_nodes]
+
+def get_path(net, source_node, dest_node):
+    nodes = findAllDConnectedNodes(net, source_node, dest_node)
+    path = [n.name() for n in nodes]
+    return path

@@ -12,8 +12,8 @@ MENU_SCRIPT = """
 ----------------------------------------
 """
 
-GET_FN_SCRIPT = """
-- If user asks whether two nodes are related, output exactly this function name: is_XY_dconnected.
+GET_FN_SCRIPT_PROMPT = """
+- If user asks whether two nodes are related, output exactly this function name: is_XY_connected.
 - If user asks for common cause of two nodes, output exactly this function name: get_common_cause.
 - If user asks for common effect (v-structure/collider) of two nodes, output exactly this function name: get_common_effect.
 - If user asks whether entering evidence for one node would change the relationship/dependency between two other nodes, output exactly this function name: does_Z_change_dependency_XY.
@@ -24,6 +24,10 @@ GET_FN_SCRIPT = """
 - If user asks for the relationship from a child node to two parent nodes, output exactly this function name: detect_relationship.
 
 Think twice and read all the Ifs before you answer.
+"""
+
+GET_FN_SCRIPT_SIMPLIFIED_PROMPT = """
+Return one from this list of functions: [is_XY_connected, get_common_cause, get_common_effect, does_Z_change_dependency_XY, evidences_block_XY, get_prob_X, get_prob_X_given_Y, get_prob_X_given_YZ, detect_relationship]
 """
 
 PREV_QUERY_SCRIPT = "There is a Previous QA context, use it to help answer the current query:\n"

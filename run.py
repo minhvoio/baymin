@@ -1,7 +1,7 @@
-from bn_helpers.support_tools import get_nets, printNet, get_BN_structure, get_BN_node_states
+from bn_helpers.get_structures_print_tools import get_nets, printNet, get_BN_structure, get_BN_node_states
 from bn_helpers.bn_helpers import BnHelper, ParamExtractor, AnswerStructure
 from ollama.prompt import answer_this_prompt
-from bn_helpers.scripts import HELLO_SCRIPT, MENU_SCRIPT, GET_FN_SCRIPT
+from bn_helpers.scripts import HELLO_SCRIPT, MENU_SCRIPT, GET_FN_SCRIPT_PROMPT, GET_FN_SCRIPT_SIMPLIFIED_PROMPT
 
 def _current_net_for_mode(base_net, prev_ctx, mode):
     if mode == "continue" and prev_ctx and prev_ctx.get("last_net") is not None:
@@ -57,7 +57,8 @@ def execute_query(base_net, user_query, prev_ctx=None, mode="new"):
         )
 
     pre_query = f"In this Bayesian Network:\n{BN_string}\n{prev_block}"
-    get_fn_prompt = pre_query + "\n" + user_query + GET_FN_SCRIPT
+    # get_fn_prompt = pre_query + "\n" + user_query + GET_FN_SCRIPT_PROMPT
+    get_fn_prompt = pre_query + "\n" + user_query + GET_FN_SCRIPT_SIMPLIFIED_PROMPT
 
     raw = answer_this_prompt(get_fn_prompt, format=BnHelper.model_json_schema())
     print("\nBayMin:")
@@ -75,10 +76,10 @@ def execute_query(base_net, user_query, prev_ctx=None, mode="new"):
         "last_net": prev_ctx.get("last_net") if prev_ctx else None
     }
 
-    if fn == "is_XY_dconnected":
+    if fn == "is_XY_connected":
         params = param_extractor.extract_two_nodes_from_query(pre_query, user_query)
         print(params)
-        ans = bn_helper.is_XY_dconnected(current_net, params.from_node, params.to_node)
+        ans = bn_helper.is_XY_connected(current_net, params.from_node, params.to_node)
         if ans:
             template = (f"Yes, {params.from_node} is d-connected to {params.to_node}, "
                         f"which means that entering evidence for {params.from_node} would "

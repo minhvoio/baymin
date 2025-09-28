@@ -23,4 +23,4 @@ if __name__ == "__main__":
     nets = load_nets_from_parquet(os.path.join(data_output, "nets_dataset.parquet"))
     for net in nets[0]:
         printNet(net)
-        print(benchmark_simple_query(net))
+        benchmark_simple_query(net)
