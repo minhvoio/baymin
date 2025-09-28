@@ -3,25 +3,26 @@ import numpy as np
 from contextlib import contextmanager
 from itertools import product
 
-def names(self, nodes):
+def names(nodes):
   return {n.name() for n in nodes}
 
-@contextmanager # release resource automatically after using it
+@contextmanager
 def temporarily_set_findings(net, findings_dict):
-    """findings_dict: {node_name: state_name_or_index}"""
-    saved = net.findings()  # current evidence (indices)
+    """
+    findings_dict: {node_name: state_name_or_index | None}
+    If value is None, the node's finding is retracted.
+    """
+    saved = net.findings()
     try:
-        # Apply new evidence
         for k, v in findings_dict.items():
             node = net.node(k)
-            if isinstance(v, int):
-                node.finding(v)
+            if v is None:
+                node.retractFindings()
             else:
-                node.finding(v)  # state(name)
+                node.finding(v)  # int or state name
         net.update()
         yield
     finally:
-        # Restore previous evidence
         net.retractFindings()
         for k, v in (saved or {}).items():
             net.node(k).finding(v)
@@ -365,3 +366,61 @@ def get_path(net, source_node, dest_node):
     nodes = findAllDConnectedNodes(net, source_node, dest_node)
     path = [n.name() for n in nodes]
     return path
+
+
+# helper to get minmal blockers
+def is_independent_given(net, X, Y, observed_names, is_XY_connected_fn):
+    """
+    True iff X ⟂ Y given original evidence plus `observed_names`.
+    Uses your CM; relies on None=retract behavior supported by the CM.
+    """
+    if not observed_names:
+        # No additional conditioning; just test current state
+        return not is_XY_connected_fn(net, X, Y)
+
+    # Observe all in observed_names (use state 0 arbitrarily for d-sep)
+    with temporarily_set_findings(net, {nm: 0 for nm in observed_names}):
+        return not is_XY_connected_fn(net, X, Y)
+
+def reduce_to_minimal_blocking_set(net, X, Y, S, is_XY_connected_fn):
+    """
+    Given a blocking set S (iterable of names), drop redundant nodes until minimal.
+    """
+    S = list(dict.fromkeys(S))  # de-dupe, keep order
+    if not is_independent_given(net, X, Y, set(S), is_XY_connected_fn):
+        return S  # not blocking; return as-is (or raise, if you prefer)
+
+    changed = True
+    while changed:
+        changed = False
+        for i in range(len(S) - 1, -1, -1):  # reverse -> stable
+            trial = S[:i] + S[i+1:]
+            if is_independent_given(net, X, Y, set(trial), is_XY_connected_fn):
+                S.pop(i)
+                changed = True
+    return S
+
+def find_minimal_blockers(net, X, Y, is_XY_connected_fn, consider='connected', max_k=2):
+    """
+    Search small sets (|S|≤max_k) that block X–Y; return one minimal set if found.
+    Consider:
+    - 'connected': only nodes currently on active paths (fast, typical)
+    - 'all': all nodes except X,Y
+    Increase max_k cautiously (3+ can be combinatorial).
+    """
+    import itertools
+
+    # If already independent, empty set is a separator
+    if not is_XY_connected_fn(net, X, Y):
+        return []
+
+    if consider == 'connected':
+        candidate_names = sorted({n.name() for n in findAllDConnectedNodes(net, X, Y)} - {X, Y})
+    else:
+        candidate_names = sorted({n.name() for n in net.nodes()} - {X, Y})
+
+    for k in range(1, max_k + 1):
+        for combo in itertools.combinations(candidate_names, k):
+            if is_independent_given(net, X, Y, set(combo), is_XY_connected_fn):
+                return reduce_to_minimal_blocking_set(net, X, Y, list(combo), is_XY_connected_fn)
+    return []

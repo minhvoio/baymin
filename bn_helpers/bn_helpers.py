@@ -5,8 +5,11 @@ from bni_netica.bni_utils import findAllDConnectedNodes
 from bn_helpers.scripts import GET_PARAMS_SCRIPT, PREV_QUERY_SCRIPT
 from bn_helpers.utils import (output_distribution, prob_X, prob_X_given_Y, prob_X_given_YZ, ensure_keys, logical_or, \
     logical_and, logical_xor, logical_xnor, fit_noisy_or, fit_noisy_and, fit_additive, _rmse, temporarily_set_findings, \
-        names, resolve_state_index, state_names_by_indices)
+        names, resolve_state_index, state_names_by_indices, find_minimal_blockers, reduce_to_minimal_blocking_set, \
+            is_independent_given)
 from itertools import product
+from collections import deque
+import itertools
 
 class QueryOneNode(BaseModel):
     node: str
@@ -71,36 +74,21 @@ class BnHelper(BaseModel):
 
     # Z CHANGE DEPENDENCY XY
     def does_Z_change_dependency_XY(self, net, X, Y, Z):
-        """
-        Returns (changed: bool, details: {'before': bool, 'after': bool})
-        where True means 'd-connected' (dependent), False means 'd-separated' (independent).
-        """
-        zname = net.node(Z).name()
-        saved = net.findings()  # keep current evidence E to restore later
-        
-        try:
-            # ---- BEFORE: dependency without Z ----
-            if saved and zname in saved:
-                # ensure Z is not observed for the 'before' check
-                net.node(zname).retractFindings()
-                net.update()
+        zname = net.node(Z).name() if isinstance(Z, str) else Z.name()
+
+        # BEFORE: Z unobserved
+        with temporarily_set_findings(net, {zname: None}):
             dep_before = self.is_XY_connected(net, X, Y)
 
-            # ---- AFTER: dependency under Z observed ----
-            with temporarily_set_findings(net, {zname: 0}): # using state index 0 for Z
-                dep_after = self.is_XY_connected(net, X, Y)
+        # AFTER: Z observed (state value doesn't matter for d-sep)
+        with temporarily_set_findings(net, {zname: 0}):
+            dep_after = self.is_XY_connected(net, X, Y)
 
-            return (dep_before != dep_after), {"before": dep_before, "after": dep_after}
-        finally:
-            # Restore original evidence exactly as it was
-            net.retractFindings()
-            if saved:
-                net.findings(saved)
-            net.update()
+        return (dep_before != dep_after), {"before": dep_before, "after": dep_after}
 
-
-    # EVIDENCES BLOCK XY
+    # # EVIDENCES BLOCK XY
     def evidences_block_XY(self, net, X, Y):
+        # node that will block the dependency between X and Y when observed
         ans = []
         evidences = findAllDConnectedNodes(net, X, Y)
         for e in evidences:
@@ -108,7 +96,6 @@ class BnHelper(BaseModel):
             if e_name != X and e_name != Y and self.does_Z_change_dependency_XY(net, X, Y, e_name)[0]:
                 ans.append(e_name)
         return ans
-    
 
     # PROBABILITIES
         
@@ -141,7 +128,7 @@ class BnHelper(BaseModel):
 
     # RELATIONSHIPS
     def cpt_Pequals_from_bn(
-        net,
+        self, net,
         child_name,
         parent_names,
         child_state=None,                # str or int (required if child has >1 state)
