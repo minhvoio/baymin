@@ -6,7 +6,7 @@ from bn_helpers.scripts import GET_PARAMS_SCRIPT, PREV_QUERY_SCRIPT
 from bn_helpers.utils import (output_distribution, prob_X, prob_X_given_Y, prob_X_given_YZ, ensure_keys, logical_or, \
     logical_and, logical_xor, logical_xnor, fit_noisy_or, fit_noisy_and, fit_additive, _rmse, temporarily_set_findings, \
         names, resolve_state_index, state_names_by_indices, find_minimal_blockers, reduce_to_minimal_blocking_set, \
-            is_independent_given)
+            is_independent_given, get_path)
 from itertools import product
 from collections import deque
 import itertools
@@ -56,7 +56,25 @@ class BnHelper():
         if node.name() == to_node:
           return True
       return False
-    
+
+    def get_explain_XY_dconnected(self, net, node1, node2):
+        open_path = get_path(net, node1, node2)  # must exist!
+        return (f"Yes, {node1} is d-connected to {node2}, "
+                f"which means that entering evidence for {node1} would "
+                f"change the probability of {node2} and vice versa. They d-connected through the following path: {open_path}")
+
+    def get_explain_XY_dseparated(self, net, node1, node2):
+        import random
+        bn_helper = BnHelper()
+        blocked_nodes = bn_helper.get_common_effect(net, node1, node2)
+        random_blocked_node = random.choice(list(blocked_nodes)) if blocked_nodes else None
+
+        base = (f"No, {node1} is not d-connected to {node2}, so evidence on {node1} "
+                f"would not change the probability of {node2}.")
+        if random_blocked_node:
+            return base + f" They are blocked at {random_blocked_node} due to a common effect."
+        return base + f" There is no open path between {node1} and {node2}."
+
 
     # COMMON CAUSE / EFFECT
     def ancestors(self, net, node):
