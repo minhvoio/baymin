@@ -1,8 +1,8 @@
 from bni_netica.bni_netica import Net
 
 def get_nets():
-    bn_path = "./nets/collection/"
-    netDir = "./nets/"
+    bn_path = "../nets/collection/"
+    netDir = "../nets/"
 
     CancerNeapolitanNet = Net(bn_path+"Cancer Neapolitan.neta")
     ChestClinicNet = Net(bn_path+"ChestClinic.neta")
@@ -14,7 +14,7 @@ def get_nets():
     WetGrassNet = Net(bn_path+"Wet Grass.neta")
     RatsNoisyOr = Net(bn_path+"Rats_NoisyOr.dne")
     Derm = Net(bn_path+"Derm 7.9 A.dne")
-    CauseEffectNet = Net("./nets/outputs/common_cause_effect.neta")
+    CauseEffectNet = Net(netDir+"outputs/common_cause_effect.neta")
     NF_V1_Net = Net(netDir+"NF_V1.dne")
 
     net_list = [CancerNeapolitanNet, ChestClinicNet, ClassifierNet, CoronaryRiskNet,

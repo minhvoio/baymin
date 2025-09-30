@@ -46,8 +46,8 @@ class QueryProbTargetGivenTwoEvidences(BaseModel):
 class AnswerStructure(BaseModel):
     answer: str
 
-class BnHelper(BaseModel):
-    function_name: str
+class BnHelper():
+    # function_name: str
 
     # XY CONNECT
     def is_XY_connected(self, net, from_node, to_node):
