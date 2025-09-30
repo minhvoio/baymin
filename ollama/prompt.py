@@ -1,11 +1,10 @@
 # MODEL = "qwen3:1.7b"
 # MODEL = "gpt-oss-bn-json"
 
-import requests
-import json
+import requests, json
 from IPython.display import display, Markdown, clear_output
 
-def answer_this_prompt(prompt, stream=False, model="qwen3:1.7b", temperature=0, format=None):
+def answer_this_prompt(prompt, stream=False, model="gpt-oss-bn-json", temperature=0, format=None):
     payload = {
         "prompt": prompt,
         "model": model,
@@ -40,3 +39,51 @@ def answer_this_prompt(prompt, stream=False, model="qwen3:1.7b", temperature=0, 
                 return "Failed to parse JSON: " + str(e)
         else:
             return "Failed to retrieve response: " + str(response.status_code)
+
+def generate_chat(prompt, stream=False, model="gpt-oss:latest", temperature=0.0, json_format=None, num_predict=200):
+    endpoint = "http://localhost:11434/api/chat"
+    payload = {
+        "model": model,
+        "messages": [
+            {"role": "user", "content": prompt}
+        ],
+        # stream defaults to True server-side; we control it client-side by iterating lines
+        "options": {
+            "temperature": float(temperature),
+            "num_predict": int(num_predict)
+        }
+    }
+    # Optional: request structured JSON output
+    if json_format is not None:
+        # either "json" or a JSON schema dict
+        payload["format"] = json_format
+
+    with requests.post(endpoint, json=payload, stream=True) as resp:
+        if resp.status_code != 200:
+            return f"Failed: {resp.status_code} {resp.text}"
+
+        full_text = ""
+        for raw in resp.iter_lines(decode_unicode=True):
+            if not raw:
+                continue
+            try:
+                chunk = json.loads(raw)
+            except json.JSONDecodeError:
+                # sometimes servers add a trailing line—ignore
+                continue
+
+            # /api/chat streaming chunks
+            if "message" in chunk and "content" in chunk["message"]:
+                content_piece = chunk["message"]["content"]
+                full_text += content_piece
+                if stream:
+                    clear_output(wait=True)
+                    display(Markdown(full_text))
+
+            # handle tool_calls or other fields if present
+            if chunk.get("done", False):
+                break
+
+        return full_text
+
+# print(generate_chat("Hello, how are you?"))
