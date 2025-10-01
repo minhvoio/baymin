@@ -4,7 +4,7 @@ def get_nets():
     bn_path = "../nets/collection/"
     netDir = "../nets/"
 
-    CancerNeapolitanNet = Net(bn_path+"Cancer Neapolitan.neta")
+    CancerNeapolitanNet = Net(bn_path+"CancerNeapolitan.neta")
     ChestClinicNet = Net(bn_path+"ChestClinic.neta")
     ClassifierNet = Net(bn_path+"Classifier.neta")
     CoronaryRiskNet = Net(bn_path+"Coronary Risk.neta")
