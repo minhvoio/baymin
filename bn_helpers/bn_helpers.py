@@ -195,10 +195,16 @@ class BnHelper():
         if impacts:
             out += "\nEvidence impact (leave-one-out):\n"
             ranked = sorted(impacts.items(), key=lambda kv: kv[1]["l1"], reverse=True)
+
+            max_abs_contribution = ranked[0][1]["max_abs"]
             for ev, stats in ranked:
-                out += f"  - {ev}: L1={stats['l1']:.4f}, max_abs={stats['max_abs']:.4f}\n"
+                # out += f"  - {ev}: L1={stats['l1']:.4f}, max_abs={stats['max_abs']:.4f}\n"
+                out += f"  - {ev}: max_abs={stats['max_abs']:.4f}\n"
+
             if ranked and (len(ranked) == 1 or ranked[0][1]["l1"] > 1.5 * (ranked[1][1]["l1"] if len(ranked) > 1 else 0)):
-                out += f"  ⇒ Most influential evidence: {ranked[0][0]} (by L1 contribution).\n"
+                # out += f"  ⇒ Most influential evidence: {ranked[0][0]} (by L1 contribution).\n"
+                # shown max_abs contribution 
+                out += f"  => Most influential evidence: {ranked[0][0]}, it contributes {max_abs_contribution:.4f}.\n"
 
         return out, net_after
         
