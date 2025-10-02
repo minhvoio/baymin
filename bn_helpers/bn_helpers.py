@@ -116,24 +116,61 @@ class BnHelper():
         return ans
 
     # PROBABILITIES
+
+    def prob_X_given(self, net, X, evidence=None):
+        """
+        Returns (original_beliefs, new_beliefs, net_after)
+        where new_beliefs = P(X | evidence).
+        `evidence` is a dict {node_name: state}, with state as str (state name) or int (state index).
+        """
+        evidence = evidence or {}
+        node_X_before = net.node(X)
+        before_beliefs = node_X_before.beliefs()
+
+        # Temporarily set all findings at once
+        with temporarily_set_findings(net, evidence):
+            node_X = net.node(X)
+            return before_beliefs, node_X.beliefs(), net
+
+    def get_prob_X_given(self, net, X, evidence=None, *, threshold=0.05, tol=1e-8):
+        """
+        Pretty string for P(X | evidence) using `output_distribution` you wrote,
+        and a clear "no change / minimal / significant" conclusion.
+        """
+        evidence = evidence or {}
+
+        # Helper to show state names even if integers were passed
+        def _state_label(node_name, s):
+            if isinstance(s, int):
+                return net.node(node_name).state(s).name()
+            return str(s)
+
+        cond = ", ".join(f"{k}={_state_label(k, v)}" for k, v in evidence.items()) or "∅"
+        header = f"P({X} | {cond}):\n"
+
+        original_beliefs, new_beliefs, net_after = self.prob_X_given(net, X, evidence)
+        out = header + output_distribution(original_beliefs, new_beliefs, net_after.node(X))
+
+        return out, net_after
         
     def get_prob_X_given_Y(self, net, X=None, Y=None, y_state="Yes"):
         """
         Returns string output of prob_X_given_Y
         """
-        beliefs, net_after = prob_X_given_Y(net, X, Y, y_state)
+        original_beliefs, new_beliefs, net_after = prob_X_given_Y(net, X, Y, y_state)
         output = f"P({X} | {Y}={y_state}):\n"
-        output += output_distribution(beliefs, net_after.node(X))
+        output += output_distribution(original_beliefs, new_beliefs, net_after.node(X))
         return output, net_after
 
     def get_prob_X_given_YZ(self, net, X=None, Y=None, y_state="Yes", Z=None, z_state="Yes"):
         """
         Returns string output of prob_X_given_YZ
         """
-        beliefs, net_after = prob_X_given_YZ(net, X, Y, y_state, Z, z_state)
+        original_beliefs, new_beliefs, net_after = prob_X_given_YZ(net, X, Y, y_state, Z, z_state)
         output = f"P({X} | {Y}={y_state}, {Z}={z_state}):\n"
-        output += output_distribution(beliefs, net_after.node(X))
+        output += output_distribution(original_beliefs, new_beliefs, net_after.node(X))
         return output, net_after
+        
 
     def get_prob_X(self, net, X=None):
         """

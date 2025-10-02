@@ -28,12 +28,38 @@ def temporarily_set_findings(net, findings_dict):
             net.node(k).finding(v)
         net.update()
 
-def output_distribution(beliefs, node):
-    """Pretty print a distribution (list of probabilities) with state names."""
+def output_distribution(original_beliefs, new_beliefs, node, threshold=0.05, tol=1e-8):
+    """Pretty print distributions and conclude about the gap between original and new beliefs."""
     output = ""
-    for i, p in enumerate(beliefs):
+
+    for i, p in enumerate(new_beliefs):
         state = node.state(i)
         output += f"  P({node.name()}={state.name()}) = {p:.4f}\n"
+
+    output += "\nOriginal distribution:\n"
+    for i, p in enumerate(original_beliefs):
+        state = node.state(i)
+        output += f"  P({node.name()}={state.name()}) = {p:.4f}\n"
+
+    # differences
+    diffs = [new - old for new, old in zip(new_beliefs, original_beliefs)]
+    max_change = max(abs(d) for d in diffs)
+
+    # conclusion
+    output += "\nConclusion:\n"
+    if max_change <= tol:  # no change (within floating point tolerance)
+        output += "  No change detected — the updated beliefs are identical to the original.\n"
+    else:
+        for i, d in enumerate(diffs):
+            state = node.state(i)
+            if abs(d) > threshold:
+                trend = "increased" if d > 0 else "decreased"
+                output += f"  Belief in state '{state.name()}' has {trend} by {abs(d):.4f}\n"
+
+        if max_change <= threshold:
+            output += "  Overall, the updated beliefs are very close to the original (minimal change).\n"
+        else:
+            output += f"  The most significant shift was {max_change:.4f} across states.\n"
 
     return output
 
@@ -49,22 +75,24 @@ def prob_X_given_Y(net, X=None, Y=None, y_state="Yes"):
     Returns P(X | Y = y_state), net_after_observation
     y_state can be state names (str) or indices (int).
     """
+    node_X_before = net.node(X)
     
     with temporarily_set_findings(net, {Y: y_state}):
         node_X = net.node(X)
         # beliefs() is P(X | current findings)
-        return node_X.beliefs(), net
+        return node_X_before.beliefs(), node_X.beliefs(), net
     
 def prob_X_given_YZ(net, X=None, Y=None, y_state="Yes", Z=None, z_state="Yes"):
     """
     Returns P(X = x_state | Y = y_state, Z = z_state), net_after_observation
     x_state, y_state and z_state can be state names (str) or indices (int).
     """
+    node_X_before = net.node(X)
     
     with temporarily_set_findings(net, {Y: y_state, Z: z_state}):
         node_X = net.node(X)
         # beliefs() is P(X | current findings)
-        return node_X.beliefs(), net
+        return node_X_before.beliefs(), node_X.beliefs(), net
 
 # helpers
 def to01(x):
