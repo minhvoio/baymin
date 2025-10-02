@@ -28,7 +28,7 @@ def temporarily_set_findings(net, findings_dict):
             net.node(k).finding(v)
         net.update()
 
-def output_distribution(original_beliefs, new_beliefs, node, threshold=0.05, tol=1e-8):
+def output_distribution(node, original_beliefs, new_beliefs, impacts, threshold=0.05, tol=1e-8):
     """Pretty print distributions and conclude about the gap between original and new beliefs."""
     output = ""
 

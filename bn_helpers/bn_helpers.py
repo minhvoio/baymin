@@ -119,37 +119,86 @@ class BnHelper():
 
     def prob_X_given(self, net, X, evidence=None):
         """
-        Returns (original_beliefs, new_beliefs, net_after)
-        where new_beliefs = P(X | evidence).
-        `evidence` is a dict {node_name: state}, with state as str (state name) or int (state index).
+        Returns (original_beliefs, new_beliefs, net_after, impacts)
+        - original_beliefs: P(X) before any findings
+        - new_beliefs:     P(X | evidence)
+        - net_after:       same net (for parity)
+        - impacts: {ev -> {"diffs": [...], "l1": float, "max_abs": float}}
         """
         evidence = evidence or {}
         node_X_before = net.node(X)
-        before_beliefs = node_X_before.beliefs()
+        original = node_X_before.beliefs()
 
-        # Temporarily set all findings at once
+        # Full-evidence posterior
         with temporarily_set_findings(net, evidence):
-            node_X = net.node(X)
-            return before_beliefs, node_X.beliefs(), net
+            new = net.node(X).beliefs()
+
+        # Leave-one-out impacts (each evidence removed once)
+        impacts = {}
+        for ev in evidence.keys():
+            reduced = {k: v for k, v in evidence.items() if k != ev}
+            with temporarily_set_findings(net, reduced):
+                wo = net.node(X).beliefs()  # P(X | evidence \ {ev})
+            diffs = [n - w for n, w in zip(new, wo)]
+            l1 = sum(abs(d) for d in diffs)
+            max_abs = max((abs(d) for d in diffs), default=0.0)
+            impacts[ev] = {"diffs": diffs, "l1": l1, "max_abs": max_abs}
+
+        return original, new, net, impacts
+
 
     def get_prob_X_given(self, net, X, evidence=None, *, threshold=0.05, tol=1e-8):
         """
-        Pretty string for P(X | evidence) using `output_distribution` you wrote,
-        and a clear "no change / minimal / significant" conclusion.
+        Pretty string for P(X | evidence) using `prob_X_given` + conclusion + evidence impact.
+        Returns: (out_str, net_after)
         """
         evidence = evidence or {}
 
-        # Helper to show state names even if integers were passed
+        # header text (state-name friendly)
         def _state_label(node_name, s):
-            if isinstance(s, int):
-                return net.node(node_name).state(s).name()
-            return str(s)
+            return net.node(node_name).state(s).name() if isinstance(s, int) else str(s)
 
         cond = ", ".join(f"{k}={_state_label(k, v)}" for k, v in evidence.items()) or "∅"
         header = f"P({X} | {cond}):\n"
 
-        original_beliefs, new_beliefs, net_after = self.prob_X_given(net, X, evidence)
-        out = header + output_distribution(original_beliefs, new_beliefs, net_after.node(X))
+        # call the core inference once
+        original, new, net_after, impacts = self.prob_X_given(net, X, evidence)
+
+        # format distributions
+        node = net_after.node(X)
+        out = header
+        for i, p in enumerate(new):
+            out += f"  P({node.name()}={node.state(i).name()}) = {p:.4f}\n"
+
+        out += "\nOriginal distribution:\n"
+        for i, p in enumerate(original):
+            out += f"  P({node.name()}={node.state(i).name()}) = {p:.4f}\n"
+
+        # conclusion on overall change
+        diffs = [n - o for n, o in zip(new, original)]
+        max_change = max((abs(d) for d in diffs), default=0.0)
+
+        out += "\nConclusion:\n"
+        if max_change <= tol:
+            out += "  No change detected — the updated beliefs are identical to the original.\n"
+        else:
+            for i, d in enumerate(diffs):
+                if abs(d) > threshold:
+                    sname = node.state(i).name()
+                    out += f"  Belief in '{sname}' {'increased' if d > 0 else 'decreased'} by {abs(d):.4f}\n"
+            if max_change <= threshold:
+                out += "  Overall, the update is minimal (all changes ≤ threshold).\n"
+            else:
+                out += f"  Largest overall per-state shift: {max_change:.4f}.\n"
+
+        # evidence impact (ranked)
+        if impacts:
+            out += "\nEvidence impact (leave-one-out):\n"
+            ranked = sorted(impacts.items(), key=lambda kv: kv[1]["l1"], reverse=True)
+            for ev, stats in ranked:
+                out += f"  - {ev}: L1={stats['l1']:.4f}, max_abs={stats['max_abs']:.4f}\n"
+            if ranked and (len(ranked) == 1 or ranked[0][1]["l1"] > 1.5 * (ranked[1][1]["l1"] if len(ranked) > 1 else 0)):
+                out += f"  ⇒ Most influential evidence: {ranked[0][0]} (by L1 contribution).\n"
 
         return out, net_after
         
