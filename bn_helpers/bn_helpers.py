@@ -63,16 +63,24 @@ class BnHelper():
                 f"which means that entering evidence for {node1} would "
                 f"change the probability of {node2} and vice versa. They d-connected through the following path: {open_path}")
 
-    def get_explain_XY_dseparated(self, net, node1, node2):
+    def get_explain_XY_dseparated(self, net, node1, node2, get_minimal=False):
         import random
         bn_helper = BnHelper()
         blocked_nodes = bn_helper.get_common_effect(net, node1, node2)
-        random_blocked_node = random.choice(list(blocked_nodes)) if blocked_nodes else None
+        
+        random_blocked_node = None
+        if get_minimal:
+            random_blocked_node = random.choice(list(blocked_nodes)) if blocked_nodes else None
 
         base = (f"No, {node1} is not d-connected to {node2}, so evidence on {node1} "
                 f"would not change the probability of {node2}.")
-        if random_blocked_node:
+        if get_minimal:
             return base + f" They are blocked at {random_blocked_node} due to a common effect."
+        elif blocked_nodes: 
+            is_plural = len(blocked_nodes) > 1
+            a_or_the = "the" if is_plural else "a"
+            final_s = "s" if is_plural else ""
+            return base + f" They are blocked at {blocked_nodes} due to {a_or_the} common effect{final_s}."
         return base + f" There is no open path between {node1} and {node2}."
 
 
