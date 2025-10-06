@@ -2,11 +2,21 @@ import math
 import numpy as np
 from contextlib import contextmanager
 from itertools import product
+from bni_netica import *
 
 def names(nodes):
   return {n.name() for n in nodes}
 
-def _state_label(node_name, s):
+def set_findings(net, findings_dict):
+    for k, v in findings_dict.items():
+        node = net.node(k)
+        if v is None:
+            node.retractFindings()
+        else:
+            node.finding(v)
+    net.update()
+
+def _state_label(net, node_name, s):
     return net.node(node_name).state(s).name() if isinstance(s, int) else str(s)
 
 @contextmanager

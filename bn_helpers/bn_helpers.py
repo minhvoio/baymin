@@ -173,7 +173,7 @@ class BnHelper():
         evidence = evidence or {}
 
         # header text (state-name friendly)
-        cond = ", ".join(f"{k}={_state_label(k, v)}" for k, v in evidence.items()) or "∅"
+        cond = ", ".join(f"{k}={_state_label(net, k, v)}" for k, v in evidence.items()) or "∅"
         header = f"P({X} | {cond}):\n"
 
         # call the core inference once
@@ -261,7 +261,7 @@ class BnHelper():
         original, new, net_after, _ = self.prob_X_given(net, X, evidence)
         node = net_after.node(X)
 
-        cond = ", ".join(f"{k}={_state_label(k, v)}" for k, v in evidence.items()) or "∅"
+        cond = ", ".join(f"{k}={_state_label(net, k, v)}" for k, v in evidence.items()) or "∅"
         out = f"P({X} | {cond}):\n"
 
         # Updated vs Original distributions
@@ -344,6 +344,8 @@ class BnHelper():
                 out += f"  => Highest-impact evidence (tie-close): {top_ev}.\n"
 
         return out, net_after
+
+
 
     # RELATIONSHIPS
     def cpt_Pequals_from_bn(
