@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from ollama.prompt import answer_this_prompt
+from ollama_helper.prompt import answer_this_prompt
 from contextlib import contextmanager
 from bni_netica.bni_utils import findAllDConnectedNodes
 from bn_helpers.scripts import GET_PARAMS_SCRIPT, PREV_QUERY_SCRIPT
@@ -215,34 +215,17 @@ class BnHelper():
                 out += f"  => Most influential evidence: {ranked[0][0]}, it contributes {max_abs_contribution:.4f}.\n"
 
         return out, net_after
-        
-    def get_prob_X_given_Y(self, net, X=None, Y=None, y_state="Yes"):
-        """
-        Returns string output of prob_X_given_Y
-        """
-        original_beliefs, new_beliefs, net_after = prob_X_given_Y(net, X, Y, y_state)
-        output = f"P({X} | {Y}={y_state}):\n"
-        output += output_distribution(original_beliefs, new_beliefs, net_after.node(X))
-        return output, net_after
-
-    def get_prob_X_given_YZ(self, net, X=None, Y=None, y_state="Yes", Z=None, z_state="Yes"):
-        """
-        Returns string output of prob_X_given_YZ
-        """
-        original_beliefs, new_beliefs, net_after = prob_X_given_YZ(net, X, Y, y_state, Z, z_state)
-        output = f"P({X} | {Y}={y_state}, {Z}={z_state}):\n"
-        output += output_distribution(original_beliefs, new_beliefs, net_after.node(X))
-        return output, net_after
-        
 
     def get_prob_X(self, net, X=None):
         """
         Returns string output of prob_X
         """
-        beliefs, net_after = prob_X(net, X)
+        node_X = net.node(X)
+        beliefs = node_X.beliefs()
         output = f"P({X}):\n"
-        output += output_distribution(beliefs, net_after.node(X))
-        return output, net_after
+        for i, p in enumerate(beliefs):
+            output += f"  P({X}={node_X.state(i).name()}) = {p:.4f}\n"
+        return output, net
 
     # RELATIONSHIPS
     def cpt_Pequals_from_bn(

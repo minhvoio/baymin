@@ -1,7 +1,7 @@
 from benchmarking.benchmarking_utils import pickTwoRandomNodes
 from bn_helpers.support_tools import get_BN_structure, printNet
 from bn_helpers.bn_helpers import AnswerStructure, BnHelper
-from ollama.prompt import answer_this_prompt
+from ollama_helper.prompt import answer_this_prompt
 from benchmarking.data_utils import load_nets_from_parquet
 import os
 

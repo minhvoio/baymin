@@ -63,37 +63,6 @@ def output_distribution(node, original_beliefs, new_beliefs, impacts, threshold=
 
     return output
 
-def prob_X(net, X=None):
-    """
-    Returns P(X), net_after_observation
-    """
-    node_X = net.node(X)
-    return node_X.beliefs(), net
-
-def prob_X_given_Y(net, X=None, Y=None, y_state="Yes"):
-    """
-    Returns P(X | Y = y_state), net_after_observation
-    y_state can be state names (str) or indices (int).
-    """
-    node_X_before = net.node(X)
-    
-    with temporarily_set_findings(net, {Y: y_state}):
-        node_X = net.node(X)
-        # beliefs() is P(X | current findings)
-        return node_X_before.beliefs(), node_X.beliefs(), net
-    
-def prob_X_given_YZ(net, X=None, Y=None, y_state="Yes", Z=None, z_state="Yes"):
-    """
-    Returns P(X = x_state | Y = y_state, Z = z_state), net_after_observation
-    x_state, y_state and z_state can be state names (str) or indices (int).
-    """
-    node_X_before = net.node(X)
-    
-    with temporarily_set_findings(net, {Y: y_state, Z: z_state}):
-        node_X = net.node(X)
-        # beliefs() is P(X | current findings)
-        return node_X_before.beliefs(), node_X.beliefs(), net
-
 # helpers
 def to01(x):
     if isinstance(x, str):

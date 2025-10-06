@@ -3,7 +3,7 @@
 
 import requests, json
 from IPython.display import display, Markdown, clear_output
-from ollama.prompt import answer_this_prompt, generate_chat
+from ollama_helper.prompt import answer_this_prompt, generate_chat
 from bn_helpers.get_structures_print_tools import get_nets, printNet, get_BN_structure, get_BN_node_states
 from bn_helpers.bn_helpers import AnswerStructure, BnHelper
 from bn_helpers.utils import get_path

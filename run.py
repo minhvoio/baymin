@@ -1,6 +1,6 @@
 from bn_helpers.get_structures_print_tools import get_nets, printNet, get_BN_structure, get_BN_node_states
 from bn_helpers.bn_helpers import BnHelper, ParamExtractor, AnswerStructure
-from ollama.prompt import answer_this_prompt
+from ollama_helper.prompt import answer_this_prompt
 from bn_helpers.scripts import HELLO_SCRIPT, MENU_SCRIPT, GET_FN_SCRIPT_PROMPT, GET_FN_SCRIPT_SIMPLIFIED_PROMPT
 
 def _current_net_for_mode(base_net, prev_ctx, mode):
