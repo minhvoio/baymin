@@ -3,10 +3,10 @@ from ollama_helper.prompt import answer_this_prompt
 from contextlib import contextmanager
 from bni_netica.bni_utils import findAllDConnectedNodes
 from bn_helpers.scripts import GET_PARAMS_SCRIPT, PREV_QUERY_SCRIPT
-from bn_helpers.utils import (output_distribution, prob_X, prob_X_given_Y, prob_X_given_YZ, ensure_keys, logical_or, \
+from bn_helpers.utils import (output_distribution, ensure_keys, logical_or, \
     logical_and, logical_xor, logical_xnor, fit_noisy_or, fit_noisy_and, fit_additive, _rmse, temporarily_set_findings, \
         names, resolve_state_index, state_names_by_indices, find_minimal_blockers, reduce_to_minimal_blocking_set, \
-            is_independent_given, get_path)
+            is_independent_given, get_path, _state_label)
 from itertools import product
 from collections import deque
 import itertools
@@ -124,6 +124,16 @@ class BnHelper():
         return ans
 
     # PROBABILITIES
+    def get_prob_X(self, net, X=None):
+        """
+        Returns string output of prob_X
+        """
+        node_X = net.node(X)
+        beliefs = node_X.beliefs()
+        output = f"P({X}):\n"
+        for i, p in enumerate(beliefs):
+            output += f"  P({X}={node_X.state(i).name()}) = {p:.4f}\n"
+        return output, net
 
     def prob_X_given(self, net, X, evidence=None):
         """
@@ -163,9 +173,6 @@ class BnHelper():
         evidence = evidence or {}
 
         # header text (state-name friendly)
-        def _state_label(node_name, s):
-            return net.node(node_name).state(s).name() if isinstance(s, int) else str(s)
-
         cond = ", ".join(f"{k}={_state_label(k, v)}" for k, v in evidence.items()) or "∅"
         header = f"P({X} | {cond}):\n"
 
@@ -204,28 +211,139 @@ class BnHelper():
             out += "\nEvidence impact (leave-one-out):\n"
             ranked = sorted(impacts.items(), key=lambda kv: kv[1]["l1"], reverse=True)
 
-            max_abs_contribution = ranked[0][1]["max_abs"]
             for ev, stats in ranked:
-                # out += f"  - {ev}: L1={stats['l1']:.4f}, max_abs={stats['max_abs']:.4f}\n"
-                out += f"  - {ev}: max_abs={stats['max_abs']:.4f}\n"
+                out += f"  - {ev}: L1={stats['l1']:.4f}, max_abs={stats['max_abs']:.4f}\n"
+                # out += f"  - {ev}: max_abs={stats['max_abs']:.4f}\n"
 
             if ranked and (len(ranked) == 1 or ranked[0][1]["l1"] > 1.5 * (ranked[1][1]["l1"] if len(ranked) > 1 else 0)):
-                # out += f"  ⇒ Most influential evidence: {ranked[0][0]} (by L1 contribution).\n"
+                out += f"  => Most influential evidence: {ranked[0][0]} (by L1 contribution).\n"
                 # shown max_abs contribution 
-                out += f"  => Most influential evidence: {ranked[0][0]}, it contributes {max_abs_contribution:.4f}.\n"
+                # out += f"  => Most influential evidence: {ranked[0][0]}, it contributes {max_abs_contribution:.4f}.\n"
 
         return out, net_after
 
-    def get_prob_X(self, net, X=None):
+    def get_highest_impact_evidence(self, net, X, evidence=None, order=None, *, threshold=0.05, tol=1e-8):
         """
-        Returns string output of prob_X
+        Analyze per-evidence impact on X using sequential ADD and sequential REMOVE,
+        then output a ranked summary and a conclusion (like `get_prob_X_given`).
+
+        - Uses `prob_X_given` to compute:
+            original = P(X)
+            new      = P(X | evidence)
+        - Sequential ADD impact for an evidence ev_k is:
+            P(X | S_k ∪ {ev_k})  -  P(X | S_k)      where S_k is the set of evidence added before ev_k (in `order`)
+        - Sequential REMOVE impact for ev_k is:
+            P(X | All)           -  P(X | All \ {ev_k})
+        - For each evidence we report:
+            add:   L1 and max_abs over states
+            rem:   L1 and max_abs over states
+            score: max(add.L1, rem.L1)   # used for "highest impact"
+
+        Returns:
+            out_str, net_after
         """
-        node_X = net.node(X)
-        beliefs = node_X.beliefs()
-        output = f"P({X}):\n"
-        for i, p in enumerate(beliefs):
-            output += f"  P({X}={node_X.state(i).name()}) = {p:.4f}\n"
-        return output, net
+        evidence = evidence or {}
+        if not evidence:
+            return f"P({X} | ∅):\n  No evidence provided; nothing to analyze.\n", net
+
+        # helpers
+        def _beliefs_with(evi_dict):
+            with temporarily_set_findings(net, evi_dict):
+                return net.node(X).beliefs()
+
+        # Preserve caller-specified order, else dict insertion order, else sorted
+        if order is not None:
+            seq = [ev for ev in order if ev in evidence]
+        else:
+            seq = list(evidence.keys())
+
+        # baseline & header
+        original, new, net_after, _ = self.prob_X_given(net, X, evidence)
+        node = net_after.node(X)
+
+        cond = ", ".join(f"{k}={_state_label(k, v)}" for k, v in evidence.items()) or "∅"
+        out = f"P({X} | {cond}):\n"
+
+        # Updated vs Original distributions
+        for i, p in enumerate(new):
+            out += f"  P({node.name()}={node.state(i).name()}) = {p:.4f}\n"
+        out += "\nOriginal distribution:\n"
+        for i, p in enumerate(original):
+            out += f"  P({node.name()}={node.state(i).name()}) = {p:.4f}\n"
+
+        # Overall conclusion (same style as get_prob_X_given)
+        diffs = [n - o for n, o in zip(new, original)]
+        max_change = max((abs(d) for d in diffs), default=0.0)
+        out += "\nConclusion:\n"
+        if max_change <= tol:
+            out += "  No change detected — the updated beliefs are identical to the original.\n"
+        else:
+            for i, d in enumerate(diffs):
+                if abs(d) > threshold:
+                    sname = node.state(i).name()
+                    out += f"  Belief in '{sname}' {'increased' if d > 0 else 'decreased'} by {abs(d):.4f}\n"
+            if max_change <= threshold:
+                out += "  Overall, the update is minimal (all changes ≤ threshold).\n"
+            else:
+                out += f"  Largest overall per-state shift: {max_change:.4f}.\n"
+
+        # sequential ADD impacts
+        impacts = {}  # ev -> {"add": {...}, "rem": {...}, "score": float}
+        S = {}         # currently added set (in sequence)
+        prev_beliefs = original
+        for ev in seq:
+            # beliefs after adding this ev on top of S
+            S_next = {**S, ev: evidence[ev]}
+            bel_next = _beliefs_with(S_next)
+            diffs_add = [b1 - b0 for b1, b0 in zip(bel_next, prev_beliefs)]
+            add_l1 = sum(abs(d) for d in diffs_add)
+            add_max = max((abs(d) for d in diffs_add), default=0.0)
+            impacts.setdefault(ev, {})["add"] = {"diffs": diffs_add, "l1": add_l1, "max_abs": add_max}
+
+            # advance sequence state
+            S = S_next
+            prev_beliefs = bel_next
+
+        # sequential REMOVE impacts
+        all_beliefs = new
+        full = dict(evidence)
+        for ev in seq:
+            reduced = {k: v for k, v in full.items() if k != ev}
+            bel_wo = _beliefs_with(reduced)
+            diffs_rem = [b_full - b_wo for b_full, b_wo in zip(all_beliefs, bel_wo)]
+            rem_l1 = sum(abs(d) for d in diffs_rem)
+            rem_max = max((abs(d) for d in diffs_rem), default=0.0)
+            impacts.setdefault(ev, {})["rem"] = {"diffs": diffs_rem, "l1": rem_l1, "max_abs": rem_max}
+
+        # scoring & report
+        # score = max(add.L1, rem.L1)
+        for ev, d in impacts.items():
+            add_l1 = d.get("add", {}).get("l1", 0.0)
+            rem_l1 = d.get("rem", {}).get("l1", 0.0)
+            d["score"] = max(add_l1, rem_l1)
+
+        ranked = sorted(impacts.items(), key=lambda kv: kv[1]["score"], reverse=True)
+
+        out += "\nEvidence impact (sequential add/remove):\n"
+        for ev, d in ranked:
+            add_l1 = d["add"]["l1"] if "add" in d else 0.0
+            rem_l1 = d["rem"]["l1"] if "rem" in d else 0.0
+            add_max = d["add"]["max_abs"] if "add" in d else 0.0
+            rem_max = d["rem"]["max_abs"] if "rem" in d else 0.0
+            out += (f"  - {ev}: "
+                    f"ADD  L1={add_l1:.4f}, max_abs={add_max:.4f} | "
+                    f"REMOVE L1={rem_l1:.4f}, max_abs={rem_max:.4f} | "
+                    f"score={d['score']:.4f}\n")
+
+        if ranked:
+            top_ev, top_stats = ranked[0]
+            # optional dominance callout similar to earlier
+            if len(ranked) == 1 or ranked[0][1]["score"] > 1.5 * ranked[1][1]["score"]:
+                out += f"  => Highest-impact evidence: {top_ev}.\n"
+            else:
+                out += f"  => Highest-impact evidence (tie-close): {top_ev}.\n"
+
+        return out, net_after
 
     # RELATIONSHIPS
     def cpt_Pequals_from_bn(

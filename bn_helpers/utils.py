@@ -6,6 +6,9 @@ from itertools import product
 def names(nodes):
   return {n.name() for n in nodes}
 
+def _state_label(node_name, s):
+    return net.node(node_name).state(s).name() if isinstance(s, int) else str(s)
+
 @contextmanager
 def temporarily_set_findings(net, findings_dict):
     """
