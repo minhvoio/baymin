@@ -3,11 +3,9 @@ from bn_helpers.get_structures_print_tools import get_BN_node_states
 from bn_helpers.bn_helpers import BnToolBox
 from bn_helpers.utils import temporarily_set_findings
 from bni_netica.bni_netica import Net
-from bn_helpers.constants import MODEL_TOOLS, OLLAMA_URL
+from bn_helpers.constants import MODEL, OLLAMA_CHAT_URL
 
 import requests, json, inspect, typing
-
-OLLAMA_CHAT_URL = OLLAMA_URL + "api/chat"
 
 # Python type -> JSON Schema
 def _pytype_to_schema(t):
@@ -83,7 +81,7 @@ def _normalize_args_for_key(args):
 def chat_with_tools(
     net: Net,
     prompt: str,
-    model: str = MODEL_TOOLS,    
+    model: str = MODEL,    
     temperature: float = 0.0,
     max_tokens: int = 500,
     max_rounds: int = 4,
@@ -461,6 +459,6 @@ def extract_text(answer: str) -> str:
     except json.JSONDecodeError:
         return answer
 
-def get_answer_from_tool_agent(net, prompt, model=MODEL_TOOLS, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL):
+def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL):
     answer = chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url)
     return extract_text(answer)

@@ -9,22 +9,25 @@ from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.ollama import OllamaProvider
 from bn_helpers.constants import MODEL, MODEL_QUIZ, OLLAMA_URL
+import asyncio
+try:
+    import nest_asyncio
+    nest_asyncio.apply()
+except Exception:
+    # If nest_asyncio isn't available, we proceed; Jupyter may still manage awaits.
+    pass
 
-async def get_answer_from_ollama(prompt, model=MODEL, temperature=0.0, max_tokens=1000, format=AnswerStructure.model_json_schema()):
-    
+async def get_answer_from_ollama(prompt, model=MODEL):
     ollama_model = OpenAIChatModel(
-        model_name=MODEL,
+        model_name=model,
         provider=OllamaProvider(base_url=OLLAMA_URL + 'v1'),  
     )
     agent = Agent(ollama_model, output_type=AnswerStructure)
 
-    answer = await agent.run(prompt)
-
-    
-    answer = answer_this_prompt(prompt, model=model, temperature=temperature, max_tokens=max_tokens, format=format)
-    print('answer:\n', answer)
-    validated_answer = AnswerStructure.model_validate_json(answer)
-    return validated_answer.answer
+    result = await agent.run(prompt)
+    answer = result.output.answer
+    print('ANSWERRRRRR:\n', answer)
+    return answer
 
 def model_do_quiz(quiz, bn_explanation):
     prompt = TAKE_QUIZ_PROMPT.format(quiz=quiz, bn_explanation=bn_explanation)
@@ -55,7 +58,14 @@ def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000):
     print()
 
     def raw_model_dependency_test():
-        ans = get_answer_from_ollama(prompt, model=model, max_tokens=max_tokens)
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                ans = loop.run_until_complete(get_answer_from_ollama(prompt, model=model))
+            else:
+                ans = loop.run_until_complete(get_answer_from_ollama(prompt, model=model))
+        except RuntimeError:
+            ans = asyncio.run(get_answer_from_ollama(prompt, model=model))
         y_hat_list = model_do_quiz(quiz, ans)
         
         print('Raw Model:')
