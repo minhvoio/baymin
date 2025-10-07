@@ -46,7 +46,7 @@ class QueryProbTargetGivenTwoEvidences(BaseModel):
 class AnswerStructure(BaseModel):
     answer: str
 
-class BnHelper():
+class BnToolBox():
     # function_name: str
 
     # XY CONNECT
