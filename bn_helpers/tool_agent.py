@@ -465,6 +465,6 @@ def extract_text(answer: str) -> str:
     except json.JSONDecodeError:
         return answer
 
-def get_answer_from_tool_agent(net, prompt, model=MODEL_TOOLS, temperature=0.0, num_predict=500, max_rounds=4, require_tool=True, ollama_url=OLLAMA_URL):
+def get_answer_from_tool_agent(net, prompt, model=MODEL_TOOLS, temperature=0.0, num_predict=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_URL):
     answer = chat_with_tools(net, prompt, model, temperature, num_predict, max_rounds, require_tool, ollama_url)
     return extract_text(answer)

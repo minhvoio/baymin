@@ -1,9 +1,0 @@
-model,net_size,score
-raw,5,0.82
-raw,10,0.79
-raw,30,0.76
-raw,60,0.75
-baymin,5,0.88
-baymin,10,0.86
-baymin,30,0.84
-baymin,60,0.83

@@ -129,19 +129,6 @@ def create_dependency_quiz(net, node1, node2, rng=None):
     answers_letters = [q1_correct, q2_correct]
     return questions_text, answers_letters
 
-def model_do_quiz(quiz, bn_explanation):
-    prompt = TAKE_QUIZ_PROMPT.format(quiz=quiz, bn_explanation=bn_explanation)
-    # print('MODEL QUIZ:', MODEL_QUIZ)
-    # print('prompt:\n', prompt)
-    res_str = answer_this_prompt(prompt, format=AnswerStructure.model_json_schema(), model=MODEL_QUIZ)
-    get_res = AnswerStructure.model_validate_json(res_str)
-    res = get_res.answer
-    # res = generate_chat(prompt, model=MODEL_QUIZ, model="qwen2.5:7b", num_predict=5)
-    # print('res:\n', res)
-    ans = res.strip("[]").split(", ")
-    # print('ans:\n', ans)
-    return ans
-
 def validate_quiz_answer(y_list, y_hat_list):
     score = 0
     for y, y_hat in zip(y_list, y_hat_list):
