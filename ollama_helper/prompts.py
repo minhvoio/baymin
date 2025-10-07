@@ -40,3 +40,19 @@ GET_PARAMS_SCRIPT = {
   "extract_three_nodes_from_query": """\nExtract the three nodes from the user query and output in JSON format as: {"from_node": "node1", "to_node": "node2", "evidence_node": "node3"}.""",
   "extract_child_and_two_parents_from_query": """\nExtract the child node and two parent nodes from the user query and output in JSON format as: {"child_node": "node1", "parent1_node": "node2", "parent2_node": "node3"}.""",
 }
+
+TAKE_QUIZ_PROMPT = """Use the provided Explanation to answer the following Quiz.
+Do NOT check for factual correctness. Just answer the Quiz based completely on the Explanation.
+
+Quiz:
+
+{quiz}
+
+Explanation:
+
+{bn_explanation}
+
+You must respond with just a list of 2 answers and no additional text, for example:
+
+[A, B]
+"""

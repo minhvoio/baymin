@@ -1,8 +1,8 @@
 from pydantic import BaseModel
-from ollama_helper.prompt import answer_this_prompt
+from ollama_helper.ollama_helper import answer_this_prompt
 from contextlib import contextmanager
 from bni_netica.bni_utils import findAllDConnectedNodes
-from bn_helpers.scripts import GET_PARAMS_SCRIPT, PREV_QUERY_SCRIPT
+from ollama_helper.prompts import GET_PARAMS_SCRIPT, PREV_QUERY_SCRIPT
 from bn_helpers.utils import (output_distribution, ensure_keys, logical_or, \
     logical_and, logical_xor, logical_xnor, fit_noisy_or, fit_noisy_and, fit_additive, _rmse, temporarily_set_findings, \
         names, resolve_state_index, state_names_by_indices, find_minimal_blockers, reduce_to_minimal_blocking_set, \
