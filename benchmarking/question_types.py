@@ -1,0 +1,15 @@
+dependency_questions = [
+  "Is changing the evidence of {node1} going to change the probability of {node2}?",
+  "Is {node1} d-connected to {node2}?",
+  "Is {node1} d-separated from {node2}?",
+  "Is {node1} dependent on {node2}?",
+  "Is {node1} independent of {node2}?",
+  "Does a path exist from {fromNode} to {toNode}?",
+  "Can information flow from {fromNode} to {toNode}?",
+  "Are {fromNode} and {toNode} dependent?",
+  "Is there any direct or indirect connection between {fromNode} and {toNode}?",
+  "Can {fromNode} influence {toNode}?",
+  "Is {toNode} reachable from {fromNode}?",
+  "Is there a path that links {fromNode} to {toNode}?",
+  "Is {toNode} conditionally dependent on {fromNode}?",
+]
