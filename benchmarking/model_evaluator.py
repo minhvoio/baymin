@@ -5,11 +5,22 @@ from bn_helpers.get_structures_print_tools import get_BN_structure
 from bn_helpers.tool_agent import get_answer_from_tool_agent
 from benchmarking.quiz_generator import create_dependency_quiz, validate_quiz_answer
 from benchmarking.benchmarking_utils import pickTwoRandomNodes
+from pydantic_ai import Agent
+from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.providers.ollama import OllamaProvider
+from bn_helpers.constants import MODEL, MODEL_QUIZ, OLLAMA_URL
 
-MODEL_QUIZ = "qwen2.5:7b"
-MODEL = "gpt-oss:latest"
+async def get_answer_from_ollama(prompt, model=MODEL, temperature=0.0, max_tokens=1000, format=AnswerStructure.model_json_schema()):
+    
+    ollama_model = OpenAIChatModel(
+        model_name=MODEL,
+        provider=OllamaProvider(base_url=OLLAMA_URL + 'v1'),  
+    )
+    agent = Agent(ollama_model, output_type=AnswerStructure)
 
-def get_answer_from_ollama(prompt, model=MODEL, temperature=0.0, max_tokens=1000, format=AnswerStructure.model_json_schema()):
+    answer = await agent.run(prompt)
+
+    
     answer = answer_this_prompt(prompt, model=model, temperature=temperature, max_tokens=max_tokens, format=format)
     print('answer:\n', answer)
     validated_answer = AnswerStructure.model_validate_json(answer)

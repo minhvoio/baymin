@@ -1,12 +1,8 @@
-QWEN = "qwen3:1.7b"
-GPT_OSS = "gpt-oss-bn-json"
-MODEL = GPT_OSS
-MODEL_QUIZ = "qwen2.5:7b"
-
 from ollama_helper.ollama_helper import answer_this_prompt
 from bn_helpers.bn_helpers import AnswerStructure, BnToolBox
 from bn_helpers.utils import get_path
 import random as _random
+from bn_helpers.constants import MODEL, MODEL_QUIZ
 
 def create_distract_answer(answer, model=MODEL, temperature=0.3, another_answer=None):
   prompt = f"Create just an answer that is different and corresponding (same number of variables) from the following answer (no other text): {answer}"

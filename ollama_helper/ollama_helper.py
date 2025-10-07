@@ -1,6 +1,3 @@
-# MODEL = "qwen3:1.7b"
-# MODEL = "gpt-oss-bn-json"
-
 import requests, json
 from IPython.display import display, Markdown, clear_output
 

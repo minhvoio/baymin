@@ -3,15 +3,11 @@ from bn_helpers.get_structures_print_tools import get_BN_node_states
 from bn_helpers.bn_helpers import BnToolBox
 from bn_helpers.utils import temporarily_set_findings
 from bni_netica.bni_netica import Net
-
-MODEL_QUIZ = "qwen2.5:7b"
-MODEL_TOOLS = "gpt-oss:latest"
-# MODEL_TOOLS = "qwen3:8b"
-# MODEL_TOOLS = MODEL_QUIZ
+from bn_helpers.constants import MODEL_TOOLS, OLLAMA_URL
 
 import requests, json, inspect, typing
 
-OLLAMA_URL = "http://localhost:11434/api/chat"
+OLLAMA_CHAT_URL = OLLAMA_URL + "api/chat"
 
 # Python type -> JSON Schema
 def _pytype_to_schema(t):
@@ -92,7 +88,7 @@ def chat_with_tools(
     max_tokens: int = 500,
     max_rounds: int = 4,
     require_tool: bool = True,
-    ollama_url: str = OLLAMA_URL,
+    ollama_url: str = OLLAMA_CHAT_URL,
 ):
     fns = get_tools_map(net)
     bn_str = get_BN_node_states(net)
@@ -465,6 +461,6 @@ def extract_text(answer: str) -> str:
     except json.JSONDecodeError:
         return answer
 
-def get_answer_from_tool_agent(net, prompt, model=MODEL_TOOLS, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_URL):
+def get_answer_from_tool_agent(net, prompt, model=MODEL_TOOLS, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL):
     answer = chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url)
     return extract_text(answer)
