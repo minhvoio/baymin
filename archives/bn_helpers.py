@@ -65,7 +65,8 @@ class BnToolBox():
 
     def get_explain_XY_dseparated(self, net, node1, node2, get_minimal=False):
         import random
-        blocked_nodes = self.get_common_effect(net, node1, node2)
+        bn_helper = BnHelper()
+        blocked_nodes = bn_helper.get_common_effect(net, node1, node2)
         
         random_blocked_node = None
         if get_minimal:
@@ -463,3 +464,72 @@ class BnToolBox():
         best_label = min(models.keys(), key=lambda k: models[k]["rmse"])
         models["best"] = best_label
         return models
+
+
+class ParamExtractor():
+
+    def extract_one_node_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryOneNode:
+        get_params_query = ""
+        if is_prev_qa:
+            get_params_query += PREV_QUERY_SCRIPT
+        
+        get_params_query += GET_PARAMS_SCRIPT["extract_one_node_from_query"]
+        get_params_prompt = pre_query + user_query + get_params_query
+        get_params = answer_this_prompt(get_params_prompt, format=QueryOneNode.model_json_schema())
+        get_params = QueryOneNode.model_validate_json(get_params)
+        return get_params
+
+    def extract_XY_and_Ystate_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryProbTargetGivenOneEvidence:
+        get_params_query = ""
+        if is_prev_qa:
+            get_params_query += PREV_QUERY_SCRIPT
+        
+        get_params_query += GET_PARAMS_SCRIPT["extract_XY_and_Ystate_from_query"]
+        get_params_prompt = pre_query + user_query + get_params_query
+        get_params = answer_this_prompt(get_params_prompt, format=QueryProbTargetGivenOneEvidence.model_json_schema())
+        get_params = QueryProbTargetGivenOneEvidence.model_validate_json(get_params)
+        return get_params
+
+    def extract_XYZ_and_YZstates_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryProbTargetGivenTwoEvidences: 
+        get_params_query = ""
+        if is_prev_qa:
+            get_params_query += PREV_QUERY_SCRIPT
+        
+        get_params_query += GET_PARAMS_SCRIPT["extract_XYZ_and_YZstates_from_query"]
+        get_params_prompt = pre_query + user_query + get_params_query
+        get_params = answer_this_prompt(get_params_prompt, format=QueryProbTargetGivenTwoEvidences.model_json_schema())
+        get_params = QueryProbTargetGivenTwoEvidences.model_validate_json(get_params)
+        return get_params
+    
+    def extract_two_nodes_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryTwoNodes:
+        get_params_query = ""
+        if is_prev_qa:
+            get_params_query += PREV_QUERY_SCRIPT
+
+        get_params_query += GET_PARAMS_SCRIPT["extract_two_nodes_from_query"]
+        get_params_prompt = pre_query + user_query + get_params_query
+        get_params = answer_this_prompt(get_params_prompt, format=QueryTwoNodes.model_json_schema())
+        get_params = QueryTwoNodes.model_validate_json(get_params)
+        return get_params
+
+    def extract_three_nodes_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryThreeNodes:
+        get_params_query = ""
+        if is_prev_qa:
+            get_params_query += PREV_QUERY_SCRIPT
+
+        get_params_query += GET_PARAMS_SCRIPT["extract_three_nodes_from_query"]
+        get_params_prompt = pre_query + user_query + get_params_query
+        get_params = answer_this_prompt(get_params_prompt, format=QueryThreeNodes.model_json_schema())
+        get_params = QueryThreeNodes.model_validate_json(get_params)
+        return get_params
+
+    def extract_child_and_two_parents_from_query(self, pre_query: str, user_query: str, is_prev_qa: bool = False) -> QueryRelationship:
+        get_params_query = ""
+        if is_prev_qa:
+            get_params_query += PREV_QUERY_SCRIPT
+
+        get_params_query += GET_PARAMS_SCRIPT["extract_child_and_two_parents_from_query"]
+        get_params_prompt = pre_query + user_query + get_params_query
+        get_params = answer_this_prompt(get_params_prompt, format=QueryRelationship.model_json_schema())
+        get_params = QueryRelationship.model_validate_json(get_params)
+        return get_params

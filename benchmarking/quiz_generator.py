@@ -8,8 +8,10 @@ from bn_helpers.bn_helpers import AnswerStructure, BnToolBox
 from bn_helpers.utils import get_path
 import random as _random
 
-def create_distract_answer(answer, model=MODEL, temperature=0.3):
-  prompt = f"Create just a distract answer (no other text) for the following answer: {answer}"
+def create_distract_answer(answer, model=MODEL, temperature=0.3, another_answer=None):
+  prompt = f"Create just an answer that is different and corresponding (same number of variables) from the following answer (no other text): {answer}"
+  if another_answer:
+    prompt += f" and also different from the following answer: {another_answer}"
   distract_answer = answer_this_prompt(prompt, format=AnswerStructure.model_json_schema(), model=model, temperature=temperature)
   distract_answer = AnswerStructure.model_validate_json(distract_answer)
   return distract_answer.answer
@@ -72,7 +74,7 @@ def create_question(header_question, option_list, rng=None, leading_blank=False)
     return "\n".join(lines), correct_letter
 
 
-def create_dependency_quiz(net, node1, node2, rng=None):
+def create_dependency_quiz(net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
     """
     Builds two multiple-choice questions about dependency and d-separation, with
     randomized answer order. Returns (questions_text, answers_letters).
@@ -96,9 +98,15 @@ def create_dependency_quiz(net, node1, node2, rng=None):
 
     # Q2
     if is_connected:
-        ground_truth = f"They are d-connected through the path {get_path(net, node1, node2)}"
-        distract_answer1 = create_distract_answer(ground_truth, temperature=0.3)
-        distract_answer2 = create_distract_answer(ground_truth, temperature=0.4)
+        ground_truth_path = get_path(net, node1, node2)
+        ground_truth = f"They are d-connected through the path {ground_truth_path}"
+
+        distract_path1 = create_distract_answer(ground_truth_path, temperature=0.3, model=model_quiz)
+        distract_answer1 = "They are d-connected through the path " + distract_path1
+
+        distract_path2 = create_distract_answer(ground_truth_path, temperature=0.3, model=model_quiz, another_answer=distract_path1)
+        distract_answer2 = "They are d-connected through the path " + distract_path2
+
         q2_options = [
             (ground_truth, True),
             (distract_answer1, False),
@@ -113,8 +121,8 @@ def create_dependency_quiz(net, node1, node2, rng=None):
             if common_effect
             else f"There is no path between {node1} and {node2}"
         )
-        distract_answer1 = create_distract_answer(because_text, temperature=0.3)
-        distract_answer2 = create_distract_answer(because_text, temperature=0.4)
+        distract_answer1 = create_distract_answer(because_text, temperature=0.3, model=model_quiz)
+        distract_answer2 = create_distract_answer(because_text, temperature=0.8, model=model_quiz, another_answer=distract_answer1)
         q2_options = [
             (because_text, True),
             (distract_answer1, False),

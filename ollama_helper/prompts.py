@@ -12,7 +12,7 @@ MENU_PROMPT = """
 ----------------------------------------
 """
 
-GET_FN_PROMPT_PROMPT = """
+GET_FN_PROMPT = """
 - If user asks whether two nodes are related, output exactly this function name: is_XY_connected.
 - If user asks for common cause of two nodes, output exactly this function name: get_common_cause.
 - If user asks for common effect (v-structure/collider) of two nodes, output exactly this function name: get_common_effect.

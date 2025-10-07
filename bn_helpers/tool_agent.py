@@ -89,7 +89,7 @@ def chat_with_tools(
     prompt: str,
     model: str = MODEL_TOOLS,    
     temperature: float = 0.0,
-    num_predict: int = 500,
+    max_tokens: int = 500,
     max_rounds: int = 4,
     require_tool: bool = True,
     ollama_url: str = OLLAMA_URL,
@@ -133,7 +133,7 @@ def chat_with_tools(
                 "model": model,
                 "messages": messages,
                 "tools": tools,
-                "options": {"temperature": float(temperature), "num_predict": int(num_predict)},
+                "options": {"temperature": float(temperature), "num_predict": int(max_tokens)},
             },
             stream=True,
         )
@@ -465,6 +465,6 @@ def extract_text(answer: str) -> str:
     except json.JSONDecodeError:
         return answer
 
-def get_answer_from_tool_agent(net, prompt, model=MODEL_TOOLS, temperature=0.0, num_predict=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_URL):
-    answer = chat_with_tools(net, prompt, model, temperature, num_predict, max_rounds, require_tool, ollama_url)
+def get_answer_from_tool_agent(net, prompt, model=MODEL_TOOLS, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_URL):
+    answer = chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url)
     return extract_text(answer)

@@ -4,12 +4,12 @@
 import requests, json
 from IPython.display import display, Markdown, clear_output
 
-def answer_this_prompt(prompt, stream=False, model="gpt-oss-bn-json", temperature=0, format=None):
+def answer_this_prompt(prompt, stream=False, model="gpt-oss:latest", temperature=0, format=None, max_tokens=200):
     payload = {
-        "prompt": prompt,
+        "prompt": 'You always return a JSON answer, for example {answer: "your answer here"}, now answer this prompt: ' + prompt,
         "model": model,
         "temperature": temperature,
-        "max_new_tokens": 50, # only when stream = False work
+        "max_new_tokens": max_tokens, # only when stream = False work
         "format": format
     }
     headers = {
@@ -40,7 +40,7 @@ def answer_this_prompt(prompt, stream=False, model="gpt-oss-bn-json", temperatur
         else:
             return "Failed to retrieve response: " + str(response.status_code)
 
-def generate_chat(prompt, stream=False, model="gpt-oss:latest", temperature=0.0, json_format=None, num_predict=200):
+def generate_chat(prompt, stream=False, model="gpt-oss:latest", temperature=0.0, json_format=None, max_tokens=200):
     endpoint = "http://localhost:11434/api/chat"
     payload = {
         "model": model,
@@ -50,7 +50,7 @@ def generate_chat(prompt, stream=False, model="gpt-oss:latest", temperature=0.0,
         # stream defaults to True server-side; we control it client-side by iterating lines
         "options": {
             "temperature": float(temperature),
-            "num_predict": int(num_predict)
+            "num_predict": int(max_tokens)
         }
     }
     # Optional: request structured JSON output

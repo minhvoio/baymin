@@ -1,21 +1,23 @@
 from bni_netica.bni_netica import Net
+from pathlib import Path
 
 def get_nets():
-    bn_path = "../nets/collection/"
-    netDir = "../nets/"
+    base_dir = Path(__file__).resolve().parent.parent
+    bn_path = base_dir / "nets" / "collection"
+    netDir = base_dir / "nets"
 
-    CancerNeapolitanNet = Net(bn_path+"CancerNeapolitan.neta")
-    ChestClinicNet = Net(bn_path+"ChestClinic.neta")
-    ClassifierNet = Net(bn_path+"Classifier.neta")
-    CoronaryRiskNet = Net(bn_path+"Coronary Risk.neta")
-    FireNet = Net(bn_path+"Fire.neta")
-    MendelGeneticsNet = Net(bn_path+"Mendel Genetics.neta")
-    RatsNet = Net(bn_path+"Rats.neta")
-    WetGrassNet = Net(bn_path+"Wet Grass.neta")
-    RatsNoisyOr = Net(bn_path+"Rats_NoisyOr.dne")
-    Derm = Net(bn_path+"Derm 7.9 A.dne")
-    CauseEffectNet = Net(netDir+"outputs/common_cause_effect.neta")
-    NF_V1_Net = Net(netDir+"NF_V1.dne")
+    CancerNeapolitanNet = Net(str(bn_path / "CancerNeapolitan.neta"))
+    ChestClinicNet = Net(str(bn_path / "ChestClinic.neta"))
+    ClassifierNet = Net(str(bn_path / "Classifier.neta"))
+    CoronaryRiskNet = Net(str(bn_path / "Coronary Risk.neta"))
+    FireNet = Net(str(bn_path / "Fire.neta"))
+    MendelGeneticsNet = Net(str(bn_path / "Mendel Genetics.neta"))
+    RatsNet = Net(str(bn_path / "Rats.neta"))
+    WetGrassNet = Net(str(bn_path / "Wet Grass.neta"))
+    RatsNoisyOr = Net(str(bn_path / "Rats_NoisyOr.dne"))
+    Derm = Net(str(bn_path / "Derm 7.9 A.dne"))
+    CauseEffectNet = Net(str(netDir / "outputs" / "common_cause_effect.neta"))
+    NF_V1_Net = Net(str(netDir / "NF_V1.dne"))
 
     net_list = [CancerNeapolitanNet, ChestClinicNet, ClassifierNet, CoronaryRiskNet,
                 FireNet, MendelGeneticsNet, RatsNet, WetGrassNet, RatsNoisyOr, Derm, CauseEffectNet, NF_V1_Net]
