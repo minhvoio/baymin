@@ -4,7 +4,7 @@ from bn_helpers.bn_helpers import BnToolBox
 from bn_helpers.utils import temporarily_set_findings
 from bni_netica.bni_netica import Net
 from bn_helpers.constants import MODEL, OLLAMA_CHAT_URL
-
+from typing import List, Tuple, Dict, Any
 import requests, json, inspect, typing
 
 # Python type -> JSON Schema
@@ -285,7 +285,7 @@ def make_explain_d_connected_tool(net):
         """
         try:
             bn_tool_box = BnToolBox()
-            is_conn = bn_tool_box.is_XY_connected(net, from_node, to_node)
+            is_conn = bn_tool_box.is_XY_dconnected(net, from_node, to_node)
             if is_conn:
                 explanation = bn_tool_box.get_explain_XY_dconnected(net, from_node, to_node)
             else:
@@ -296,7 +296,7 @@ def make_explain_d_connected_tool(net):
     return check_d_connected
 
 def make_explain_common_cause_tool(net):
-    def check_common_cause(node1, node2):
+    def check_common_cause(node1: str, node2: str):
         """Check if there is a common cause between two nodes."""
         try:
             bn_tool_box = BnToolBox()
@@ -311,7 +311,7 @@ def make_explain_common_cause_tool(net):
     return check_common_cause
 
 def make_explain_common_effect_tool(net):
-    def check_common_effect(node1, node2):
+    def check_common_effect(node1: str, node2: str):
         """Check if there is a common effect between two nodes."""
         try:
             bn_tool_box = BnToolBox()
@@ -326,7 +326,7 @@ def make_explain_common_effect_tool(net):
     return check_common_effect
 
 def get_prob_node_tool(net):
-    def get_prob_node(node):
+    def get_prob_node(node: str):
         """Get the probability of a node."""
         try:
             bn_tool_box = BnToolBox()
@@ -336,56 +336,71 @@ def get_prob_node_tool(net):
             return {"prob_node": None, "error": f"{type(e).__name__}: {e}"}
     return get_prob_node
 
-def get_prob_node_given_one_evidence_tool(net):
-    def get_prob_node_given_one_evidence(node, evidence, evidence_state):
-        """Get the probability of a node given one evidence with its state.
-        If the evidence_state is not provided, it means the evidence is True."""
+from typing import List
+
+def check_evidences_change_relationship_between_two_nodes_tool(net):
+    def check_evidences_change_relationship_between_two_nodes(node1: str, node2: str, evidence: List[str]):
+        """Check if knowing Evidence(s) will change the dependency relationship between Node1 and Node2."""
         try:
             bn_tool_box = BnToolBox()
-            prob, _ = bn_tool_box.get_prob_X_given_Y(net, node, evidence, evidence_state)
-            return prob
-        except Exception as e:
-            return {"prob_node_given_one_evidence": None, "error": f"{type(e).__name__}: {e}"}
-    return get_prob_node_given_one_evidence
+            changed, details = bn_tool_box.does_evidence_change_dependency_XY(net, node1, node2, evidence)
 
-def get_prob_node_given_two_evidences_tool(net):
-    def get_prob_node_given_two_evidences(node, evidence1, evidence1_state, evidence2, evidence2_state):
-        """Get the probability of a node given two evidences with their states.
-        If the evidence_state is not provided, it means the evidence is True/or pick the state that means it is observed."""
-        try:
-            bn_tool_box = BnToolBox()
-            prob, _ = bn_tool_box.get_prob_X_given_YZ(net, node, evidence1, evidence1_state, evidence2, evidence2_state)
-            return prob
-        except Exception as e:
-            return {"prob_node_given_two_evidences": None, "error": f"{type(e).__name__}: {e}"}
-    return get_prob_node_given_two_evidences
+            def _conn_label(b: bool) -> str:
+                return "d-connected" if b else "d-separated"
 
-def check_one_evidence_change_relationship_between_two_nodes_tool(net):
-    def check_one_evidence_change_relationship_between_two_nodes(node1, node2, evidence):
-        """Check if changing the Evidence of one node will change the dependency relationship between Node1 and Node2.
-        This function is used to check if the relationship between Node1 and Node2 get affected when we observe Evidence."""
-        try:
-            bn_tool_box = BnToolBox()
-            ans, details = bn_tool_box.does_Z_change_dependency_XY(net, node1, node2, evidence)
-            template = ""
+            def _fmt_ev_list(evs: List[str]) -> str:
+                if not evs: return "∅"
+                return ", ".join(evs)
 
-            if ans:
-                template = (f"Yes, observing {evidence} changes the dependency between {node1} and {node2}. "
-                            f"Before observing {evidence}, {node1} and {node2} were "
-                            f"{'d-connected' if details['before'] else 'd-separated'}. After observing {evidence}, they are "
-                            f"{'d-connected' if details['after'] else 'd-separated'}.")
+            before = _conn_label(details["before"])
+            after  = _conn_label(details["after"])
+            ev_str = _fmt_ev_list(evidence)
+
+            # Find first step (if any) where connectivity flips relative to BEFORE
+            flip_note = ""
+            for step in details.get("sequential", []):
+                if step["connected"] != details["before"]:
+                    flip_note = f" The relationship first flips after conditioning on {{{step['added']}}}."
+                    break
+
+            if not evidence:
+                template = (
+                    f"No evidence provided. Relationship between {node1} and {node2} is {before} "
+                    f"with no conditioning."
+                )
+                return template
+
+            if changed:
+                template = (
+                    f"Yes - conditioning on {{{ev_str}}} changes the dependency between {node1} and {node2}. "
+                    f"Before observing {{{ev_str}}}, they were {before}. After observing all evidence, they are {after}."
+                    f"{flip_note}"
+                )
             else:
-                template = (f"No, observing {evidence} does not change the dependency between {node1} and {node2}. "
-                            f"Before observing {evidence}, {node1} and {node2} were "
-                            f"{'d-connected' if details['before'] else 'd-separated'}. After observing {evidence}, they remain "
-                            f"{'d-connected' if details['after'] else 'd-separated'}.")
+                template = (
+                    f"No - conditioning on {{{ev_str}}} does not change the dependency between {node1} and {node2}. "
+                    f"Before observing {{{ev_str}}}, they were {before}. After observing all evidence, they remain {after}."
+                )
+
+            if details.get("sequential"):
+                steps = "; ".join(
+                    f"+{s['added']} => {_conn_label(s['connected'])}"
+                    for s in details["sequential"]
+                )
+                template += f" Sequence: {steps}."
+
             return template
+
         except Exception as e:
-            return {"check_one_evidence_change_relationship_between_two_nodes": None, "error": f"{type(e).__name__}: {e}"}
-    return check_one_evidence_change_relationship_between_two_nodes
+            return {
+                "check_evidences_change_relationship_between_two_nodes": None,
+                "error": f"{type(e).__name__}: {e}"
+            }
+
+    return check_evidences_change_relationship_between_two_nodes
 
 def get_evidences_block_two_nodes_tool(net):
-    def get_evidences_block_two_nodes(node1, node2):
+    def get_evidences_block_two_nodes(node1: str, node2: str):
         """Get the evidences list that block the dependency/path between Node1 and Node2."""
         try:
             bn_tool_box = BnToolBox()
@@ -443,7 +458,7 @@ def get_tools_map(net):
         "get_prob_node_given_any_evidence": get_prob_node_given_any_evidence_tool(net),
         "get_highest_impact_evidence_contribute_to_node": get_highest_impact_evidence_contribute_to_node_tool(net),
         "get_highest_impact_evidence_contribute_to_node_given_evidence_knowledge": get_highest_impact_evidence_contribute_to_node_given_background_evidence_tool(net),
-        "check_one_evidence_change_relationship_between_two_nodes": check_one_evidence_change_relationship_between_two_nodes_tool(net),
+        "check_evidences_change_relationship_between_two_nodes": check_evidences_change_relationship_between_two_nodes_tool(net),
         "get_evidences_block_two_nodes": get_evidences_block_two_nodes_tool(net),
     }
 

@@ -379,25 +379,25 @@ def get_path(net, source_node, dest_node):
 
 
 # helper to get minmal blockers
-def is_independent_given(net, X, Y, observed_names, is_XY_connected_fn):
+def is_independent_given(net, X, Y, observed_names, is_XY_dconnected_fn):
     """
     True iff X ⟂ Y given original evidence plus `observed_names`.
     Uses your CM; relies on None=retract behavior supported by the CM.
     """
     if not observed_names:
         # No additional conditioning; just test current state
-        return not is_XY_connected_fn(net, X, Y)
+        return not is_XY_dconnected_fn(net, X, Y)
 
     # Observe all in observed_names (use state 0 arbitrarily for d-sep)
     with temporarily_set_findings(net, {nm: 0 for nm in observed_names}):
-        return not is_XY_connected_fn(net, X, Y)
+        return not is_XY_dconnected_fn(net, X, Y)
 
-def reduce_to_minimal_blocking_set(net, X, Y, S, is_XY_connected_fn):
+def reduce_to_minimal_blocking_set(net, X, Y, S, is_XY_dconnected_fn):
     """
     Given a blocking set S (iterable of names), drop redundant nodes until minimal.
     """
     S = list(dict.fromkeys(S))  # de-dupe, keep order
-    if not is_independent_given(net, X, Y, set(S), is_XY_connected_fn):
+    if not is_independent_given(net, X, Y, set(S), is_XY_dconnected_fn):
         return S  # not blocking; return as-is (or raise, if you prefer)
 
     changed = True
@@ -405,12 +405,12 @@ def reduce_to_minimal_blocking_set(net, X, Y, S, is_XY_connected_fn):
         changed = False
         for i in range(len(S) - 1, -1, -1):  # reverse -> stable
             trial = S[:i] + S[i+1:]
-            if is_independent_given(net, X, Y, set(trial), is_XY_connected_fn):
+            if is_independent_given(net, X, Y, set(trial), is_XY_dconnected_fn):
                 S.pop(i)
                 changed = True
     return S
 
-def find_minimal_blockers(net, X, Y, is_XY_connected_fn, consider='connected', max_k=2):
+def find_minimal_blockers(net, X, Y, is_XY_dconnected_fn, consider='connected', max_k=2):
     """
     Search small sets (|S|≤max_k) that block X–Y; return one minimal set if found.
     Consider:
@@ -421,7 +421,7 @@ def find_minimal_blockers(net, X, Y, is_XY_connected_fn, consider='connected', m
     import itertools
 
     # If already independent, empty set is a separator
-    if not is_XY_connected_fn(net, X, Y):
+    if not is_XY_dconnected_fn(net, X, Y):
         return []
 
     if consider == 'connected':
@@ -431,6 +431,6 @@ def find_minimal_blockers(net, X, Y, is_XY_connected_fn, consider='connected', m
 
     for k in range(1, max_k + 1):
         for combo in itertools.combinations(candidate_names, k):
-            if is_independent_given(net, X, Y, set(combo), is_XY_connected_fn):
-                return reduce_to_minimal_blocking_set(net, X, Y, list(combo), is_XY_connected_fn)
+            if is_independent_given(net, X, Y, set(combo), is_XY_dconnected_fn):
+                return reduce_to_minimal_blocking_set(net, X, Y, list(combo), is_XY_dconnected_fn)
     return []

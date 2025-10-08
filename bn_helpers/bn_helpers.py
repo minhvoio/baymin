@@ -10,6 +10,7 @@ from bn_helpers.utils import (output_distribution, ensure_keys, logical_or, \
 from itertools import product
 from collections import deque
 import itertools
+from typing import List, Tuple, Dict, Any
 
 class QueryOneNode(BaseModel):
     node: str
@@ -50,7 +51,7 @@ class BnToolBox():
     # function_name: str
 
     # XY CONNECT
-    def is_XY_connected(self, net, from_node, to_node):
+    def is_XY_dconnected(self, net, from_node, to_node):
       relatedNodes = net.node(from_node).getRelated("d_connected, exclude_self")
       for node in relatedNodes:
         if node.name() == to_node:
@@ -98,18 +99,55 @@ class BnToolBox():
     
 
     # Z CHANGE DEPENDENCY XY
-    def does_Z_change_dependency_XY(self, net, X, Y, Z):
-        zname = net.node(Z).name() if isinstance(Z, str) else Z.name()
+    # def does_Z_change_dependency_XY(self, net, X, Y, Z):
+    #     zname = net.node(Z).name() if isinstance(Z, str) else Z.name()
 
-        # BEFORE: Z unobserved
-        with temporarily_set_findings(net, {zname: None}):
-            dep_before = self.is_XY_connected(net, X, Y)
+    #     # BEFORE: Z unobserved
+    #     with temporarily_set_findings(net, {zname: None}):
+    #         dep_before = self.is_XY_dconnected(net, X, Y)
 
-        # AFTER: Z observed (state value doesn't matter for d-sep)
-        with temporarily_set_findings(net, {zname: 0}):
-            dep_after = self.is_XY_connected(net, X, Y)
+    #     # AFTER: Z observed (state value doesn't matter for d-sep)
+    #     with temporarily_set_findings(net, {zname: 0}):
+    #         dep_after = self.is_XY_dconnected(net, X, Y)
 
-        return (dep_before != dep_after), {"before": dep_before, "after": dep_after}
+    #     return (dep_before != dep_after), {"before": dep_before, "after": dep_after}
+
+    def does_evidence_change_dependency_XY(self, net, X: str, Y: str, evidence: List[str]) -> Tuple[bool, Dict[str, Any]]:
+        if not evidence:
+            with temporarily_set_findings(net, {}):
+                dep = self.is_XY_dconnected(net, X, Y)
+            return False, {
+                "before": dep,
+                "after": dep,
+                "conditioned_on": [],
+                "sequential": []
+            }
+
+        # BEFORE: none of the evidence is observed
+        with temporarily_set_findings(net, {z: None for z in evidence}):
+            dep_before = self.is_XY_dconnected(net, X, Y)
+
+        # AFTER: all evidence nodes observed (value doesn't matter for d-sep)
+        with temporarily_set_findings(net, {z: 0 for z in evidence}):
+            dep_after = self.is_XY_dconnected(net, X, Y)
+
+        changed = dep_before != dep_after
+
+        # Sequential trace (adding evidence one by one)
+        sequential_trace = []
+        partial = {}
+        for z in evidence:
+            partial[z] = 0
+            with temporarily_set_findings(net, partial):
+                conn = self.is_XY_dconnected(net, X, Y)
+            sequential_trace.append({"added": z, "connected": conn})
+
+        return changed, {
+            "before": dep_before,
+            "after": dep_after,
+            "conditioned_on": evidence,
+            "sequential": sequential_trace # how each evidence changes the dependency
+        }
 
     # # EVIDENCES BLOCK XY
     def evidences_block_XY(self, net, X, Y):

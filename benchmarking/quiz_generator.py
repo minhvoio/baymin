@@ -81,7 +81,7 @@ def create_dependency_quiz(net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
 
     randomizer = rng or _random
     bn_helper = BnToolBox()
-    is_connected = bn_helper.is_XY_connected(net, node1, node2)
+    is_connected = bn_helper.is_XY_dconnected(net, node1, node2)
 
     # Q1
     q1_header = f"1. Is changing the evidence of {node1} going to change the probability of {node2}?"

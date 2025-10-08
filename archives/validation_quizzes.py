@@ -8,14 +8,13 @@ def create_dependency_quiz(net, node1, node2, rng=None):
     - answers_letters: list like ["A", "C"] indicating the correct choice per question
     - rng: optional random-like object with .shuffle(list) and .choice(...)
     """
-    from bn_helpers.bn_helpers import BnHelper
     from bn_helpers.utils import get_path
+    from bn_helpers.bn_helpers import BnToolBox
 
     randomizer = rng or _random
-
-    bn_helper = BnHelper(function_name='is_XY_connected')
-    is_connected = bn_helper.is_XY_connected(net, node1, node2)
-
+    bn_tool_box = BnToolBox()
+    is_connected = bn_tool_box.is_XY_dconnected(net, node1, node2)
+    
     # Q1: Is changing evidence of node1 going to change probability of node2?
     q1_prompt = f"1. Is changing the evidence of {node1} going to change the probability of {node2}?"
     q1_options = [
@@ -41,7 +40,7 @@ def create_dependency_quiz(net, node1, node2, rng=None):
         ]
         q2_header = "2. Why they are d-connected?"
     else:
-        common_effect = bn_helper.get_common_effect(net, node1, node2)
+        common_effect = bn_tool_box.get_common_effect(net, node1, node2)
         because_text = (
             f"They are d-separated because they are blocked by {common_effect}"
             if common_effect
