@@ -100,7 +100,7 @@ def chat_with_tools(
         "3) Always call a tool when any tool could plausibly answer the user.\n"
         "4) After receiving tool results, if the return value is grammatically correct, return exactly that value;\n"
         "   otherwise fix only the grammar and return the corrected value.\n"
-        "5) Do NOT verify factual correctness of the tool outputs — only grammar.\n"
+        "5) Do NOT verify factual correctness of the tool outputs — only grammar - to correctly answer the question.\n"
         # "5) If a prior tool call failed or was rejected, do NOT repeat the same tool/argument combination.\n"
         # "6) If a tool call fails, try an alternative: adjust parameters (consistent with the prompt and provided node/state names) "
         # "   or choose a different tool.\n"

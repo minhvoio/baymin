@@ -1,4 +1,4 @@
-dependency_questions = [
+DEPENDENCY_QUESTIONS = [
   "Is changing the evidence of {node1} going to change the probability of {node2}?",
   "Is {node1} d-connected to {node2}?",
   "Is {node1} d-separated from {node2}?",
@@ -12,4 +12,73 @@ dependency_questions = [
   "Is {toNode} reachable from {fromNode}?",
   "Is there a path that links {fromNode} to {toNode}?",
   "Is {toNode} conditionally dependent on {fromNode}?",
+]
+
+COMMON_CAUSE_QUESTIONS = [
+  "What is the common cause of {node1} and {node2}?",
+  "Is there a common cause that influences both {node1} and {node2}?",
+  "Which variable acts as a common parent/grandparent of {node1} and {node2}?",
+  "Do {node1} and {node2} share the same parent/grandparent node?",
+  "List all possible common causes between {node1} and {node2}.",
+  "Which node connects both {node1} and {node2} as a common ancestor?",
+  "What is the minimal set of nodes that explain the common cause relationship between {node1} and {node2}?",
+  "In the network, does any latent variable act as a hidden common cause for {node1} and {node2}?",
+  "Is there a node that causes changes in both {node1} and {node2}?",
+  "What variable could be responsible for influencing both {node1} and {node2}?",
+  "Which parent/grandparent node explains why {node1} and {node2} are correlated?",
+  "Who is the 'root cause' that affects both {node1} and {node2}?",
+  "Do {node1} and {node2} have a common upstream cause?",
+  "Is there a higher-level node that explains both {node1} and {node2}?",
+  "What ancestor variable links {node1} and {node2} together?",
+  "Is there any hidden or unobserved variable causing both {node1} and {node2}?",
+  "Which node in the network is the main source of influence for both {node1} and {node2}?",
+  "Could {node1} and {node2} be correlated because of the same cause?",
+  "Which upstream factor explains the relationship between {node1} and {node2}?"
+]
+
+COMMON_EFFECT_QUESTIONS = [
+  "What is the common effect of {node1} and {node2}?",
+  "Is there a common effect that influences both {node1} and {node2}?",
+  "Which variable acts as a common child/grandchild of {node1} and {node2}?",
+  "Do {node1} and {node2} share the same child/grandchild node?",
+  "List all possible common effects between {node1} and {node2}.",
+  "Which node connects both {node1} and {node2} as a common descendant?",
+  "What is the minimal set of nodes that explain the common effect relationship between {node1} and {node2}?",
+  "Which node is influenced by both {node1} and {node2}?",
+  "Is there any variable that results from both {node1} and {node2}?",
+  "Which child/grandchild node is affected by both {node1} and {node2}?",
+  "Do {node1} and {node2} lead to the same outcome node?",
+  "What node depends on both {node1} and {node2}?",
+  "Could {node1} and {node2} both contribute to the same effect?",
+  "What is the shared consequence of {node1} and {node2}?",
+  "Is there a node that combines the influence of {node1} and {node2}?",
+  "Does any variable act as a collider between {node1} and {node2}?",
+  "Which descendant node captures the joint influence of {node1} and {node2}?",
+  "Which variable serves as a merging point for {node1} and {node2}’s paths?",
+  "What shared output arises due to both {node1} and {node2}?",
+  "Is there a child/grandchild node that both {node1} and {node2} directly or indirectly affect?"
+]
+
+BLOCKED_EVIDENCES_QUESTIONS = [
+  "What is the minimal set of nodes that would block the dependency between {node1} and {node2}?",
+  "Which node acts as a blocker for the dependency between {node1} and {node2}?",
+  "Is there a node that, when observed, would block the dependency between {node1} and {node2}?",
+  "List all possible nodes that would block the dependency between {node1} and {node2}.",
+  "What set of evidences would block the path between {node1} and {node2}?",
+  "What is the minimal set of nodes that explain the blocked dependency relationship between {node1} and {node2}?",
+  "Which evidence node would make {node1} and {node2} independent?",
+  "If we observe a certain node, which one would block the path between {node1} and {node2}?",
+  "What node should we condition on to d-separate {node1} and {node2}?",
+  "Which observation would cut off the information flow between {node1} and {node2}?",
+  "Identify the variable that d-separates {node1} from {node2}.",
+  "Which conditioning set would stop {node1} from affecting {node2}?",
+  "What is the smallest evidence set that would block all active paths between {node1} and {node2}?",
+  "Is there any node that, once known, breaks the dependency between {node1} and {node2}?",
+  "Which node lies on the path between {node1} and {node2} and can act as a blocking point?",
+  "If we want {node1} and {node2} to be independent, which nodes should we observe?",
+  "What combination of variables can act as a separator between {node1} and {node2}?",
+  "Which nodes should be set as evidence to deactivate the connection between {node1} and {node2}?",
+  "Can you identify a conditioning variable that blocks the information transfer between {node1} and {node2}?",
+  "Which minimal set of evidences would achieve d-separation for {node1} and {node2}?",
+  "When conditioning, what nodes would close all open paths between {node1} and {node2}?"
 ]
