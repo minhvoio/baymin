@@ -83,13 +83,15 @@ class BnToolBox():
             return base + f" They are blocked at {blocked_nodes} due to {a_or_the} common effect{final_s}."
         return base + f" There is no open path between {node1} and {node2}."
 
+    def get_d_connected_nodes(self, net, node):
+        return names(net.node(node).getRelated("d_connected, exclude_self"))
 
     # COMMON CAUSE / EFFECT
     def ancestors(self, net, node):
-        return names(net.node(node).getRelated("ancestors,exclude_self"))
+        return names(net.node(node).getRelated("ancestors, exclude_self"))
 
     def descendants(self, net, node):
-        return names(net.node(node).getRelated("descendents,exclude_self"))
+        return names(net.node(node).getRelated("descendents, exclude_self"))
 
     def get_common_cause(self, net, node1, node2):
         return self.ancestors(net, node1) & self.ancestors(net, node2)

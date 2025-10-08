@@ -295,6 +295,18 @@ def make_explain_d_connected_tool(net):
             return {"d_connected": None, "error": f"{type(e).__name__}: {e}"}
     return check_d_connected
 
+def get_d_connected_nodes_tool(net):
+    def get_d_connected_nodes(target_node: str):
+        """Get the d-connected nodes of a target_node / Get list of nodes that has impact on the target_node. 
+        Meaning observing any node from this list will change the probability of the target_node."""
+        try:
+            bn_tool_box = BnToolBox()
+            return bn_tool_box.get_d_connected_nodes(net, target_node)
+        except Exception as e:
+            return {"get_d_connected_nodes": None, "error": f"{type(e).__name__}: {e}"}
+    return get_d_connected_nodes
+
+
 def make_explain_common_cause_tool(net):
     def check_common_cause(node1: str, node2: str):
         """Check if there is a common cause between two nodes."""
@@ -452,6 +464,7 @@ def get_highest_impact_evidence_contribute_to_node_given_background_evidence_too
 def get_tools_map(net):
     return {
         "check_d_connected": make_explain_d_connected_tool(net),
+        "get_d_connected_nodes": get_d_connected_nodes_tool(net),
         "check_common_cause": make_explain_common_cause_tool(net),
         "check_common_effect": make_explain_common_effect_tool(net),
         "get_prob_node": get_prob_node_tool(net),
