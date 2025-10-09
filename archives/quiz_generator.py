@@ -70,67 +70,68 @@ def create_question(header_question, option_list, rng=None, leading_blank=False)
     return "\n".join(lines), correct_letter
 
 
-def create_dependency_quiz(question_format, net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
+def create_dependency_quiz(net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
     """
-    Builds a single multiple-choice question about whether changing evidence of `node1`
-    changes the probability of `node2`, *including the reason* in each option.
-    Returns (question_text, answers_letters) where answers_letters is a one-item list like ["B"].
+    Builds two multiple-choice questions about dependency and d-separation, with
+    randomized answer order. Returns (questions_text, answers_letters).
 
+    - answers_letters: list like ["A", "C"] indicating the correct choice per question
     - rng: optional random-like object with .shuffle(list) and .choice(...)
     """
+
     randomizer = rng or _random
     bn_helper = BnToolBox()
     is_connected = bn_helper.is_XY_dconnected(net, node1, node2)
 
-    # Header
-    q_header = question_format.format(node1=node1, node2=node2)
+    # Q1
+    q1_header = f"1. Is changing the evidence of {node1} going to change the probability of {node2}?"
+    q1_options = [
+        ("Yes", is_connected),
+        ("No", not is_connected),
+        ("None of the above", False),
+    ]
+    q1_text, q1_correct = create_question(q1_header, q1_options, rng=randomizer)
 
+    # Q2
     if is_connected:
-        # Ground-truth reason (d-connected path)
-        try:
-            ground_truth_path = get_path(net, node1, node2)
-        except Exception:
-            ground_truth_path = None
-        path_str = ground_truth_path or "N/A"
+        ground_truth_path = get_path(net, node1, node2)
+        ground_truth = f"They are d-connected through the path {ground_truth_path}"
 
-        correct = f"Yes, they are d-connected through the path {path_str}. Meaning that changing the evidence of {node1} will change the probability of {node2}."
+        distract_path1 = create_distract_answer(ground_truth_path, temperature=0.3, model=model_quiz)
+        distract_answer1 = "They are d-connected through the path " + distract_path1
 
-        # Two plausible-but-wrong path distractors
-        d1_path = create_distract_answer(path_str, temperature=0.3, model=model_quiz)
-        d2_path = create_distract_answer(path_str, temperature=0.8, model=model_quiz, another_answer=d1_path)
+        distract_path2 = create_distract_answer(ground_truth_path, temperature=0.3, model=model_quiz, another_answer=distract_path1)
+        distract_answer2 = "They are d-connected through the path " + distract_path2
 
-        opt1 = (correct, True)
-        opt2 = (f"Yes, they are d-connected through the path {d1_path}", False)
-        opt3 = (f"Yes, they are d-connected through the path {d2_path}", False)
-        opt4 = ("None of the above", False)
-        opt5 = (f"No, there is no path between {node1} and {node2}. Meaning that changing the evidence of {node1} will not change the probability of {node2}.", False)
-
-        options = [opt1, opt2, opt3, opt4, opt5]
-
+        q2_options = [
+            (ground_truth, True),
+            (distract_answer1, False),
+            (distract_answer2, False),
+            ("None of the above", False),
+        ]
+        q2_header = "2. Why are they d-connected?"
     else:
-        # Ground-truth reason (blocked / no path)
         common_effect = bn_helper.get_common_effect(net, node1, node2)
         because_text = (
-            f"No, they are d-separated because they are blocked by {common_effect}. Meaning that changing the evidence of {node1} will not change the probability of {node2}."
+            f"They are d-separated because they are blocked by {common_effect}"
             if common_effect
-            else f"No, there is no path between {node1} and {node2}. Meaning that changing the evidence of {node1} will not change the probability of {node2}."
+            else f"There is no path between {node1} and {node2}"
         )
+        distract_answer1 = create_distract_answer(because_text, temperature=0.3, model=model_quiz)
+        distract_answer2 = create_distract_answer(because_text, temperature=0.8, model=model_quiz, another_answer=distract_answer1)
+        q2_options = [
+            (because_text, True),
+            (distract_answer1, False),
+            (distract_answer2, False),
+            ("None of the above", False),
+        ]
+        q2_header = "2. Why are they d-separated?"
 
-        # Two plausible-but-wrong distractors derived from the correct explanation
-        d1 = create_distract_answer(because_text, temperature=0.3, model=model_quiz)
-        d2 = create_distract_answer(because_text, temperature=0.8, model=model_quiz, another_answer=d1)
+    q2_text, q2_correct = create_question(q2_header, q2_options, rng=randomizer, leading_blank=True)
 
-        opt1 = (because_text, True)
-        opt2 = (d1, False)
-        opt3 = (d2, False)
-        opt4 = ("None of the above", False)
-        opt5 = (f"Yes, they are d-connected. Meaning that changing the evidence of {node1} will change the probability of {node2}.", False)
-
-        options = [opt1, opt2, opt3, opt4, opt5]
-
-    q_text, q_correct = create_question(q_header, options, rng=randomizer)
-
-    return q_text, [q_correct]
+    questions_text = "\n".join([q1_text, q2_text])
+    answers_letters = [q1_correct, q2_correct]
+    return questions_text, answers_letters
 
 def validate_quiz_answer(y_list, y_hat_list):
     score = 0

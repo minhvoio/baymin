@@ -52,7 +52,7 @@ Explanation:
 
 {bn_explanation}
 
-You must respond with just a list of 2 answers and no additional text, for example:
+You must respond with just a letter of the answer and no additional text, for example:
 
-[A, B]
+A
 """
