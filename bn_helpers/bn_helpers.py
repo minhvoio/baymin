@@ -157,7 +157,7 @@ class BnToolBox():
         evidences = findAllDConnectedNodes(net, X, Y)
         for e in evidences:
             e_name = e.name()
-            if e_name != X and e_name != Y and self.does_Z_change_dependency_XY(net, X, Y, e_name)[0]:
+            if e_name != X and e_name != Y and self.does_evidence_change_dependency_XY(net, X, Y, [e_name])[0]:
                 ans.append(e_name)
         return ans
 

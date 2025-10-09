@@ -3,8 +3,8 @@ from ollama_helper.prompts import TAKE_QUIZ_PROMPT
 from bn_helpers.bn_helpers import AnswerStructure, BnToolBox
 from bn_helpers.get_structures_print_tools import get_BN_structure
 from bn_helpers.tool_agent import get_answer_from_tool_agent
-from benchmarking.quiz_generator import create_dependency_quiz
-from benchmarking.benchmarking_utils import pickTwoRandomNodes
+from benchmarking.quiz_generator import create_dependency_quiz, create_common_cause_quiz, create_common_effect_quiz, create_blocked_evidence_quiz
+from benchmarking.benchmarking_utils import pick_two_random_nodes
 from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.ollama import OllamaProvider
@@ -61,7 +61,7 @@ def validate_quiz_answer(y, y_hat):
         return 0
 
 def two_nodes_question(net, question_format=None):
-    node1, node2 = pickTwoRandomNodes(net)
+    node1, node2 = pick_two_random_nodes(net)
     bn = get_BN_structure(net)
     question = question_format.format(node1=node1, node2=node2)
     prompt = f"In this Bayesian Network:\n{bn}\n"
@@ -69,18 +69,18 @@ def two_nodes_question(net, question_format=None):
     return prompt, node1, node2, question
 
 # DEPENDENCY TEST
-def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30):
+def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30):
     raw_model_total_score = 0
     baymin_total_score = 0
-    for question in DEPENDENCY_QUESTIONS[:num_questions]:
+    for question in question_set[:num_questions]:
         prompt, node1, node2, question_output = two_nodes_question(net, question_format=question)
-        quiz, y = create_dependency_quiz(question_output, net, node1, node2, model_quiz=model_quiz)
+        quiz, y = create_quiz_function(question_output, net, node1, node2, model_quiz=model_quiz)
         # print('prompt:\n', prompt)
         # print('quiz:\n', quiz)
         # print('y_list:\n', y_list)
         # print()
 
-        def raw_model_dependency_test():
+        def raw_model_test():
             try:
                 loop = asyncio.get_event_loop()
                 if loop.is_running():
@@ -98,8 +98,8 @@ def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, nu
             score = validate_quiz_answer(y, y_hat)
             return score
 
-        def baymin_dependency_test():
-            answer = get_answer_from_tool_agent(net, prompt, model=model, max_tokens=max_tokens)
+        def baymin_test():
+            answer = get_answer_from_tool_agent(net, question_output, model=model, max_tokens=max_tokens)
             y_hat = model_do_quiz(quiz, answer)
             
             score = validate_quiz_answer(y, y_hat)
@@ -112,9 +112,21 @@ def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, nu
                 print('---------------------------------------------')
             return score
 
-        raw_model_score = raw_model_dependency_test()
-        baymin_score = baymin_dependency_test()
+        raw_model_score = raw_model_test()
+        baymin_score = baymin_test()
         raw_model_total_score += raw_model_score
         baymin_total_score += baymin_score
         
     return raw_model_total_score / num_questions, baymin_total_score / num_questions
+
+def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30):
+    return elementary_test(net, DEPENDENCY_QUESTIONS, create_dependency_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions)
+
+def common_cause_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30):
+    return elementary_test(net, COMMON_CAUSE_QUESTIONS, create_common_cause_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions)
+
+def common_effect_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30):
+    return elementary_test(net, COMMON_EFFECT_QUESTIONS, create_common_effect_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions)
+
+def blocked_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30):
+    return elementary_test(net, BLOCKED_EVIDENCES_QUESTIONS, create_blocked_evidence_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions)
