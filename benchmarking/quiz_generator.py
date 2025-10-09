@@ -5,9 +5,9 @@ import random as _random
 from bn_helpers.constants import MODEL, MODEL_QUIZ
 
 def create_distract_answer(answer, model=MODEL, temperature=0.3, another_answer=None):
-  prompt = f"Create just an answer that is different and corresponding (same number of variables) from the following answer (no other text): {answer}"
+  prompt = f"Keep the sentence structure, just change the variables names from the following answer (no other text): {answer}"
   if another_answer:
-    prompt += f" and also different from the following answer: {another_answer}"
+    prompt += f" and different variables names from the following answer: {another_answer}"
   distract_answer = answer_this_prompt(prompt, format=AnswerStructure.model_json_schema(), model=model, temperature=temperature)
   distract_answer = AnswerStructure.model_validate_json(distract_answer)
   return distract_answer.answer
@@ -125,11 +125,11 @@ def create_dependency_quiz(question, net, node1, node2, rng=None, model_quiz=MOD
 def create_common_cause_quiz(question, net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
     randomizer = rng or _random
     bn_tool_box = BnToolBox()
-    common_causes = bn_tool_box.get_common_cause(net, node1, node2)
-    
+    common_causes = bn_tool_box.get_common_cause(net, node1, node2)    
     nums_cause, is_or_are, final_s = grammar_plural(common_causes)
+    is_None = ', '.join(common_causes) if common_causes else "None"
     
-    correct = f"The common cause{final_s} of {node1} and {node2} {is_or_are}: {', '.join(common_causes)}."
+    correct = f"The common cause{final_s} of {node1} and {node2} {is_or_are}: {is_None}."
     
     d1 = create_distract_answer(correct, temperature=0.3, model=model_quiz)
     d2 = create_distract_answer(correct, temperature=0.8, model=model_quiz, another_answer=d1)
@@ -149,10 +149,10 @@ def create_common_effect_quiz(question, net, node1, node2, rng=None, model_quiz=
     randomizer = rng or _random
     bn_tool_box = BnToolBox()
     common_effects = bn_tool_box.get_common_effect(net, node1, node2)
-
     nums_effect, is_or_are, final_s = grammar_plural(common_effects)
+    is_None = ', '.join(common_effects) if common_effects else "None"
 
-    correct = f"The common effect{final_s} of {node1} and {node2} {is_or_are}: {', '.join(common_effects)}."
+    correct = f"The common effect{final_s} of {node1} and {node2} {is_or_are}: {is_None}."
 
     d1 = create_distract_answer(correct, temperature=0.3, model=model_quiz)
     d2 = create_distract_answer(correct, temperature=0.8, model=model_quiz, another_answer=d1)
@@ -161,6 +161,27 @@ def create_common_effect_quiz(question, net, node1, node2, rng=None, model_quiz=
     opt2 = (d1, False)
     opt3 = (d2, False)
     opt4 = (f"No, there is no common effect between {node1} and {node2}.", nums_effect == 0)
+    opt5 = ("None of the above", False)
+    options = [opt1, opt2, opt3, opt4, opt5]
+
+    q_text, q_correct = create_question(question, options, rng=randomizer)
+    return q_text, q_correct
+
+def create_blocked_evidence_quiz(question, net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
+    randomizer = rng or _random
+    bn_tool_box = BnToolBox()
+    blocked_evidence = bn_tool_box.evidences_block_XY(net, node1, node2)
+    nums_blocked, is_or_are, final_s = grammar_plural(blocked_evidence)
+    is_None = ', '.join(blocked_evidence) if blocked_evidence else "None"
+    correct = f"The evidence{final_s} that would block the dependency between {node1} and {node2} {is_or_are}: {is_None}."
+    
+    d1 = create_distract_answer(correct, temperature=0.3, model=model_quiz)
+    d2 = create_distract_answer(correct, temperature=0.8, model=model_quiz, another_answer=d1)
+
+    opt1 = (correct, nums_blocked > 0)
+    opt2 = (d1, False)
+    opt3 = (d2, False)
+    opt4 = (f"No, there is no evidence that would block the dependency between {node1} and {node2}.", nums_blocked == 0)
     opt5 = ("None of the above", False)
     options = [opt1, opt2, opt3, opt4, opt5]
 

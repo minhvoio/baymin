@@ -9,7 +9,7 @@ from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.ollama import OllamaProvider
 from bn_helpers.constants import MODEL, MODEL_QUIZ, OLLAMA_URL
-from question_types import DEPENDENCY_QUESTIONS, COMMON_CAUSE_QUESTIONS, COMMON_EFFECT_QUESTIONS, BLOCKED_EVIDENCES_QUESTIONS, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, PROBABILITY_QUESTIONS, HIGHEST_IMPACT_EVIDENCE_QUESTIONS
+from benchmarking.question_types import DEPENDENCY_QUESTIONS, COMMON_CAUSE_QUESTIONS, COMMON_EFFECT_QUESTIONS, BLOCKED_EVIDENCES_QUESTIONS, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, PROBABILITY_QUESTIONS, HIGHEST_IMPACT_EVIDENCE_QUESTIONS
 from pydantic import BaseModel
 
 import asyncio
@@ -60,9 +60,7 @@ def validate_quiz_answer(y, y_hat):
     else:
         return 0
 
-
-# DEPENDENCY TEST
-def create_dependency_question_prompt(net, question_format=None):
+def two_nodes_question(net, question_format=None):
     node1, node2 = pickTwoRandomNodes(net)
     bn = get_BN_structure(net)
     question = question_format.format(node1=node1, node2=node2)
@@ -70,11 +68,12 @@ def create_dependency_question_prompt(net, question_format=None):
     prompt += question
     return prompt, node1, node2, question
 
+# DEPENDENCY TEST
 def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30):
     raw_model_total_score = 0
     baymin_total_score = 0
     for question in DEPENDENCY_QUESTIONS[:num_questions]:
-        prompt, node1, node2, question_output = create_dependency_question_prompt(net, question_format=question)
+        prompt, node1, node2, question_output = two_nodes_question(net, question_format=question)
         quiz, y = create_dependency_quiz(question_output, net, node1, node2, model_quiz=model_quiz)
         # print('prompt:\n', prompt)
         # print('quiz:\n', quiz)
