@@ -70,20 +70,13 @@ def create_question(header_question, option_list, rng=None, leading_blank=False)
     return "\n".join(lines), correct_letter
 
 
-def create_dependency_quiz(question_format, net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
-    """
-    Builds a single multiple-choice question about whether changing evidence of `node1`
-    changes the probability of `node2`, *including the reason* in each option.
-    Returns (question_text, answers_letters) where answers_letters is a one-item list like ["B"].
-
-    - rng: optional random-like object with .shuffle(list) and .choice(...)
-    """
+def create_dependency_quiz(question, net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
     randomizer = rng or _random
     bn_helper = BnToolBox()
     is_connected = bn_helper.is_XY_dconnected(net, node1, node2)
 
     # Header
-    q_header = question_format.format(node1=node1, node2=node2)
+    q_header = question
 
     if is_connected:
         # Ground-truth reason (d-connected path)
@@ -130,11 +123,5 @@ def create_dependency_quiz(question_format, net, node1, node2, rng=None, model_q
 
     q_text, q_correct = create_question(q_header, options, rng=randomizer)
 
-    return q_text, [q_correct]
+    return q_text, q_correct
 
-def validate_quiz_answer(y_list, y_hat_list):
-    score = 0
-    for y, y_hat in zip(y_list, y_hat_list):
-        if y == y_hat:
-            score += 1
-    return score / len(y_list)
