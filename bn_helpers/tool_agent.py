@@ -313,8 +313,14 @@ def make_explain_common_cause_tool(net):
         try:
             bn_tool_box = BnToolBox()
             ans = bn_tool_box.get_common_cause(net, node1, node2)
+
+            nums_cause = len(ans)  
+            is_plural = nums_cause > 1
+            is_or_are = "are" if is_plural else "is"
+            final_s = "s" if is_plural else ""
+
             if ans:
-                template = f"The common cause(s) of {node1} and {node2} is/are: {', '.join(ans)}."
+                template = f"The common cause{final_s} of {node1} and {node2} {is_or_are}: {', '.join(ans)}."
             else:
                 template = f"There is no common cause between {node1} and {node2}."
             return template
@@ -328,8 +334,12 @@ def make_explain_common_effect_tool(net):
         try:
             bn_tool_box = BnToolBox()
             ans = bn_tool_box.get_common_effect(net, node1, node2)
+            nums_effect = len(ans)
+            is_plural = nums_effect > 1
+            is_or_are = "are" if is_plural else "is"
+            final_s = "s" if is_plural else ""
             if ans:
-                template = f"The common effect(s) of {node1} and {node2} is/are: {', '.join(ans)}."
+                template = f"The common effect{final_s} of {node1} and {node2} {is_or_are}: {', '.join(ans)}."
             else:
                 template = f"There is no common effect between {node1} and {node2}."
             return template
