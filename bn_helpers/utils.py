@@ -434,3 +434,10 @@ def find_minimal_blockers(net, X, Y, is_XY_dconnected_fn, consider='connected', 
             if is_independent_given(net, X, Y, set(combo), is_XY_dconnected_fn):
                 return reduce_to_minimal_blocking_set(net, X, Y, list(combo), is_XY_dconnected_fn)
     return []
+
+def grammar_plural(items):
+    nums_items = len(items)
+    is_plural = nums_items > 1
+    is_or_are = "are" if is_plural else "is"
+    final_s = "s" if is_plural else ""
+    return nums_items, is_or_are, final_s

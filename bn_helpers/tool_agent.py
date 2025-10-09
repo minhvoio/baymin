@@ -1,7 +1,7 @@
 import requests, json
 from bn_helpers.get_structures_print_tools import get_BN_node_states
 from bn_helpers.bn_helpers import BnToolBox
-from bn_helpers.utils import temporarily_set_findings
+from bn_helpers.utils import temporarily_set_findings, grammar_plural
 from bni_netica.bni_netica import Net
 from bn_helpers.constants import MODEL, OLLAMA_CHAT_URL
 from typing import List, Tuple, Dict, Any
@@ -313,11 +313,7 @@ def make_explain_common_cause_tool(net):
         try:
             bn_tool_box = BnToolBox()
             ans = bn_tool_box.get_common_cause(net, node1, node2)
-
-            nums_cause = len(ans)  
-            is_plural = nums_cause > 1
-            is_or_are = "are" if is_plural else "is"
-            final_s = "s" if is_plural else ""
+            _, is_or_are, final_s = grammar_plural(ans)
 
             if ans:
                 template = f"The common cause{final_s} of {node1} and {node2} {is_or_are}: {', '.join(ans)}."
@@ -334,10 +330,8 @@ def make_explain_common_effect_tool(net):
         try:
             bn_tool_box = BnToolBox()
             ans = bn_tool_box.get_common_effect(net, node1, node2)
-            nums_effect = len(ans)
-            is_plural = nums_effect > 1
-            is_or_are = "are" if is_plural else "is"
-            final_s = "s" if is_plural else ""
+            _, is_or_are, final_s = grammar_plural(ans)
+            
             if ans:
                 template = f"The common effect{final_s} of {node1} and {node2} {is_or_are}: {', '.join(ans)}."
             else:

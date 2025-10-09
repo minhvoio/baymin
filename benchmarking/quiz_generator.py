@@ -1,6 +1,6 @@
 from ollama_helper.ollama_helper import answer_this_prompt
 from bn_helpers.bn_helpers import AnswerStructure, BnToolBox
-from bn_helpers.utils import get_path
+from bn_helpers.utils import get_path, grammar_plural
 import random as _random
 from bn_helpers.constants import MODEL, MODEL_QUIZ
 
@@ -127,10 +127,7 @@ def create_common_cause_quiz(question, net, node1, node2, rng=None, model_quiz=M
     bn_tool_box = BnToolBox()
     common_causes = bn_tool_box.get_common_cause(net, node1, node2)
     
-    nums_cause = len(common_causes) 
-    is_plural = nums_cause > 1
-    is_or_are = "are" if is_plural else "is"
-    final_s = "s" if is_plural else ""
+    nums_cause, is_or_are, final_s = grammar_plural(common_causes)
     
     correct = f"The common cause{final_s} of {node1} and {node2} {is_or_are}: {', '.join(common_causes)}."
     
@@ -153,10 +150,7 @@ def create_common_effect_quiz(question, net, node1, node2, rng=None, model_quiz=
     bn_tool_box = BnToolBox()
     common_effects = bn_tool_box.get_common_effect(net, node1, node2)
 
-    nums_effect = len(common_effects)
-    is_plural = nums_effect > 1
-    is_or_are = "are" if is_plural else "is"
-    final_s = "s" if is_plural else ""
+    nums_effect, is_or_are, final_s = grammar_plural(common_effects)
 
     correct = f"The common effect{final_s} of {node1} and {node2} {is_or_are}: {', '.join(common_effects)}."
 
