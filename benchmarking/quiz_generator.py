@@ -72,11 +72,8 @@ def create_question(header_question, option_list, rng=None, leading_blank=False)
 
 def create_dependency_quiz(question, net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
     randomizer = rng or _random
-    bn_helper = BnToolBox()
-    is_connected = bn_helper.is_XY_dconnected(net, node1, node2)
-
-    # Header
-    q_header = question
+    bn_tool_box = BnToolBox()
+    is_connected = bn_tool_box.is_XY_dconnected(net, node1, node2)
 
     if is_connected:
         # Ground-truth reason (d-connected path)
@@ -102,7 +99,7 @@ def create_dependency_quiz(question, net, node1, node2, rng=None, model_quiz=MOD
 
     else:
         # Ground-truth reason (blocked / no path)
-        common_effect = bn_helper.get_common_effect(net, node1, node2)
+        common_effect = bn_tool_box.get_common_effect(net, node1, node2)
         because_text = (
             f"No, they are d-separated because they are blocked by {common_effect}. Meaning that changing the evidence of {node1} will not change the probability of {node2}."
             if common_effect
@@ -121,7 +118,32 @@ def create_dependency_quiz(question, net, node1, node2, rng=None, model_quiz=MOD
 
         options = [opt1, opt2, opt3, opt4, opt5]
 
-    q_text, q_correct = create_question(q_header, options, rng=randomizer)
-
+    q_text, q_correct = create_question(question, options, rng=randomizer)
     return q_text, q_correct
 
+
+def create_common_cause_quiz(question, net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
+    randomizer = rng or _random
+    bn_tool_box = BnToolBox()
+    common_causes = bn_tool_box.get_common_cause(net, node1, node2)
+
+    nums_cause = len(list(common_causes))
+    is_plural = nums_cause > 1
+    is_or_are = "are" if is_plural else "is"
+    final_s = "s" if is_plural else ""
+
+    correct = f"The common cause{final_s} of {node1} and {node2} {is_or_are}: {', '.join(common_causes)}."
+
+    d1 = create_distract_answer(correct, temperature=0.3, model=model_quiz)
+    d2 = create_distract_answer(correct, temperature=0.8, model=model_quiz, another_answer=d1)
+
+    opt1 = (correct, nums_cause > 0)
+    opt2 = (d1, False)
+    opt3 = (d2, False)
+    opt4 = (f"No, there is no common cause between {node1} and {node2}.", nums_cause == 0)
+    opt5 = ("None of the above", False)
+
+    options = [opt1, opt2, opt3, opt4, opt5]
+
+    q_text, q_correct = create_question(question, options, rng=randomizer)
+    return q_text, q_correct
