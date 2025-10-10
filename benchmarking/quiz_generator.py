@@ -219,23 +219,67 @@ def create_evidence_change_relationship_quiz(question: str, net, node1: str, nod
     randomizer = rng or _random
     bn_tool_box = BnToolBox()
     correct_answer, _ = bn_tool_box.get_explain_evidence_change_dependency_XY(net, node1, node2, evidence)
+    _, details = bn_tool_box.does_evidence_change_dependency_XY(net, node1, node2, evidence)
     
-    if evidence:
-        opt1 = (correct_answer, True)
-        
-        fake_nodes = generate_fake_nodes_for_relation(net, evidence, node1, node2)
-        ev_str_fake = ", ".join(fake_nodes) if fake_nodes else "∅"
-        # Create fake answer by replacing the evidence in the correct answer
-        fake_answer = correct_answer.replace(", ".join(evidence), ev_str_fake)
-        opt2 = (fake_answer, False)
+    opt1 = (correct_answer, True)
+    
+    # Option 2: Reverse one of the sequential items (d-connected => d-separated and vice versa)
+    fake_answer2 = correct_answer
+    if details.get("sequential"):
+        # Pick a random sequential step to reverse
+        step_to_reverse = randomizer.choice(details["sequential"])
+        original_conn = "d-connected" if step_to_reverse["connected"] else "d-separated"
+        reversed_conn = "d-separated" if step_to_reverse["connected"] else "d-connected"
+        # Replace the first occurrence of the original connection status with the reversed one
+        fake_answer2 = fake_answer2.replace(f"+{step_to_reverse['added']} => {original_conn}", f"+{step_to_reverse['added']} => {reversed_conn}", 1)
+    opt2 = (fake_answer2, False)
 
-        opt3 = (f"No, the relationship between {node1} and {node2} is not affected by the evidence of {evidence}.", False)
-    else:
-        opt1 = (correct_answer, True)
-        fake_nodes = fake_random_nodes(net, (node1, node2), num_node_keep=0, num_node_output=get_random_number_of_nodes(net, padding=2), min_output_when_zero=2)
-        opt2 = (f"Yes, the relationship between {node1} and {node2} is affected by the evidence of {fake_nodes}.", False)
-        opt3 = (f"Yes, the relationship between {node1} and {node2} is affected by the evidence of {fake_random_nodes(net, (node1, node2), \
-            num_node_keep=0, num_node_output=get_random_number_of_nodes(net, padding=2), exclude=fake_nodes, min_output_when_zero=2)}.", False)
+    # Option 3: Flip Yes/No from correct answer using the opposite template
+    changed, details = bn_tool_box.does_evidence_change_dependency_XY(net, node1, node2, evidence)
+    
+    def _conn_label(b: bool) -> str:
+        return "d-connected" if b else "d-separated"
+    
+    def _fmt_ev_list(evs: list[str]) -> str:
+        if not evs: return "∅"
+        return ", ".join(evs)
+    
+    # Reverse the before/after states to match the flipped template
+    before_reversed = _conn_label(not details["before"])
+    after_reversed = _conn_label(not details["after"])
+    ev_str = _fmt_ev_list(evidence)
+    
+    # Find first step (if any) where connectivity flips relative to BEFORE (reversed)
+    flip_note = ""
+    for step in details.get("sequential", []):
+        if step["connected"] != details["before"]:
+            flip_note = f" The relationship first flips after conditioning on {step['added']}."
+            break
+    
+    # Generate the opposite template
+    if not evidence:
+        fake_answer3 = f"No evidence provided. Relationship between {node1} and {node2} is {before_reversed} with no conditioning."
+    elif not changed:  # Original was "No", so make it "Yes"
+        fake_answer3 = (
+            f"Yes - conditioning on {ev_str} changes the dependency between {node1} and {node2}. "
+            f"Before observing {ev_str}, they were {_conn_label(details["before"])}. After observing all evidence, they are {after_reversed}."
+            f"{flip_note}"
+        )
+    else:  # Original was "Yes", so make it "No"
+        fake_answer3 = (
+            f"No - conditioning on {ev_str} does not change the dependency between {node1} and {node2}. "
+            f"Before observing {ev_str}, they were {before_reversed}. After observing all evidence, they remain {after_reversed}."
+        )
+    
+    # Add sequence if present (with reversed connection states)
+    if details.get("sequential"):
+        steps = "; ".join(
+            f"+{s['added']} => {_conn_label(not s['connected'])}"
+            for s in details["sequential"]
+        )
+        fake_answer3 += f" Sequence: {steps}."
+    
+    opt3 = (fake_answer3, False)
     
     opt4 = ("None of the above", False)
     options = [opt1, opt2, opt3, opt4]

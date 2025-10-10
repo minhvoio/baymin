@@ -218,7 +218,7 @@ def generate_fake_probability_answer_from_data(structured_data, variation_range=
             conclusion_parts.append(f"Belief in '{state}' {'increased' if change > 0 else 'decreased'} by {abs_change:.4f}")
         
         if max_change <= 0.05:
-            conclusion_parts.append("Overall, the update is minimal (all changes ≤ threshold).")
+            conclusion_parts.append(f"Overall, the update is minimal ({max_change:.4f}).")
         else:
             conclusion_parts.append(f"Largest overall per-state shift: {max_change:.4f}.")
         
