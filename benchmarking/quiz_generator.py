@@ -3,7 +3,7 @@ from bn_helpers.bn_helpers import AnswerStructure, BnToolBox
 from bn_helpers.utils import get_path, grammar_plural
 import random as _random
 from bn_helpers.constants import MODEL, MODEL_QUIZ
-from benchmarking.benchmarking_utils import fake_random_nodes, pick_two_random_nodes, generate_fake_nodes_for_relation
+from benchmarking.benchmarking_utils import fake_random_nodes, pick_two_random_nodes, generate_fake_nodes_for_relation, get_random_number_of_nodes, generate_fake_probability_answer_from_data
 
 def create_distract_answer(answer, model=MODEL, temperature=0.3, another_answer=None):
   prompt = f"Keep the sentence structure, just change the variables names from the following answer (no other text): {answer}"
@@ -71,7 +71,7 @@ def create_question(header_question, option_list, rng=None, leading_blank=False)
     return "\n".join(lines), correct_letter
 
 
-def create_dependency_quiz(question, net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
+def create_dependency_quiz(question, net, node1, node2, rng=None):
     randomizer = rng or _random
     bn_tool_box = BnToolBox()
     is_connected = bn_tool_box.is_XY_dconnected(net, node1, node2)
@@ -125,7 +125,7 @@ def create_dependency_quiz(question, net, node1, node2, rng=None, model_quiz=MOD
     return q_text, q_correct
 
 
-def create_common_cause_quiz(question, net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
+def create_common_cause_quiz(question, net, node1, node2, rng=None):
     randomizer = rng or _random
     bn_tool_box = BnToolBox()
     common_causes = bn_tool_box.get_common_cause(net, node1, node2)
@@ -162,7 +162,7 @@ def create_common_cause_quiz(question, net, node1, node2, rng=None, model_quiz=M
     q_text, q_correct = create_question(question, options, rng=randomizer)
     return q_text, q_correct
 
-def create_common_effect_quiz(question, net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
+def create_common_effect_quiz(question, net, node1, node2, rng=None):
     randomizer = rng or _random
     bn_tool_box = BnToolBox()
     common_effects = bn_tool_box.get_common_effect(net, node1, node2)
@@ -189,7 +189,7 @@ def create_common_effect_quiz(question, net, node1, node2, rng=None, model_quiz=
     q_text, q_correct = create_question(question, options, rng=randomizer)
     return q_text, q_correct
 
-def create_blocked_evidence_quiz(question, net, node1, node2, rng=None, model_quiz=MODEL_QUIZ):
+def create_blocked_evidence_quiz(question, net, node1, node2, rng=None):
     randomizer = rng or _random
     bn_tool_box = BnToolBox()
     blocked_evidence = bn_tool_box.evidences_block_XY(net, node1, node2)
@@ -214,3 +214,65 @@ def create_blocked_evidence_quiz(question, net, node1, node2, rng=None, model_qu
 
     q_text, q_correct = create_question(question, options, rng=randomizer)
     return q_text, q_correct
+
+def create_evidence_change_relationship_quiz(question: str, net, node1: str, node2: str, evidence: list[str], rng=None):
+    randomizer = rng or _random
+    bn_tool_box = BnToolBox()
+    correct_answer, _ = bn_tool_box.get_explain_evidence_change_dependency_XY(net, node1, node2, evidence)
+    
+    if evidence:
+        opt1 = (correct_answer, True)
+        
+        fake_nodes = generate_fake_nodes_for_relation(net, evidence, node1, node2)
+        ev_str_fake = ", ".join(fake_nodes) if fake_nodes else "∅"
+        # Create fake answer by replacing the evidence in the correct answer
+        fake_answer = correct_answer.replace(", ".join(evidence), ev_str_fake)
+        opt2 = (fake_answer, False)
+
+        opt3 = (f"No, the relationship between {node1} and {node2} is not affected by the evidence of {evidence}.", False)
+    else:
+        opt1 = (correct_answer, True)
+        fake_nodes = fake_random_nodes(net, (node1, node2), num_node_keep=0, num_node_output=get_random_number_of_nodes(net, padding=2), min_output_when_zero=2)
+        opt2 = (f"Yes, the relationship between {node1} and {node2} is affected by the evidence of {fake_nodes}.", False)
+        opt3 = (f"Yes, the relationship between {node1} and {node2} is affected by the evidence of {fake_random_nodes(net, (node1, node2), \
+            num_node_keep=0, num_node_output=get_random_number_of_nodes(net, padding=2), exclude=fake_nodes, min_output_when_zero=2)}.", False)
+    
+    opt4 = ("None of the above", False)
+    options = [opt1, opt2, opt3, opt4]
+
+    q_text, q_correct = create_question(question, options, rng=randomizer)
+    return q_text, q_correct
+
+def create_probability_quiz(question, net, node, evidence, rng=None):
+    randomizer = rng or _random
+    bn_tool_box = BnToolBox()
+    evidence_dict = {ev: True for ev in evidence} if evidence else {}
+
+    correct_answer, structured_data = bn_tool_box.get_explain_prob_X_given(net, node, evidence_dict)
+    opt1 = (correct_answer, True)
+    
+    # Generate fake answer by slightly randomizing the probabilities using structured data
+    fake_answer = generate_fake_probability_answer_from_data(structured_data, variation_range=(0, 2))
+    opt2 = (fake_answer, False)
+    
+    # Generate another fake answer with larger variation
+    fake_answer2 = generate_fake_probability_answer_from_data(structured_data, variation_range=(0, 5))
+    opt3 = (fake_answer2, False)
+    
+    opt4 = ("None of the above", False)
+    options = [opt1, opt2, opt3, opt4]
+
+    q_text, q_correct = create_question(question, options, rng=randomizer)
+    
+    # Add separators before each option for better readability
+    lines = q_text.split('\n')
+    formatted_lines = []
+    
+    for i, line in enumerate(lines):
+        # Add separator before each option (A., B., C., D.)
+        if line.startswith(('A.', 'B.', 'C.', 'D.')):
+            formatted_lines.append("-----------")
+        
+        formatted_lines.append(line)
+    
+    return '\n'.join(formatted_lines), q_correct

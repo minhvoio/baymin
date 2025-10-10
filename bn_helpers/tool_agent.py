@@ -1,3 +1,4 @@
+from tempfile import template
 import requests, json
 from bn_helpers.get_structures_print_tools import get_BN_node_states
 from bn_helpers.bn_helpers import BnToolBox
@@ -359,52 +360,7 @@ def check_evidences_change_relationship_between_two_nodes_tool(net):
         """Check if knowing Evidence(s) will change the dependency relationship between Node1 and Node2."""
         try:
             bn_tool_box = BnToolBox()
-            changed, details = bn_tool_box.does_evidence_change_dependency_XY(net, node1, node2, evidence)
-
-            def _conn_label(b: bool) -> str:
-                return "d-connected" if b else "d-separated"
-
-            def _fmt_ev_list(evs: List[str]) -> str:
-                if not evs: return "∅"
-                return ", ".join(evs)
-
-            before = _conn_label(details["before"])
-            after  = _conn_label(details["after"])
-            ev_str = _fmt_ev_list(evidence)
-
-            # Find first step (if any) where connectivity flips relative to BEFORE
-            flip_note = ""
-            for step in details.get("sequential", []):
-                if step["connected"] != details["before"]:
-                    flip_note = f" The relationship first flips after conditioning on {{{step['added']}}}."
-                    break
-
-            if not evidence:
-                template = (
-                    f"No evidence provided. Relationship between {node1} and {node2} is {before} "
-                    f"with no conditioning."
-                )
-                return template
-
-            if changed:
-                template = (
-                    f"Yes - conditioning on {{{ev_str}}} changes the dependency between {node1} and {node2}. "
-                    f"Before observing {{{ev_str}}}, they were {before}. After observing all evidence, they are {after}."
-                    f"{flip_note}"
-                )
-            else:
-                template = (
-                    f"No - conditioning on {{{ev_str}}} does not change the dependency between {node1} and {node2}. "
-                    f"Before observing {{{ev_str}}}, they were {before}. After observing all evidence, they remain {after}."
-                )
-
-            if details.get("sequential"):
-                steps = "; ".join(
-                    f"+{s['added']} => {_conn_label(s['connected'])}"
-                    for s in details["sequential"]
-                )
-                template += f" Sequence: {steps}."
-
+            _, template = bn_tool_box.get_explain_evidence_change_dependency_XY(net, node1, node2, evidence)
             return template
 
         except Exception as e:
@@ -432,7 +388,7 @@ def get_prob_node_given_any_evidence_tool(net):
         """Get probability distribution of a node given any evidence dict by adding all evidences."""
         try:
             bn_tool_box = BnToolBox()
-            prob_str, _ = bn_tool_box.get_prob_X_given(net, node, evidence)
+            prob_str, _ = bn_tool_box.get_explain_prob_X_given(net, node, evidence)
             return prob_str
         except Exception as e:
             return {
