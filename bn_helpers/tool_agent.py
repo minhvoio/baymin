@@ -130,11 +130,12 @@ def chat_with_tools(
         "You are a tool-calling grammar-checking assistant.\n"
         "Rules:\n"
         "1) Do NOT perform calculations or external actions yourself.\n"
-        "2) Always call a tool when any tool could plausibly answer the user.\n"
+        "2) Read the query carefully, think step by step, then ALWAYS call a related tool.\n"
         # "3) After receiving tool results, return it as-is.\n"
         "3) After receiving tool results, if the return value is grammatically correct, return it exactly as the tool output; \n"
         "   otherwise fix only the grammar and return the grammar-corrected output.\n"
         "4) Do NOT verify factual correctness of the tool outputs — only grammar.\n"
+        "5) Do NOT miss any information from the tool output. Any information from the tool output should be included in the final answer.\n"
         # "5) Read the query carefully, think step by step, getting the correct tools.\n"
     )
 
@@ -296,12 +297,22 @@ def chat_with_tools(
                 continue
             else:
                 final_answer = assistant_msg["content"].strip()
+                if isTesting and testing_log:
+                    testing_log['final_answer'] = final_answer
+                    return final_answer, testing_log
+                else:
+                    return final_answer
 
         # If we asked to finalize but got empty, fall back to the most recent tool JSON (raw)
         if messages and any(m.get("role") == "tool" for m in messages[-5:]):
             for m in reversed(messages):
                 if m.get("role") == "tool":
                     final_answer = m["content"]  # raw JSON string
+                    if isTesting and testing_log:
+                        testing_log['final_answer'] = final_answer
+                        return final_answer, testing_log
+                    else:
+                        return final_answer
 
         # Last resort: ask to use tools again
         messages.append({
@@ -311,7 +322,6 @@ def chat_with_tools(
         retries_left -= 1
 
     # After all rounds, return the latest assistant content if any
-
     for m in reversed(messages):
         if m.get("role") == "assistant" and m.get("content", "").strip():
             final_answer = m["content"].strip()
@@ -337,6 +347,7 @@ def make_explain_d_connected_tool(net):
     def check_d_connected(from_node: str, to_node: str) -> dict:
         """Explain whether two nodes are d-connected and why.
         d-connected means that entering evidence for one node will change the probability of the other node.
+        KEYWORDS: dependency, d-connected, d-separated, dependent, independent, path, influence, reachable, connection, correlation, reachable
         """
         try:
             bn_tool_box = BnToolBox()
@@ -354,7 +365,9 @@ def make_explain_d_connected_tool(net):
 def get_d_connected_nodes_tool(net):
     def get_d_connected_nodes(target_node: str):
         """Get the d-connected nodes of a target_node / Get list of nodes that has impact on the target_node. 
-        Meaning observing any node from this list will change the probability of the target_node."""
+        Meaning observing any node from this list will change the probability of the target_node.
+        KEYWORDS: connected nodes, impact, influence, dependency, reachable
+        """
         try:
             bn_tool_box = BnToolBox()
             return bn_tool_box.get_d_connected_nodes(net, target_node)
@@ -365,7 +378,9 @@ def get_d_connected_nodes_tool(net):
 
 def make_explain_common_cause_tool(net):
     def check_common_cause(node1: str, node2: str):
-        """Check if there is a common cause between two nodes."""
+        """Check if there is a common cause between two nodes.
+        KEYWORDS: common cause, common parent, common ancestor, shared cause, root cause, upstream cause, by both
+        """
         try:
             bn_tool_box = BnToolBox()
             ans = bn_tool_box.get_common_cause(net, node1, node2)
@@ -382,7 +397,9 @@ def make_explain_common_cause_tool(net):
 
 def make_explain_common_effect_tool(net):
     def check_common_effect(node1: str, node2: str):
-        """Check if there is a common effect between two nodes."""
+        """Check if there is a common effect between two nodes.
+        KEYWORDS: common effect, common child, common descendant, shared effect, collider, outcome, by both
+        """
         try:
             bn_tool_box = BnToolBox()
             ans = bn_tool_box.get_common_effect(net, node1, node2)
@@ -399,7 +416,9 @@ def make_explain_common_effect_tool(net):
 
 def get_prob_node_tool(net):
     def get_prob_node(node: str):
-        """Get the probability of a node."""
+        """Get the probability of a node.
+        KEYWORDS: probability, likelihood, chance, belief, posterior
+        """
         try:
             bn_tool_box = BnToolBox()
             prob, _ = bn_tool_box.get_prob_X(net, node)
@@ -408,11 +427,11 @@ def get_prob_node_tool(net):
             return {"prob_node": None, "error": f"{type(e).__name__}: {e}"}
     return get_prob_node
 
-from typing import List
-
 def check_evidences_change_relationship_between_two_nodes_tool(net):
     def check_evidences_change_relationship_between_two_nodes(node1: str, node2: str, evidence: List[str]):
-        """Check if knowing Evidence(s) will change the dependency relationship between Node1 and Node2."""
+        """Check if knowing Evidence(s) will change the dependency relationship between Node1 and Node2.
+        KEYWORDS: evidence change relationship, conditioning, observe, block, open path
+        """
         try:
             bn_tool_box = BnToolBox()
             _, template = bn_tool_box.get_explain_evidence_change_dependency_XY(net, node1, node2, evidence)
@@ -428,7 +447,9 @@ def check_evidences_change_relationship_between_two_nodes_tool(net):
 
 def get_evidences_block_two_nodes_tool(net):
     def get_evidences_block_two_nodes(node1: str, node2: str):
-        """Get the evidences list that block the dependency/path between Node1 and Node2."""
+        """Get the evidences list that block the dependency/path between Node1 and Node2.
+        KEYWORDS: block evidence, d-separate, conditioning set, minimal evidence, separator
+        """
         try:
             bn_tool_box = BnToolBox()
             ans = bn_tool_box.evidences_block_XY(net, node1, node2)
@@ -440,7 +461,9 @@ def get_evidences_block_two_nodes_tool(net):
 
 def get_prob_node_given_any_evidence_tool(net):
     def get_prob_node_given_any_evidence(node: str, evidence: dict = None):
-        """Get probability distribution of a node given any evidence dict by adding all evidences."""
+        """Get probability distribution of a node given any evidence dict by adding all evidences.
+        KEYWORDS: probability given evidence, conditional probability, posterior, belief update
+        """
         try:
             bn_tool_box = BnToolBox()
             prob_str, _ = bn_tool_box.get_explain_prob_X_given(net, node, evidence)
@@ -455,7 +478,9 @@ def get_prob_node_given_any_evidence_tool(net):
 
 def get_highest_impact_evidence_contribute_to_node_tool(net):
     def get_highest_impact_evidence_contribute_to_node(node: str, evidence: dict = None):
-        """Compare the evidences impact on the node by adding and removing one evidence at a time, return the evidence that has the highest impact."""
+        """Compare the evidences impact on the node by adding and removing one evidence at a time, return the evidence that has the highest impact.
+        KEYWORDS: highest impact evidence, most influential, biggest effect, strongest influence
+        """
         try:
             bn_tool_box = BnToolBox()
             ans, _, _ = bn_tool_box.get_highest_impact_evidence(net, node, evidence)
@@ -467,7 +492,9 @@ def get_highest_impact_evidence_contribute_to_node_tool(net):
 def get_highest_impact_evidence_contribute_to_node_given_background_evidence_tool(net):
     def get_highest_impact_evidence_contribute_to_node_given_background_evidence(node: str, new_evidence: dict = None, background_evidence: dict = None):
         """With existing (background/old) evidence, compare the new evidence(s) impact on the node by adding and removing one evidence at a time, 
-        return the new evidence(s) that has the highest impact."""
+        return the new evidence(s) that has the highest impact.
+        KEYWORDS: highest impact evidence, background evidence, new evidence, most influential
+        """
         try:
             with temporarily_set_findings(net, background_evidence):
                 bn_tool_box = BnToolBox()

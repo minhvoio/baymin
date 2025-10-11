@@ -44,8 +44,9 @@
 TAKE_QUIZ_PROMPT = """
 Use the provided Explanation to answer the Quiz below.
 Base your answer only on the Explanation — do NOT verify factual correctness.
-
-If none of the answer options match the Explanation, choose “None of the above.” option.
+If none of the answer options match the Explanation, choose the letter of the “None of the above.” option.
+Do NOT output anything other than a ONE LETTER answer.
+Think step by step and choose the ONE LETTER answer carefully.
 
 Quiz:
 {quiz}

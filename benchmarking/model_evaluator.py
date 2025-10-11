@@ -113,9 +113,7 @@ def raw_model_test(prompt, quiz, y, model=MODEL, max_tokens=1000, model_quiz=MOD
     y_hat = model_do_quiz(quiz, ans, model=model_quiz)
     
     score = validate_quiz_answer(y, y_hat)
-    return score
-
-
+    return score, ans
 
 def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True):
     answer, testing_log = chat_with_tools(net, question_output, model=model, max_tokens=max_tokens, isTesting=True)
@@ -126,7 +124,7 @@ def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, mod
     if score < 1:
         log_for_baymin_testing(quiz, y, y_hat, answer, testing_log)
             
-    return score
+    return score, answer
 
 # DEPENDENCY TEST
 def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, max_tokens=1000, num_questions=30, isTesting=True):
@@ -162,8 +160,8 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
             quiz, y = create_quiz_function(question_output, net, node1, node2)
             evidence = None
 
-        raw_model_score = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz)
-        baymin_score = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
+        raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz)
+        baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
         raw_model_total_score += raw_model_score
         baymin_total_score += baymin_score
         
@@ -185,7 +183,9 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
             network_size=network_size,  # optional
             node1=node1,  # optional
             node2=node2,  # optional
-            evidence=str(evidence) if evidence else None  # optional
+            evidence=str(evidence) if evidence else None,  # optional
+            raw_model_answer=raw_model_answer,
+            baymin_answer=baymin_answer
         )
     
     # Calculate final scores based on total questions
@@ -248,8 +248,8 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
             quiz, y = create_quiz_function(question_output, net, node)
             evidence = None
 
-        raw_model_score = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz)
-        baymin_score = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
+        raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz)
+        baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
         raw_model_total_score += raw_model_score
         baymin_total_score += baymin_score
         
@@ -270,7 +270,9 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
             max_tokens=max_tokens,  # optional
             network_size=network_size,  # optional
             node=node,  # optional
-            evidence=str(evidence) if evidence else None  # optional
+            evidence=str(evidence) if evidence else None,  # optional
+            raw_model_answer=raw_model_answer,
+            baymin_answer=baymin_answer
         )
     
     # Calculate final scores based on total questions

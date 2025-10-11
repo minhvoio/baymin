@@ -1,7 +1,7 @@
 import requests, json
 from IPython.display import display, Markdown, clear_output
 
-def answer_this_prompt(prompt, stream=False, model="gpt-oss:latest", temperature=0, format=None, max_tokens=200):
+def answer_this_prompt(prompt, stream=False, model="gpt-oss:latest", temperature=0, format=None, max_tokens=1800):
     payload = {
         "prompt": 'You always return a JSON answer, for example {answer: "your answer here"}, now answer this prompt: ' + prompt,
         "model": model,

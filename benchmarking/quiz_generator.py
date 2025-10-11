@@ -83,11 +83,8 @@ def create_dependency_quiz(question, net, node1, node2, rng=None):
         except Exception:
             ground_truth_path = None
         path_list = list(ground_truth_path) if ground_truth_path else []
-        path_text = ", ".join(path_list) if path_list else "N/A"
 
-        correct = (
-            f"Yes, they are d-connected through the path {path_text}. Meaning that changing the evidence of {node1} will change the probability of {node2}."
-        )
+        correct = bn_tool_box.get_explain_XY_dconnected(net, node1, node2)
 
         fake1_nodes = generate_fake_nodes_for_relation(net, path_list, node1, node2)
         d1_path = ", ".join(fake1_nodes) if fake1_nodes else ", ".join(pick_two_random_nodes(net))
@@ -105,11 +102,7 @@ def create_dependency_quiz(question, net, node1, node2, rng=None):
         ce_list = list(common_effects) if common_effects else []
         ce_text = ", ".join(ce_list) if ce_list else "None"
 
-        because_text = (
-            f"No, they are d-separated because they are blocked by {ce_text}. Meaning that changing the evidence of {node1} will not change the probability of {node2}."
-            if ce_list
-            else f"No, there is no path between {node1} and {node2}. Meaning that changing the evidence of {node1} will not change the probability of {node2}."
-        )
+        because_text = bn_tool_box.get_explain_XY_dseparated(net, node1, node2)
 
         fake1_nodes = generate_fake_nodes_for_relation(net, ce_list, node1, node2)
         d1_path = ", ".join(fake1_nodes) if fake1_nodes else ", ".join(pick_two_random_nodes(net))
@@ -139,18 +132,18 @@ def create_common_cause_quiz(question, net, node1, node2, rng=None):
         correct_nodes_text = ', '.join(synth) if synth else "None"
     correct = f"The common cause{final_s} of {node1} and {node2} {is_or_are}: {correct_nodes_text}."
 
-    common_list = list(common_causes) if common_causes else []
-
-    # opt2 generation via fake_random_nodes per new rules
-    desired_len = len(common_list)
-    if desired_len >= 2:
-        # Use common_list as real_nodes; keep 1; output count equals number of common causes
-        opt2_nodes = fake_random_nodes(net, common_list, num_node_keep=1, num_node_output=desired_len, exclude=[node1, node2]) or common_list
-    else:
-        # Use [node1, node2] as real_nodes; keep 0; when desired_len==0 synthesize 2 nodes
-        opt2_nodes = fake_random_nodes(net, [node1, node2], num_node_keep=0, num_node_output=desired_len, exclude=[node1, node2], min_output_when_zero=2) or common_list
-
-    opt2_text = f"The common cause{final_s} of {node1} and {node2} {is_or_are}: {', '.join(opt2_nodes)}."
+    # Generate a fake option list using the reusable generator
+    cause_list = list(common_causes) if common_causes else []
+    fake_nodes = generate_fake_nodes_for_relation(net, cause_list, node1, node2)
+    
+    # Ensure fake answer is different from correct answer
+    fake_nodes_text = ', '.join(fake_nodes)
+    if fake_nodes_text == correct_nodes_text:
+        # If they're the same, try generating again with different parameters
+        fake_nodes = generate_fake_nodes_for_relation(net, cause_list, node1, node2, num_output=len(cause_list) + 1)
+        fake_nodes_text = ', '.join(fake_nodes)
+    
+    opt2_text = f"The common cause{final_s} of {node1} and {node2} {is_or_are}: {fake_nodes_text}."
 
     opt1 = (correct, nums_cause > 0)
     opt2 = (opt2_text, False)
@@ -178,7 +171,15 @@ def create_common_effect_quiz(question, net, node1, node2, rng=None):
     # Generate a fake option list using the reusable generator
     effect_list = list(common_effects) if common_effects else []
     fake_nodes = generate_fake_nodes_for_relation(net, effect_list, node1, node2)
-    opt2_text = f"The common effect{final_s} of {node1} and {node2} {is_or_are}: {', '.join(fake_nodes)}."
+    
+    # Ensure fake answer is different from correct answer
+    fake_nodes_text = ', '.join(fake_nodes)
+    if fake_nodes_text == correct_nodes_text:
+        # If they're the same, try generating again with different parameters
+        fake_nodes = generate_fake_nodes_for_relation(net, effect_list, node1, node2, num_output=len(effect_list) + 1)
+        fake_nodes_text = ', '.join(fake_nodes)
+    
+    opt2_text = f"The common effect{final_s} of {node1} and {node2} {is_or_are}: {fake_nodes_text}."
 
     opt1 = (correct, nums_effect > 0)
     opt2 = (opt2_text, False)
@@ -204,7 +205,15 @@ def create_blocked_evidence_quiz(question, net, node1, node2, rng=None):
 
     block_list = list(blocked_evidence) if blocked_evidence else []
     fake_nodes = generate_fake_nodes_for_relation(net, block_list, node1, node2)
-    opt2_text = f"The evidence{final_s} that would block the dependency between {node1} and {node2} {is_or_are}: {', '.join(fake_nodes)}."
+    
+    # Ensure fake answer is different from correct answer
+    fake_nodes_text = ', '.join(fake_nodes)
+    if fake_nodes_text == correct_nodes_text:
+        # If they're the same, try generating again with different parameters
+        fake_nodes = generate_fake_nodes_for_relation(net, block_list, node1, node2, num_output=len(block_list) + 1)
+        fake_nodes_text = ', '.join(fake_nodes)
+    
+    opt2_text = f"The evidence{final_s} that would block the dependency between {node1} and {node2} {is_or_are}: {fake_nodes_text}."
 
     opt1 = (correct, nums_blocked > 0)
     opt2 = (opt2_text, False)

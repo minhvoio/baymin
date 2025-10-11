@@ -76,7 +76,7 @@ COMMON_CAUSE_QUESTIONS = [
   "Is there any hidden or unobserved variable causing both {node1} and {node2}?",
   "Which node in the network is the main source of influence for both {node1} and {node2}?",
   "Could {node1} and {node2} be correlated because of the same cause?",
-  "Which upstream factor explains the relationship between {node1} and {node2}?"
+  "Which upstream factor explains the relationship between {node1} and {node2}?",
   "Is there any shared parent/grandparent that explains both {node1} and {node2}?",
   "Could both {node1} and {node2} be descendants of the same parent/grandparent?",
   "Is there a direct or indirect parent/grandparent node common to both {node1} and {node2}?",
@@ -87,7 +87,6 @@ COMMON_CAUSE_QUESTIONS = [
   "Are {node1} and {node2} connected because of a mutual causal ancestor?",
   "Does a single upstream variable influence both {node1} and {node2}?",
   "What variable lies upstream of both {node1} and {node2}?",
-  "Which higher-level node best explains their correlation?",
   "Is there a node that simultaneously affects both {node1} and {node2}?",
   "Which shared cause could explain the observed dependency between {node1} and {node2}?",
   "Are both {node1} and {node2} affected by a single hidden node?",
