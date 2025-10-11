@@ -1,4 +1,5 @@
 import random 
+import csv, datetime
 
 def pick_one_random_node(net):
     nodes = net.nodes()
@@ -397,3 +398,201 @@ def generate_fake_highest_impact_evidence_answer(structured_data, fake_evidence_
     )
     
     return fake_answer
+
+
+def get_completed_questions(test_type, question_set_name, model, model_quiz, network_size):
+    """
+    Get list of already completed question indices from the CSV log.
+    
+    Args:
+        test_type: Type of test (e.g., 'elementary_test', 'numerical_test')
+        question_set_name: Name of the question set being tested
+        model: Model used for generating answers
+        model_quiz: Model used for taking the quiz
+        network_size: Number of nodes in the network
+        
+    Returns:
+        Set of completed question indices
+    """
+    try:
+        csv_file = 'test_log.csv'
+        completed_questions = set()
+        
+        with open(csv_file, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if (row.get('test_type') == test_type and
+                    row.get('question_set_name') == question_set_name and
+                    row.get('model') == model and
+                    row.get('model_quiz') == model_quiz and
+                    row.get('network_size') == str(network_size)):
+                    completed_questions.add(int(row.get('question_index', 0)))
+        
+        return completed_questions
+    except FileNotFoundError:
+        return set()
+    except Exception as e:
+        print(f"[Test] Error reading completed questions: {e}")
+        return set()
+
+def log_test_result(test_type, question_set_name, question_index, quiz, expected_answer, model, model_quiz, 
+                   raw_model_score, baymin_score, question_output=None, prompt=None, 
+                   hasEvidence=None, max_tokens=None, network_size=None, node1=None, node2=None, 
+                   evidence=None, node=None, raw_model_answer=None, baymin_answer=None):
+    """
+    Log test results to CSV file with comprehensive information for validation.
+    Includes duplicate prevention to avoid re-logging the same test results.
+    
+    Args:
+        test_type: Type of test (e.g., 'elementary_test', 'numerical_test')
+        question_set_name: Name of the question set being tested
+        question_index: Index of the question in the set
+        quiz: The quiz question text
+        expected_answer: The correct answer
+        model: Model used for generating answers
+        model_quiz: Model used for taking the quiz
+        raw_model_score: Score from raw model (0 or 1)
+        baymin_score: Score from baymin model (0 or 1)
+        question_output: The formatted question output #optional
+        prompt: The full prompt sent to models #optional
+        hasEvidence: Whether evidence was used #optional
+        max_tokens: Maximum tokens setting #optional
+        network_size: Number of nodes in the network #optional
+        node1: First node in the question #optional
+        node2: Second node in the question #optional
+        evidence: Evidence used in the question #optional
+        node: Single node for numerical tests #optional
+        raw_model_answer: Raw model's answer text #optional
+        baymin_answer: Baymin model's answer text #optional
+    """
+    try:
+        csv_file = 'test_log.csv'
+        
+        # Check for duplicates using composite key
+        duplicate_key = (test_type, question_set_name, question_index, model, model_quiz, network_size)
+        
+        # Read existing data to check for duplicates
+        existing_data = []
+        file_exists = False
+        try:
+            with open(csv_file, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                existing_data = list(reader)
+                file_exists = True
+        except FileNotFoundError:
+            file_exists = False
+        
+        # Check if this exact test result already exists
+        for row in existing_data:
+            existing_key = (
+                row.get('test_type', ''),
+                row.get('question_set_name', ''),
+                int(row.get('question_index', 0)),
+                row.get('model', ''),
+                row.get('model_quiz', ''),
+                row.get('network_size', '')
+            )
+            if existing_key == duplicate_key:
+                print(f"[Test] Skipping duplicate: {test_type} - {question_set_name} - Q{question_index}")
+                return
+        
+        # Prepare new row data
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        csv_row = {
+            'timestamp': timestamp,
+            'test_type': test_type,
+            'question_set_name': question_set_name,
+            'question_index': question_index,
+            'quiz': quiz.replace('\n', ' ').replace('\r', ' ')[:500],
+            'expected_answer': expected_answer,
+            'model': model,
+            'model_quiz': model_quiz,
+            'raw_model_score': raw_model_score,
+            'baymin_score': baymin_score,
+            'question_output': question_output.replace('\n', ' ').replace('\r', ' ')[:500] if question_output else 'N/A',  # optional
+            'prompt': prompt.replace('\n', ' ').replace('\r', ' ')[:500] if prompt else 'N/A',  # optional
+            'hasEvidence': hasEvidence if hasEvidence is not None else 'N/A',  # optional
+            'max_tokens': max_tokens if max_tokens is not None else 'N/A',  # optional
+            'network_size': network_size if network_size is not None else 'N/A',  # optional
+            'node1': node1 if node1 else 'N/A',  # optional
+            'node2': node2 if node2 else 'N/A',  # optional
+            'node': node if node else 'N/A',  # optional
+            'evidence': evidence if evidence else 'N/A',  # optional
+            'raw_model_answer': raw_model_answer.replace('\n', ' ').replace('\r', ' ')[:500] if raw_model_answer else 'N/A',  # optional
+            'baymin_answer': baymin_answer.replace('\n', ' ').replace('\r', ' ')[:500] if baymin_answer else 'N/A',  # optional
+        }
+        
+        # Append new row to CSV file
+        with open(csv_file, 'a', newline='', encoding='utf-8') as f:
+            fieldnames = ['timestamp', 'test_type', 'question_set_name', 'question_index', 'quiz', 'expected_answer', 
+                         'model', 'model_quiz', 'raw_model_score', 'baymin_score', 
+                         'question_output', 'prompt', 'hasEvidence', 'max_tokens', 'network_size', 
+                         'node1', 'node2', 'node', 'evidence', 'raw_model_answer', 'baymin_answer']
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            
+            # Write header if file is new
+            if not file_exists:
+                writer.writeheader()
+            
+            writer.writerow(csv_row)
+            print(f"[Test] Logged: {test_type} - {question_set_name} - Q{question_index}")
+            
+    except Exception as e:
+        print(f"[Test] Logging failed for question {question_index}: {e}")
+
+
+def log_for_baymin_testing(quiz, y, y_hat, answer, testing_log):
+    print('quiz:\n', quiz)
+    print('y:\n', y)
+    print('y_hat:\n', y_hat)
+    print('---------------------------------------------')
+    print('Baymin Model:')
+    print('ans:\n', answer)
+    print('y:\n', y)
+    print('y_hat:\n', y_hat)
+    print('---------------------------------------------')
+
+    # Log wrong answer to CSV (always log for debugging purposes)
+    try:
+        csv_file = 'baymin_wrong_ans_log.csv'
+        
+        # Check if file exists
+        file_exists = False
+        try:
+            with open(csv_file, 'r'):
+                file_exists = True
+        except FileNotFoundError:
+            file_exists = False
+        
+        # Prepare new row data
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        tool_calls_str = "; ".join(testing_log['tool_calls']) if testing_log['tool_calls'] else "None"
+        tool_results_str = "; ".join(testing_log['tool_results']) if testing_log['tool_results'] else "None"
+        
+        csv_row = {
+            'timestamp': timestamp,
+            'prompt': testing_log['prompt'].replace('\n', ' ').replace('\r', ' ')[:500],  # Limit length and remove newlines
+            'bn_str': testing_log['bn_str'].replace('\n', ' ').replace('\r', ' ')[:500],  # Limit length and remove newlines
+            'network_size': testing_log['network_size'],
+            'tool_calls': tool_calls_str,
+            'tool_results': tool_results_str,
+            'final_answer': testing_log['final_answer'].replace('\n', ' ').replace('\r', ' ')[:500] if testing_log['final_answer'] else "None",  # Limit length and remove newlines
+            'quiz': quiz.replace('\n', ' ').replace('\r', ' ')[:500],  
+            'expected_answer': y,
+            'actual_answer': y_hat
+        }
+        
+        # Append new row to CSV file
+        with open(csv_file, 'a', newline='', encoding='utf-8') as f:
+            fieldnames = ['timestamp', 'prompt', 'bn_str', 'network_size', 'tool_calls', 'tool_results', 'final_answer', 'quiz', 'expected_answer', 'actual_answer']
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            
+            # Write header if file is new
+            if not file_exists:
+                writer.writeheader()
+            
+            writer.writerow(csv_row)
+            print(f"[BayMin] Logged wrong answer to CSV")
+            
+    except Exception as e:
+        print(f"[BayMin] Debug logging failed: {e}")

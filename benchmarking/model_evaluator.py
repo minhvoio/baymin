@@ -5,7 +5,8 @@ from bn_helpers.get_structures_print_tools import get_BN_structure, getNetCPTStr
 from bn_helpers.tool_agent import get_answer_from_tool_agent, chat_with_tools
 from benchmarking.quiz_generator import (create_dependency_quiz, create_common_cause_quiz, create_common_effect_quiz, create_blocked_evidence_quiz, 
 create_evidence_change_relationship_quiz, create_probability_quiz, create_highest_impact_evidence_quiz)
-from benchmarking.benchmarking_utils import pick_two_random_nodes, fake_random_nodes, get_random_number_of_nodes, pick_one_random_node, generate_evidence_nodes
+from benchmarking.benchmarking_utils import (pick_two_random_nodes, fake_random_nodes, 
+get_random_number_of_nodes, pick_one_random_node, generate_evidence_nodes, log_test_result, log_for_baymin_testing, get_completed_questions)
 from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.ollama import OllamaProvider
@@ -114,82 +115,178 @@ def raw_model_test(prompt, quiz, y, model=MODEL, max_tokens=1000, model_quiz=MOD
     score = validate_quiz_answer(y, y_hat)
     return score
 
-def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ):
-    answer = chat_with_tools(net, question_output, model=model, max_tokens=max_tokens)
+
+
+def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True):
+    answer, testing_log = chat_with_tools(net, question_output, model=model, max_tokens=max_tokens, isTesting=True)
     y_hat = model_do_quiz(quiz, answer, model=model_quiz)
     
     score = validate_quiz_answer(y, y_hat)
 
     if score < 1:
-        print('quiz:\n', quiz)
-        print('y:\n', y)
-        print('y_hat:\n', y_hat)
-        print('---------------------------------------------')
-        print('Baymin Model:')
-        print('ans:\n', answer)
-        print('y:\n', y)
-        print('y_hat:\n', y_hat)
-        print('---------------------------------------------')
+        log_for_baymin_testing(quiz, y, y_hat, answer, testing_log)
+            
     return score
 
 # DEPENDENCY TEST
-def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, max_tokens=1000, num_questions=30):
+def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, max_tokens=1000, num_questions=30, isTesting=True):
     raw_model_total_score = 0
     baymin_total_score = 0
-    for question in question_set[:num_questions]:
+    
+    # Get question set name from function name
+    question_set_name = create_quiz_function.__name__.replace('create_', '').replace('_quiz', '')
+    network_size = len(net.nodes())
+    
+    # Check for already completed questions
+    completed_questions = get_completed_questions('elementary_test', question_set_name, model, model_quiz, network_size)
+    
+    print(f"Running {question_set_name} test for Net_{network_size} with {num_questions} questions")
+    if completed_questions:
+        print(f"Found {len(completed_questions)} already completed questions: {sorted(completed_questions)}")
+        print(f"Skipping completed questions and continuing from where we left off...")
+    
+    for i, question in enumerate(question_set[:num_questions]):
+        question_index = i + 1
+        
+        # Skip if already completed
+        if question_index in completed_questions:
+            print(f"Skipping question {question_index} (already completed)")
+            continue
+            
+        print(f"Running question {question_index}")
         if hasEvidence:
             prompt, node1, node2, question_output, evidence = two_nodes_question(net, question_format=question, hasEvidence=hasEvidence)
             quiz, y = create_quiz_function(question_output, net, node1, node2, evidence)
         else:
             prompt, node1, node2, question_output = two_nodes_question(net, question_format=question, hasEvidence=hasEvidence)
             quiz, y = create_quiz_function(question_output, net, node1, node2)
-        # print('prompt:\n', prompt)
-        # print('quiz:\n', quiz)
-        # print('y_list:\n', y_list)
-        # print()
+            evidence = None
 
         raw_model_score = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz)
-        baymin_score = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz)
+        baymin_score = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
         raw_model_total_score += raw_model_score
         baymin_total_score += baymin_score
         
-    return raw_model_total_score / num_questions, baymin_total_score / num_questions
+        # Log test result
+        log_test_result(
+            test_type='elementary_test',
+            question_set_name=question_set_name,
+            question_index=question_index,
+            quiz=quiz,
+            expected_answer=y,
+            model=model,
+            model_quiz=model_quiz,
+            raw_model_score=raw_model_score,
+            baymin_score=baymin_score,
+            question_output=question_output,  # optional
+            prompt=prompt,  # optional
+            hasEvidence=hasEvidence,  # optional
+            max_tokens=max_tokens,  # optional
+            network_size=network_size,  # optional
+            node1=node1,  # optional
+            node2=node2,  # optional
+            evidence=str(evidence) if evidence else None  # optional
+        )
+    
+    # Calculate final scores based on total questions
+    total_questions_run = num_questions - len(completed_questions)
+    if total_questions_run > 0:
+        final_raw_score = raw_model_total_score / total_questions_run
+        final_baymin_score = baymin_total_score / total_questions_run
+    else:
+        final_raw_score = 0
+        final_baymin_score = 0
+        
+    print(f"Test completed: {total_questions_run} new questions run, {len(completed_questions)} skipped")
+    return final_raw_score, final_baymin_score
 
-def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30):
-    return elementary_test(net, DEPENDENCY_QUESTIONS, create_dependency_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions)
+def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True):
+    return elementary_test(net, DEPENDENCY_QUESTIONS, create_dependency_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting)
 
-def common_cause_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30):
-    return elementary_test(net, COMMON_CAUSE_QUESTIONS, create_common_cause_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions)
+def common_cause_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True):
+    return elementary_test(net, COMMON_CAUSE_QUESTIONS, create_common_cause_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting)
 
-def common_effect_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30):
-    return elementary_test(net, COMMON_EFFECT_QUESTIONS, create_common_effect_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions)
+def common_effect_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True):
+    return elementary_test(net, COMMON_EFFECT_QUESTIONS, create_common_effect_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting)
 
-def blocked_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30):
-    return elementary_test(net, BLOCKED_EVIDENCES_QUESTIONS, create_blocked_evidence_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions)
+def blocked_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True):
+    return elementary_test(net, BLOCKED_EVIDENCES_QUESTIONS, create_blocked_evidence_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting)
 
-def evidence_change_relationship_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=True):
-    return elementary_test(net, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, create_evidence_change_relationship_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence)
+def evidence_change_relationship_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=True, isTesting=True):
+    return elementary_test(net, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, create_evidence_change_relationship_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting)
 
-def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, max_tokens=1000, num_questions=30):
+def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, max_tokens=1000, num_questions=30, isTesting=True):
     raw_model_total_score = 0
     baymin_total_score = 0
-    for question in question_set[:num_questions]:
+    
+    # Get question set name from function name
+    question_set_name = create_quiz_function.__name__.replace('create_', '').replace('_quiz', '')
+    network_size = len(net.nodes())
+    
+    # Check for already completed questions
+    completed_questions = get_completed_questions('numerical_test', question_set_name, model, model_quiz, network_size)
+    
+    print(f"Running {question_set_name} test for Net_{network_size} with {num_questions} questions")
+    if completed_questions:
+        print(f"Found {len(completed_questions)} already completed questions: {sorted(completed_questions)}")
+        print(f"Skipping completed questions and continuing from where we left off...")
+    
+    for i, question in enumerate(question_set[:num_questions]):
+        question_index = i + 1
+        
+        # Skip if already completed
+        if question_index in completed_questions:
+            print(f"Skipping question {question_index} (already completed)")
+            continue
+            
+        print(f"Running question {question_index}")
         if hasEvidence:
             prompt, node, question_output, evidence = probability_question(net, question_format=question, hasEvidence=hasEvidence)
             quiz, y = create_quiz_function(question_output, net, node, evidence)
         else:
             prompt, node, question_output = probability_question(net, question_format=question, hasEvidence=hasEvidence)
             quiz, y = create_quiz_function(question_output, net, node)
+            evidence = None
 
         raw_model_score = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz)
-        baymin_score = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz)
+        baymin_score = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
         raw_model_total_score += raw_model_score
         baymin_total_score += baymin_score
         
-    return raw_model_total_score / num_questions, baymin_total_score / num_questions
+        # Log test result
+        log_test_result(
+            test_type='numerical_test',
+            question_set_name=question_set_name,
+            question_index=question_index,
+            quiz=quiz,
+            expected_answer=y,
+            model=model,
+            model_quiz=model_quiz,
+            raw_model_score=raw_model_score,
+            baymin_score=baymin_score,
+            question_output=question_output,  # optional
+            prompt=prompt,  # optional
+            hasEvidence=hasEvidence,  # optional
+            max_tokens=max_tokens,  # optional
+            network_size=network_size,  # optional
+            node=node,  # optional
+            evidence=str(evidence) if evidence else None  # optional
+        )
+    
+    # Calculate final scores based on total questions
+    total_questions_run = num_questions - len(completed_questions)
+    if total_questions_run > 0:
+        final_raw_score = raw_model_total_score / total_questions_run
+        final_baymin_score = baymin_total_score / total_questions_run
+    else:
+        final_raw_score = 0
+        final_baymin_score = 0
+        
+    print(f"Test completed: {total_questions_run} new questions run, {len(completed_questions)} skipped")
+    return final_raw_score, final_baymin_score
 
-def probability_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=True):
-    return numerical_test(net, PROBABILITY_QUESTIONS, create_probability_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence)
+def probability_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=True, isTesting=True):
+    return numerical_test(net, PROBABILITY_QUESTIONS, create_probability_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting)
 
-def highest_impact_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=False):
-    return numerical_test(net, HIGHEST_IMPACT_EVIDENCE_QUESTIONS, create_highest_impact_evidence_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence)
+def highest_impact_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=False, isTesting=True):
+    return numerical_test(net, HIGHEST_IMPACT_EVIDENCE_QUESTIONS, create_highest_impact_evidence_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting)

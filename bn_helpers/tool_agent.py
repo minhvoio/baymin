@@ -6,7 +6,7 @@ from bn_helpers.utils import temporarily_set_findings, grammar_plural
 from bni_netica.bni_netica import Net
 from bn_helpers.constants import MODEL, OLLAMA_CHAT_URL
 from typing import List, Tuple, Dict, Any
-import requests, json, inspect, typing
+import requests, json, inspect, typing, csv, datetime
 
 # Python type -> JSON Schema
 def _pytype_to_schema(t):
@@ -89,25 +89,54 @@ def chat_with_tools(
     require_tool: bool = True,
     ollama_url: str = OLLAMA_CHAT_URL,
     isDebug: bool = False,
+    isTesting: bool = False,
 ):
     fns = get_tools_map(net)
     bn_str = get_BN_node_states(net)
     tools = [function_to_tool_schema(fn, name=name) for name, fn in fns.items()]
+    
+    # Initialize debug logging variables
+    debug_tool_calls = []
+    debug_tool_results = []
+    network_size = len(net.nodes())
+    
+    # Initialize testing log if needed
+    testing_log = None
+    if isTesting:
+        testing_log = {
+            'prompt': prompt,
+            'bn_str': bn_str,
+            'network_size': network_size,
+            'tool_calls': [],
+            'tool_results': [],
+            'final_answer': ''
+        }
 
-    system_prompt = """
-    You are a tool-using Bayesian Network assistant. Your task is to call tools when needed and return their results in clear, readable language.
+    # system_prompt = """
+    # You are a tool-using Bayesian Network assistant. Your task is to call tools when needed and return their results in clear, readable language.
 
-    Rules:
-    1) Always use a tool if it can plausibly answer the query. Don’t compute or act manually.
-    2) After getting tool results, rewrite them into a human-readable summary, not raw JSON.
-    3) Keep every detail from the tool output — values, fields, and structure — but express them cleanly.
-    4) You may fix grammar, add labels, and format lists/tables, but never change or invent data.
-    5) If output is already plain text and grammatically correct, return it as-is.
-    6) If errors or warnings exist, include them under “Errors/Warnings”.
-    7) Do not verify factual accuracy — only reformat and clarify.
+    # Rules:
+    # 1) Always use a tool if it can plausibly answer the query. Don’t compute or act manually.
+    # 2) After getting tool results, rewrite them into a human-readable summary, not raw JSON.
+    # 3) Keep every detail from the tool output — values, fields, and structure — but express them cleanly.
+    # 4) You may fix grammar, add labels, and format lists/tables, but never change or invent data.
+    # 5) If output is already plain text and grammatically correct, return it as-is.
+    # 6) If errors or warnings exist, include them under “Errors/Warnings”.
+    # 7) Do not verify factual accuracy — only reformat and clarify.
 
-    Goal: Produce a polished, complete, human-readable report faithfully reflecting tool outputs.
-    """
+    # Goal: Produce a polished, complete, human-readable report faithfully reflecting tool outputs.
+    # """
+    system_prompt = (
+        "You are a tool-calling grammar-checking assistant.\n"
+        "Rules:\n"
+        "1) Do NOT perform calculations or external actions yourself.\n"
+        "2) Always call a tool when any tool could plausibly answer the user.\n"
+        # "3) After receiving tool results, return it as-is.\n"
+        "3) After receiving tool results, if the return value is grammatically correct, return it exactly as the tool output; \n"
+        "   otherwise fix only the grammar and return the grammar-corrected output.\n"
+        "4) Do NOT verify factual correctness of the tool outputs — only grammar.\n"
+        # "5) Read the query carefully, think step by step, getting the correct tools.\n"
+    )
 
     # Give the model the “catalog” of node/state names to extract from
     prompt += (
@@ -185,6 +214,9 @@ def chat_with_tools(
 
                 if isDebug:
                     print(f"[BayMin] tool_call #{i}: {fn_name}({args})")
+                    debug_tool_calls.append(f"{fn_name}({args})")
+                if isTesting and testing_log:
+                    testing_log['tool_calls'].append(f"{fn_name}({args})")
                 seen_calls.add(call_key)
 
                 # Run it
@@ -205,6 +237,9 @@ def chat_with_tools(
 
                 if isDebug:
                     print(f"[BayMin] tool_result #{i}: {payload}")
+                    debug_tool_results.append(str(payload))
+                if isTesting and testing_log:
+                    testing_log['tool_results'].append(str(payload))
                 tool_msgs.append({
                     "role": "tool",
                     "tool_name": fn_name,
@@ -243,6 +278,8 @@ def chat_with_tools(
             retries_left -= 1
             continue
 
+        final_answer = ""
+
         # No tool calls returned this turn
         if assistant_msg["content"].strip():
             # Model produced direct text. If tools required, nudge once more; else return it.
@@ -258,13 +295,13 @@ def chat_with_tools(
                 retries_left -= 1
                 continue
             else:
-                return assistant_msg["content"].strip()
+                final_answer = assistant_msg["content"].strip()
 
         # If we asked to finalize but got empty, fall back to the most recent tool JSON (raw)
         if messages and any(m.get("role") == "tool" for m in messages[-5:]):
             for m in reversed(messages):
                 if m.get("role") == "tool":
-                    return m["content"]  # raw JSON string
+                    final_answer = m["content"]  # raw JSON string
 
         # Last resort: ask to use tools again
         messages.append({
@@ -274,14 +311,27 @@ def chat_with_tools(
         retries_left -= 1
 
     # After all rounds, return the latest assistant content if any
+
     for m in reversed(messages):
         if m.get("role") == "assistant" and m.get("content", "").strip():
-            return m["content"].strip()
+            final_answer = m["content"].strip()
+            break
     # Or the last tool output as ultimate fallback
-    for m in reversed(messages):
-        if m.get("role") == "tool":
-            return m["content"]
-    return ""
+    if not final_answer:
+        for m in reversed(messages):
+            if m.get("role") == "tool":
+                final_answer = m["content"]
+                break
+    
+    # Update testing log with final answer
+    if isTesting and testing_log:
+        testing_log['final_answer'] = final_answer
+    
+    # Return answer and testing log if in testing mode
+    if isTesting:
+        return final_answer, testing_log
+    else:
+        return final_answer
 
 def make_explain_d_connected_tool(net):
     def check_d_connected(from_node: str, to_node: str) -> dict:
@@ -300,6 +350,7 @@ def make_explain_d_connected_tool(net):
             return {"d_connected": None, "error": f"{type(e).__name__}: {e}"}
     return check_d_connected
 
+# opt out of this tool
 def get_d_connected_nodes_tool(net):
     def get_d_connected_nodes(target_node: str):
         """Get the d-connected nodes of a target_node / Get list of nodes that has impact on the target_node. 
@@ -429,7 +480,6 @@ def get_highest_impact_evidence_contribute_to_node_given_background_evidence_too
 def get_tools_map(net):
     return {
         "check_d_connected": make_explain_d_connected_tool(net),
-        "get_d_connected_nodes": get_d_connected_nodes_tool(net),
         "check_common_cause": make_explain_common_cause_tool(net),
         "check_common_effect": make_explain_common_effect_tool(net),
         "get_prob_node": get_prob_node_tool(net),
@@ -452,9 +502,19 @@ def extract_text(answer: str) -> str:
     except json.JSONDecodeError:
         return answer
 
-def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL):
+def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL, isTesting=False):
     import re
-    answer = chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url)
+    result = chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url, isTesting=isTesting)
+    
+    if isTesting:
+        answer, testing_log = result
+    else:
+        answer = result
+        
     readable = answer.encode('utf-8').decode('unicode_escape')  # converts \n and \u202f
     readable = re.sub(r'\*\*(.*?)\*\*', r'\1', readable)
-    return readable
+    
+    if isTesting:
+        return readable, testing_log
+    else:
+        return readable
