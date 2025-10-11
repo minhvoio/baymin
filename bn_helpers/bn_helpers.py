@@ -184,11 +184,17 @@ class BnToolBox():
         then output a ranked summary and a conclusion (like `get_prob_X_given`).
 
         Returns:
-            out_str, net_after
+            out_str, net_after, structured_data
         """
         evidence = evidence or {}
         if not evidence:
-            return f"P({X} | ∅):\n  No evidence provided; nothing to analyze.\n", net
+            # Derive candidate evidences from nodes d-connected to X
+            candidates = self.get_d_connected_nodes(net, X)
+            if candidates:
+                # Default each candidate evidence to its first state (index 0)
+                evidence = {ev: 0 for ev in candidates}
+            else:
+                return f"P({X} | ∅):\n  No evidence provided; nothing to analyze.\n", net, {}
 
         # helpers
         def _beliefs_with(evi_dict):
@@ -232,7 +238,7 @@ class BnToolBox():
                 out += f"  Largest overall per-state shift: {max_change:.4f}.\n"
 
         # sequential ADD impacts
-        impacts = {}  # ev -> {"add": {...}, "rem": {...}, "score": float}
+        impacts = {}  # ev -> {"add": {...}, "remove": {...}, "score": float} 
         S = {}         # currently added set (in sequence)
         prev_beliefs = original
         for ev in seq:
@@ -257,13 +263,13 @@ class BnToolBox():
             diffs_rem = [b_full - b_wo for b_full, b_wo in zip(all_beliefs, bel_wo)]
             rem_l1 = sum(abs(d) for d in diffs_rem)
             rem_max = max((abs(d) for d in diffs_rem), default=0.0)
-            impacts.setdefault(ev, {})["rem"] = {"diffs": diffs_rem, "l1": rem_l1, "max_abs": rem_max}
+            impacts.setdefault(ev, {})["remove"] = {"diffs": diffs_rem, "l1": rem_l1, "max_abs": rem_max}
 
         # scoring & report
         # score = max(add.L1, rem.L1)
         for ev, d in impacts.items():
             add_l1 = d.get("add", {}).get("l1", 0.0)
-            rem_l1 = d.get("rem", {}).get("l1", 0.0)
+            rem_l1 = d.get("remove", {}).get("l1", 0.0)
             d["score"] = max(add_l1, rem_l1)
 
         ranked = sorted(impacts.items(), key=lambda kv: kv[1]["score"], reverse=True)
@@ -271,13 +277,32 @@ class BnToolBox():
         out += "\nEvidence impact (sequential add/remove):\n"
         for ev, d in ranked:
             add_l1 = d["add"]["l1"] if "add" in d else 0.0
-            rem_l1 = d["rem"]["l1"] if "rem" in d else 0.0
+            rem_l1 = d["remove"]["l1"] if "remove" in d else 0.0
             add_max = d["add"]["max_abs"] if "add" in d else 0.0
-            rem_max = d["rem"]["max_abs"] if "rem" in d else 0.0
+            rem_max = d["remove"]["max_abs"] if "remove" in d else 0.0
             out += (f"  - {ev}: "
                     f"ADD  L1={add_l1:.4f}, max_abs={add_max:.4f} | "
                     f"REMOVE L1={rem_l1:.4f}, max_abs={rem_max:.4f} | "
                     f"score={d['score']:.4f}\n")
+
+        # Prepare structured data for fake answer generation
+        structured_data = {
+            "X": X,
+            "evidence": evidence,
+            "original_distribution": {node.state(i).name(): original[i] for i in range(len(original))},
+            "new_distribution": {node.state(i).name(): new[i] for i in range(len(new))},
+            "conclusion": {
+                "max_change": max_change,
+                "changes": [{"state": node.state(i).name(), "change": diffs[i], "abs_change": abs(diffs[i])} 
+                           for i in range(len(diffs)) if abs(diffs[i]) > threshold],
+                "minimal_update": max_change <= threshold,
+                "no_change": max_change <= tol
+            },
+            "impacts": impacts,
+            "ranked": ranked,
+            "highest_impact_evidence": ranked[0][0] if ranked else None,
+            "is_tie_close": len(ranked) > 1 and ranked[0][1]["score"] <= 1.5 * ranked[1][1]["score"] if len(ranked) > 1 else False
+        }
 
         if ranked:
             top_ev, top_stats = ranked[0]
@@ -287,7 +312,7 @@ class BnToolBox():
             else:
                 out += f"  => Highest-impact evidence (tie-close): {top_ev}.\n"
 
-        return out, net_after
+        return out, net_after, structured_data
 
 
 
@@ -435,102 +460,102 @@ class BnToolBox():
             return base + f" They are blocked at {blocked_nodes} due to {a_or_the} common effect{final_s}."
         return base + f" There is no open path between {node1} and {node2}."
 
-    def _create_probability_distributions(self, node, original, new):
-        """Create probability distribution data and text representations."""
-        # Create probability distribution data
-        new_dist_data = {node.state(i).name(): p for i, p in enumerate(new)}
-        original_dist_data = {node.state(i).name(): p for i, p in enumerate(original)}
-        
-        # Create probability distribution strings
-        new_dist_text = "\n".join(f"  P({node.name()}={node.state(i).name()}) = {p:.4f}" for i, p in enumerate(new))
-        original_dist_text = "\n".join(f"  P({node.name()}={node.state(i).name()}) = {p:.4f}" for i, p in enumerate(original))
-        
-        return new_dist_data, original_dist_data, new_dist_text, original_dist_text
-
-    def _generate_conclusion_data(self, node, original, new, threshold=0.05, tol=1e-8):
-        """Generate conclusion data and text based on probability changes."""
-        diffs = [n - o for n, o in zip(new, original)]
-        max_change = max((abs(d) for d in diffs), default=0.0)
-
-        conclusion_data = {
-            "max_change": max_change,
-            "changes": [],
-            "minimal_update": max_change <= threshold
-        }
-        
-        if max_change <= tol:
-            conclusion_text = "No change detected — the updated beliefs are identical to the original."
-        else:
-            conclusion_parts = []
-            for i, d in enumerate(diffs):
-                if abs(d) > threshold:
-                    sname = node.state(i).name()
-                    change_text = f"Belief in '{sname}' {'increased' if d > 0 else 'decreased'} by {abs(d):.4f}"
-                    conclusion_parts.append(change_text)
-                    conclusion_data["changes"].append({
-                        "state": sname,
-                        "change": d,
-                        "abs_change": abs(d)
-                    })
-            
-            if max_change <= threshold:
-                conclusion_parts.append("Overall, the update is minimal (all changes ≤ threshold).")
-            else:
-                conclusion_parts.append(f"Largest overall per-state shift: {max_change:.4f}.")
-            
-            conclusion_text = "\n".join(f"  {part}" for part in conclusion_parts)
-
-        return conclusion_data, conclusion_text
-
-    def _generate_evidence_impact_data(self, impacts):
-        """Generate evidence impact data and text."""
-        impact_data = {}
-        impact_text = ""
-        
-        if impacts:
-            ranked = sorted(impacts.items(), key=lambda kv: kv[1]["l1"], reverse=True)
-            impact_lines = []
-            for ev, stats in ranked:
-                impact_lines.append(f"  - {ev}: L1={stats['l1']:.4f}, max_abs={stats['max_abs']:.4f}")
-                impact_data[ev] = stats
-            
-            if ranked and (len(ranked) == 1 or ranked[0][1]["l1"] > 1.5 * (ranked[1][1]["l1"] if len(ranked) > 1 else 0)):
-                impact_lines.append(f"  => Most influential evidence: {ranked[0][0]} (by L1 contribution).")
-                impact_data["most_influential"] = ranked[0][0]
-            
-            impact_text = "\nEvidence impact (leave-one-out):\n" + "\n".join(impact_lines)
-
-        return impact_data, impact_text
-
-    def _format_probability_answer(self, X, evidence, net, new_dist_text, original_dist_text, conclusion_text, impact_text):
-        """Format the final probability answer string."""
-        cond = ", ".join(f"{k}={_state_label(net, k, v)}" for k, v in evidence.items()) or "∅"
-        answer = (
-            f"P({X} | {cond}):\n"
-            f"{new_dist_text}\n"
-            f"\nOriginal distribution:\n"
-            f"{original_dist_text}\n"
-            f"\nConclusion:\n"
-            f"{conclusion_text}"
-            f"{impact_text}"
-        )
-        return answer
-
     def get_explain_prob_X_given(self, net, X, evidence=None, *, threshold=0.05, tol=1e-8):
         """
-        Generate structured data and formatted explanation for P(X | evidence).
+        Get structured data and formatted explanation for P(X | evidence).
         Returns: (formatted_answer, structured_data)
         """
+        def _create_probability_distributions(node, original, new):
+            """Create probability distribution data and text representations."""
+            # Create probability distribution data
+            new_dist_data = {node.state(i).name(): p for i, p in enumerate(new)}
+            original_dist_data = {node.state(i).name(): p for i, p in enumerate(original)}
+            
+            # Create probability distribution strings
+            new_dist_text = "\n".join(f"  P({node.name()}={node.state(i).name()}) = {p:.4f}" for i, p in enumerate(new))
+            original_dist_text = "\n".join(f"  P({node.name()}={node.state(i).name()}) = {p:.4f}" for i, p in enumerate(original))
+            
+            return new_dist_data, original_dist_data, new_dist_text, original_dist_text
+
+        def _get_conclusion_data(node, original, new, threshold=0.05, tol=1e-8):
+            """Get conclusion data and text based on probability changes."""
+            diffs = [n - o for n, o in zip(new, original)]
+            max_change = max((abs(d) for d in diffs), default=0.0)
+
+            conclusion_data = {
+                "max_change": max_change,
+                "changes": [],
+                "minimal_update": max_change <= threshold
+            }
+            
+            if max_change <= tol:
+                conclusion_text = "No change detected — the updated beliefs are identical to the original."
+            else:
+                conclusion_parts = []
+                for i, d in enumerate(diffs):
+                    if abs(d) > threshold:
+                        sname = node.state(i).name()
+                        change_text = f"Belief in '{sname}' {'increased' if d > 0 else 'decreased'} by {abs(d):.4f}"
+                        conclusion_parts.append(change_text)
+                        conclusion_data["changes"].append({
+                            "state": sname,
+                            "change": d,
+                            "abs_change": abs(d)
+                        })
+                
+                if max_change <= threshold:
+                    conclusion_parts.append("Overall, the update is minimal (all changes ≤ threshold).")
+                else:
+                    conclusion_parts.append(f"Largest overall per-state shift: {max_change:.4f}.")
+                
+                conclusion_text = "\n".join(f"  {part}" for part in conclusion_parts)
+
+            return conclusion_data, conclusion_text
+
+        def _get_evidence_impact_data(impacts):
+            """Get evidence impact data and text."""
+            impact_data = {}
+            impact_text = ""
+            
+            if impacts:
+                ranked = sorted(impacts.items(), key=lambda kv: kv[1]["l1"], reverse=True)
+                impact_lines = []
+                for ev, stats in ranked:
+                    impact_lines.append(f"  - {ev}: L1={stats['l1']:.4f}, max_abs={stats['max_abs']:.4f}")
+                    impact_data[ev] = stats
+                
+                if ranked and (len(ranked) == 1 or ranked[0][1]["l1"] > 1.5 * (ranked[1][1]["l1"] if len(ranked) > 1 else 0)):
+                    impact_lines.append(f"  => Most influential evidence: {ranked[0][0]} (by L1 contribution).")
+                    impact_data["most_influential"] = ranked[0][0]
+                
+                impact_text = "\nEvidence impact (leave-one-out):\n" + "\n".join(impact_lines)
+
+            return impact_data, impact_text
+
+        def _format_probability_answer(X, evidence, net, new_dist_text, original_dist_text, conclusion_text, impact_text):
+            """Format the final probability answer string."""
+            cond = ", ".join(f"{k}={_state_label(net, k, v)}" for k, v in evidence.items()) or "∅"
+            answer = (
+                f"P({X} | {cond}):\n"
+                f"{new_dist_text}\n"
+                f"\nOriginal distribution:\n"
+                f"{original_dist_text}\n"
+                f"\nConclusion:\n"
+                f"{conclusion_text}"
+                f"{impact_text}"
+            )
+            return answer
+
         evidence = evidence or {}
 
         original, new, net_after, impacts = self.prob_X_given(net, X, evidence)
         node = net_after.node(X)
         
-        new_dist_data, original_dist_data, new_dist_text, original_dist_text = self._create_probability_distributions(node, original, new)
+        new_dist_data, original_dist_data, new_dist_text, original_dist_text = _create_probability_distributions(node, original, new)
         
-        conclusion_data, conclusion_text = self._generate_conclusion_data(node, original, new, threshold, tol)
+        conclusion_data, conclusion_text = _get_conclusion_data(node, original, new, threshold, tol)
         
-        impact_data, impact_text = self._generate_evidence_impact_data(impacts)
+        impact_data, impact_text = _get_evidence_impact_data(impacts)
 
         structured_data = {
             "X": X,
@@ -545,7 +570,7 @@ class BnToolBox():
             "impact_text": impact_text
         }
 
-        answer = self._format_probability_answer(X, evidence, net, new_dist_text, original_dist_text, conclusion_text, impact_text)
+        answer = _format_probability_answer(X, evidence, net, new_dist_text, original_dist_text, conclusion_text, impact_text)
 
         return answer, structured_data
 

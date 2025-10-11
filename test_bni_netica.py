@@ -200,32 +200,37 @@ def mainTests():
 	# print('Utilities:', myNet.node('D').expectedUtils())
 
 def utilsTests():
-	import bni_utils
+	netDir = "./nets/"
+	from bni_netica.bni_netica import Net
+	from bni_netica import bni_utils
+	from bn_helpers.get_structures_print_tools import getNetCPTStrings
 	myNet = Net(netDir+"NF_V1.dne")
 
 	print('[d-connected nodes between PesticideUse]')
 	nodes = myNet.node('PesticideUse').getRelated('d_connected, exclude_self')
 	print([n.name() for n in nodes])
 
-	print('[d-connected nodes between PesticideUse and Rainfall]')
+	print(getNetCPTStrings(myNet))
 
-	nodes = bni_utils.findAllDConnectedNodes(myNet, "PesticideUse", "Rainfall")
-	print([n.name() for n in nodes])
+	# print('[d-connected nodes between PesticideUse and Rainfall]')
 
-	print('[d-connected nodes between PesticideUse and FishAbundance]')
-	nodes = bni_utils.findAllDConnectedNodes(myNet, "PesticideUse", "FishAbundance")
-	print([n.name() for n in nodes])
+	# nodes = bni_utils.findAllDConnectedNodes(myNet, "PesticideUse", "Rainfall")
+	# print([n.name() for n in nodes])
 
-	print('[d-connected nodes between PesticideUse and Rainfall | PesticideInRiver]')
-	myNet.node('PesticideInRiver').finding('Low')
-	nodes = bni_utils.findAllDConnectedNodes(myNet, "PesticideUse", "Rainfall")
-	print([n.name() for n in nodes])
-	myNet.retractFindings()
+	# print('[d-connected nodes between PesticideUse and FishAbundance]')
+	# nodes = bni_utils.findAllDConnectedNodes(myNet, "PesticideUse", "FishAbundance")
+	# print([n.name() for n in nodes])
 
-	print('[d-connected nodes between PesticideUse and Rainfall | FishAbundance]')
-	myNet.node('FishAbundance').finding('Low')
-	arcs = bni_utils.findAllDConnectedNodes(myNet, "PesticideUse", "Rainfall", {"arcs": True})
-	print([arc for arc in arcs])
+	# print('[d-connected nodes between PesticideUse and Rainfall | PesticideInRiver]')
+	# myNet.node('PesticideInRiver').finding('Low')
+	# nodes = bni_utils.findAllDConnectedNodes(myNet, "PesticideUse", "Rainfall")
+	# print([n.name() for n in nodes])
+	# myNet.retractFindings()
+
+	# print('[d-connected nodes between PesticideUse and Rainfall | FishAbundance]')
+	# myNet.node('FishAbundance').finding('Low')
+	# arcs = bni_utils.findAllDConnectedNodes(myNet, "PesticideUse", "Rainfall", {"arcs": True})
+	# print([arc for arc in arcs])
 
 # mainTests()
 utilsTests()

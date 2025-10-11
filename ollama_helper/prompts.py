@@ -41,15 +41,16 @@
 #   "extract_child_and_two_parents_from_query": """\nExtract the child node and two parent nodes from the user query and output in JSON format as: {"child_node": "node1", "parent1_node": "node2", "parent2_node": "node3"}.""",
 # }
 
-TAKE_QUIZ_PROMPT = """Use the provided Explanation to answer the following Quiz.
-Do NOT check for factual correctness. Just answer the Quiz based completely on the Explanation.
+TAKE_QUIZ_PROMPT = """
+Use the provided Explanation to answer the Quiz below.
+Base your answer only on the Explanation — do NOT verify factual correctness.
+
+If none of the answer options match the Explanation, choose “None of the above.” option.
 
 Quiz:
-
 {quiz}
 
 Explanation:
-
 {bn_explanation}
 
 You must respond with just a letter of the answer and no additional text, for example:

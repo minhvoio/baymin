@@ -83,11 +83,11 @@ def fake_random_nodes(net, real_nodes, num_node_keep, num_node_output, exclude=N
     random.shuffle(result)
     return result
 
-def generate_fake_nodes_for_relation(net, truth_nodes, node1, node2, *, exclude_extra=None):
+def generate_fake_nodes_for_relation(net, truth_nodes, node1, node2, *, exclude_extra=None, num_output=None):
     """Generate a fake list of node names for quiz distractors.
 
     Rules:
-    - desired_len = len(truth_nodes)
+    - desired_len = num_output if provided, otherwise len(truth_nodes)
     - If desired_len >= 2: use truth_nodes as real_nodes, keep 1, output desired_len
     - If desired_len < 2: use [node1, node2] as real_nodes, keep 0, output desired_len;
       when desired_len == 0, synthesize 2 nodes.
@@ -95,7 +95,7 @@ def generate_fake_nodes_for_relation(net, truth_nodes, node1, node2, *, exclude_
     - Guaranteed to return a non-empty list (length desired_len or 2 when zero),
       unless the network has insufficient candidates.
     """
-    desired_len = len(truth_nodes or [])
+    desired_len = num_output if num_output is not None else len(truth_nodes or [])
     exclude = list(set((exclude_extra or []) + [node1, node2]))
 
     if desired_len >= 2:
@@ -234,6 +234,166 @@ def generate_fake_probability_answer_from_data(structured_data, variation_range=
         f"\nConclusion:\n"
         f"{conclusion_text}"
         f"{fake_data['impact_text']}"
+    )
+    
+    return fake_answer
+
+def generate_fake_highest_impact_evidence_answer(structured_data, fake_evidence_name, variation_range=(0, 2)):
+    """Generate a fake highest impact evidence answer by modifying the evidence name and slightly randomizing probabilities.
+    
+    Args:
+        structured_data: Dictionary containing the highest impact evidence data
+        fake_evidence_name: Name of the fake evidence to use (must be in evidence list)
+        variation_range: Tuple of (min, max) percentage variation for probabilities
+    
+    Returns:
+        Fake answer string with modified evidence name and slightly changed probabilities
+    """
+    import random
+    
+    # Create a copy of the structured data
+    fake_data = structured_data.copy()
+    
+    # Find the fake evidence and correct evidence in the ranked list
+    fake_evidence_data = None
+    correct_evidence_data = None
+    correct_evidence_name = fake_data["highest_impact_evidence"]
+    
+    for ev, data in fake_data["ranked"]:
+        if ev == fake_evidence_name:
+            fake_evidence_data = data
+        if ev == correct_evidence_name:
+            correct_evidence_data = data
+    
+    if fake_evidence_data is None or correct_evidence_data is None:
+        # Fallback: if fake evidence not found, use the original data
+        return structured_data
+    
+    # Update the highest impact evidence
+    fake_data["highest_impact_evidence"] = fake_evidence_name
+    
+    # Swap the scores and metrics between fake and correct evidence
+    # This makes the fake evidence appear to have the highest score
+    fake_data["ranked"] = []
+    for ev, data in structured_data["ranked"]:
+        if ev == fake_evidence_name:
+            # Give fake evidence the correct evidence's high score
+            fake_data["ranked"].append((ev, correct_evidence_data))
+        elif ev == correct_evidence_name:
+            # Give correct evidence the fake evidence's lower score
+            fake_data["ranked"].append((ev, fake_evidence_data))
+        else:
+            # Keep other evidence unchanged
+            fake_data["ranked"].append((ev, data))
+    
+    # Re-sort by score to maintain ranking
+    fake_data["ranked"].sort(key=lambda x: x[1]["score"], reverse=True)
+    
+    # Randomize the new distribution probabilities slightly
+    new_dist = fake_data["new_distribution"]
+    probabilities = list(new_dist.values())
+    states = list(new_dist.keys())
+    
+    # Generate random variations
+    variations = []
+    for prob in probabilities:
+        prob_percent = prob * 100
+        variation = random.uniform(-variation_range[1], variation_range[1])
+        new_percent = prob_percent + variation
+        variations.append(new_percent)
+    
+    # Normalize to ensure they sum to 100%
+    total_percent = sum(variations)
+    normalized_variations = [v / total_percent * 100 for v in variations]
+    
+    # Convert back to decimal probabilities
+    fake_probabilities = [p / 100 for p in normalized_variations]
+    
+    # Update the fake data
+    fake_data["new_distribution"] = {state: prob for state, prob in zip(states, fake_probabilities)}
+    
+    # Recalculate changes based on new probabilities
+    original_dist = fake_data["original_distribution"]
+    new_changes = []
+    max_change = 0
+    
+    for state in states:
+        original_prob = original_dist[state]
+        new_prob = fake_data["new_distribution"][state]
+        change = new_prob - original_prob
+        abs_change = abs(change)
+        
+        if abs_change > 0.05:  # threshold
+            new_changes.append({
+                "state": state,
+                "change": change,
+                "abs_change": abs_change
+            })
+        
+        max_change = max(max_change, abs_change)
+    
+    # Update conclusion data
+    fake_data["conclusion"]["max_change"] = max_change
+    fake_data["conclusion"]["changes"] = new_changes
+    fake_data["conclusion"]["minimal_update"] = max_change <= 0.05
+    
+    # Generate the formatted answer
+    X = fake_data["X"]
+    evidence = fake_data["evidence"]
+    
+    # Create evidence condition string
+    cond = ", ".join(f"{k}={v}" for k, v in evidence.items()) or "∅"
+    
+    # Create distribution text
+    new_dist_text = "\n".join(f"  P({X}={state}) = {prob:.4f}" for state, prob in fake_data["new_distribution"].items())
+    original_dist_text = "\n".join(f"  P({X}={state}) = {prob:.4f}" for state, prob in original_dist.items())
+    
+    # Create conclusion text
+    conclusion = fake_data["conclusion"]
+    if conclusion["no_change"]:
+        conclusion_text = "No change detected — the updated beliefs are identical to the original."
+    else:
+        conclusion_parts = []
+        for change_info in conclusion["changes"]:
+            state = change_info["state"]
+            abs_change = change_info["abs_change"]
+            change = change_info["change"]
+            conclusion_parts.append(f"Belief in '{state}' {'increased' if change > 0 else 'decreased'} by {abs_change:.4f}")
+        
+        if conclusion["minimal_update"]:
+            conclusion_parts.append("Overall, the update is minimal (all changes ≤ threshold).")
+        else:
+            conclusion_parts.append(f"Largest overall per-state shift: {conclusion['max_change']:.4f}.")
+        
+        conclusion_text = "\n".join(f"  {part}" for part in conclusion_parts)
+    
+    # Create evidence impact section - keep the same ranking but highlight the fake evidence
+    impacts_text = "\nEvidence impact (sequential add/remove):\n"
+    for ev, d in fake_data["ranked"]:
+        add_l1 = d["add"]["l1"] if "add" in d else 0.0
+        rem_l1 = d["remove"]["l1"] if "remove" in d else 0.0
+        add_max = d["add"]["max_abs"] if "add" in d else 0.0
+        rem_max = d["remove"]["max_abs"] if "remove" in d else 0.0
+        impacts_text += (f"  - {ev}: "
+                        f"ADD  L1={add_l1:.4f}, max_abs={add_max:.4f} | "
+                        f"REMOVE L1={rem_l1:.4f}, max_abs={rem_max:.4f} | "
+                        f"score={d['score']:.4f}\n")
+    
+    # Add highest impact evidence line - use the fake evidence
+    if fake_data["is_tie_close"]:
+        impacts_text += f"  => Highest-impact evidence (tie-close): {fake_evidence_name}.\n"
+    else:
+        impacts_text += f"  => Highest-impact evidence: {fake_evidence_name}.\n"
+    
+    # Combine all parts
+    fake_answer = (
+        f"P({X} | {cond}):\n"
+        f"{new_dist_text}\n"
+        f"\nOriginal distribution:\n"
+        f"{original_dist_text}\n"
+        f"\nConclusion:\n"
+        f"{conclusion_text}\n"
+        f"{impacts_text}"
     )
     
     return fake_answer

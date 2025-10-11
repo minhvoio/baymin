@@ -47,3 +47,15 @@ def printPath(path):
         ans += f"{node} -> "
     ans += f"{path[-1]}"
     return ans
+
+def getNetCPTStrings(net):
+    cpt_strings = {}
+    for node in net.nodes():
+        cpt_data = node.cpt()
+        if isinstance(cpt_data, list):
+            # Handle list format - convert to string representation
+            cpt_strings[node.name()] = str(cpt_data)
+        else:
+            # Handle dict format (if it exists)
+            cpt_strings[node.name()] = "\n".join([f"{k}: {v}" for k, v in cpt_data.items()])
+    return cpt_strings

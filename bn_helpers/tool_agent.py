@@ -88,24 +88,26 @@ def chat_with_tools(
     max_rounds: int = 4,
     require_tool: bool = True,
     ollama_url: str = OLLAMA_CHAT_URL,
+    isDebug: bool = False,
 ):
     fns = get_tools_map(net)
     bn_str = get_BN_node_states(net)
     tools = [function_to_tool_schema(fn, name=name) for name, fn in fns.items()]
 
-    system_prompt = (
-        "You are a tool-using Bayesian Network assistant.\n"
-        "Rules:\n"
-        "1) Read the query carefully, think step by step, getting the correct tools.\n"
-        "2) Do NOT perform calculations or external actions yourself if a tool can do it.\n"
-        "3) Always call a tool when any tool could plausibly answer the user.\n"
-        "4) After receiving tool results, if the return value is grammatically correct, return exactly that value;\n"
-        "   otherwise fix only the grammar and return the corrected value.\n"
-        "5) Do NOT verify factual correctness of the tool outputs — only grammar - to correctly answer the question.\n"
-        # "5) If a prior tool call failed or was rejected, do NOT repeat the same tool/argument combination.\n"
-        # "6) If a tool call fails, try an alternative: adjust parameters (consistent with the prompt and provided node/state names) "
-        # "   or choose a different tool.\n"
-    )
+    system_prompt = """
+    You are a tool-using Bayesian Network assistant. Your task is to call tools when needed and return their results in clear, readable language.
+
+    Rules:
+    1) Always use a tool if it can plausibly answer the query. Don’t compute or act manually.
+    2) After getting tool results, rewrite them into a human-readable summary, not raw JSON.
+    3) Keep every detail from the tool output — values, fields, and structure — but express them cleanly.
+    4) You may fix grammar, add labels, and format lists/tables, but never change or invent data.
+    5) If output is already plain text and grammatically correct, return it as-is.
+    6) If errors or warnings exist, include them under “Errors/Warnings”.
+    7) Do not verify factual accuracy — only reformat and clarify.
+
+    Goal: Produce a polished, complete, human-readable report faithfully reflecting tool outputs.
+    """
 
     # Give the model the “catalog” of node/state names to extract from
     prompt += (
@@ -181,7 +183,8 @@ def chat_with_tools(
                     })
                     continue
 
-                print(f"[BayMin] tool_call #{i}: {fn_name}({args})")
+                if isDebug:
+                    print(f"[BayMin] tool_call #{i}: {fn_name}({args})")
                 seen_calls.add(call_key)
 
                 # Run it
@@ -200,7 +203,8 @@ def chat_with_tools(
                         payload = {"error": type(e).__name__, "detail": str(e)}
                         recent_errors.append(f"{fn_name} failed with {type(e).__name__}: {e}")
 
-                print(f"[BayMin] tool_result #{i}: {payload}")
+                if isDebug:
+                    print(f"[BayMin] tool_result #{i}: {payload}")
                 tool_msgs.append({
                     "role": "tool",
                     "tool_name": fn_name,
@@ -403,19 +407,20 @@ def get_highest_impact_evidence_contribute_to_node_tool(net):
         """Compare the evidences impact on the node by adding and removing one evidence at a time, return the evidence that has the highest impact."""
         try:
             bn_tool_box = BnToolBox()
-            ans, _ = bn_tool_box.get_highest_impact_evidence(net, node, evidence)
+            ans, _, _ = bn_tool_box.get_highest_impact_evidence(net, node, evidence)
             return ans
         except Exception as e:
             return {"get_highest_impact_evidence_contribute_to_node": None, "error": f"{type(e).__name__}: {e}"}
     return get_highest_impact_evidence_contribute_to_node
 
 def get_highest_impact_evidence_contribute_to_node_given_background_evidence_tool(net):
-    def get_highest_impact_evidence_contribute_to_node_given_background_evidence(node: str, evidence: dict = None, background_evidence: dict = None):
-        """With existing evidence (evidence), compare the evidences impact on the node by adding and removing one evidence at a time, return the evidence that has the highest impact."""
+    def get_highest_impact_evidence_contribute_to_node_given_background_evidence(node: str, new_evidence: dict = None, background_evidence: dict = None):
+        """With existing (background/old) evidence, compare the new evidence(s) impact on the node by adding and removing one evidence at a time, 
+        return the new evidence(s) that has the highest impact."""
         try:
             with temporarily_set_findings(net, background_evidence):
                 bn_tool_box = BnToolBox()
-                ans, _ = bn_tool_box.get_highest_impact_evidence(net, node, evidence)
+                ans, _, _ = bn_tool_box.get_highest_impact_evidence(net, node, new_evidence)
                 return ans
         except Exception as e:
             return {"get_highest_impact_evidence_contribute_to_node_given_background_evidence": None, "error": f"{type(e).__name__}: {e}"}
@@ -448,5 +453,8 @@ def extract_text(answer: str) -> str:
         return answer
 
 def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL):
+    import re
     answer = chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url)
-    return extract_text(answer)
+    readable = answer.encode('utf-8').decode('unicode_escape')  # converts \n and \u202f
+    readable = re.sub(r'\*\*(.*?)\*\*', r'\1', readable)
+    return readable

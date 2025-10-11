@@ -3,7 +3,7 @@ from bn_helpers.bn_helpers import AnswerStructure, BnToolBox
 from bn_helpers.utils import get_path, grammar_plural
 import random as _random
 from bn_helpers.constants import MODEL, MODEL_QUIZ
-from benchmarking.benchmarking_utils import fake_random_nodes, pick_two_random_nodes, generate_fake_nodes_for_relation, get_random_number_of_nodes, generate_fake_probability_answer_from_data
+from benchmarking.benchmarking_utils import fake_random_nodes, pick_two_random_nodes, generate_fake_nodes_for_relation, get_random_number_of_nodes, generate_fake_probability_answer_from_data, generate_fake_highest_impact_evidence_answer
 
 def create_distract_answer(answer, model=MODEL, temperature=0.3, another_answer=None):
   prompt = f"Keep the sentence structure, just change the variables names from the following answer (no other text): {answer}"
@@ -312,11 +312,91 @@ def create_probability_quiz(question, net, node, evidence, rng=None):
     lines = q_text.split('\n')
     formatted_lines = []
     
-    for i, line in enumerate(lines):
-        # Add separator before each option (A., B., C., D.)
+    for _, line in enumerate(lines):
         if line.startswith(('A.', 'B.', 'C.', 'D.')):
             formatted_lines.append("-----------")
         
         formatted_lines.append(line)
     
     return '\n'.join(formatted_lines), q_correct
+
+
+def create_highest_impact_evidence_quiz(question, net, node, evidence=None, order=None, rng=None):
+    """
+    Create a quiz about which evidence has the highest impact on a node.
+    
+    Args:
+        question (str): The question prompt/header line.
+        net: Bayesian network
+        node (str): Target node to analyze
+        evidence (dict): Evidence dictionary, if None will derive from d-connected nodes
+        order (list): Order of evidence to analyze
+        rng: Optional randomizer
+    
+    Returns:
+        (question_block_text, correct_letter)
+    """
+    randomizer = rng or _random
+    bn_tool_box = BnToolBox()
+    
+    # Get the correct answer and structured data
+    correct_answer, _, structured_data = bn_tool_box.get_highest_impact_evidence(net, node, evidence, order)
+    
+    # Extract the highest-impact evidence from structured data
+    highest_impact_evidence = structured_data.get("highest_impact_evidence")
+    
+    # Generate fake answers using structured data
+    fake_answer1 = correct_answer
+    fake_answer2 = correct_answer
+    
+    if highest_impact_evidence:
+        # Get the ranked evidence list from structured data
+        ranked_evidence = structured_data.get("ranked", [])
+        
+        # Select the 2nd and 3rd highest impact evidence as fake options
+        fake_evidence_candidates = []
+        if len(ranked_evidence) >= 2:
+            fake_evidence_candidates.append(ranked_evidence[1][0])  # 2nd highest
+        if len(ranked_evidence) >= 3:
+            fake_evidence_candidates.append(ranked_evidence[2][0])  # 3rd highest
+        
+        # If we don't have enough ranked evidence, fall back to other evidence nodes
+        if len(fake_evidence_candidates) < 2:
+            evidence_nodes = list(structured_data.get("evidence", {}).keys())
+            remaining_candidates = [ev for ev in evidence_nodes if ev != highest_impact_evidence and ev not in fake_evidence_candidates]
+            fake_evidence_candidates.extend(remaining_candidates[:2-len(fake_evidence_candidates)])
+        
+        if len(fake_evidence_candidates) >= 1:
+            # Generate fake answer 1 with slightly modified probabilities
+            fake_answer1 = generate_fake_highest_impact_evidence_answer(
+                structured_data, fake_evidence_candidates[0], variation_range=(0, 2)
+            )
+            
+            # Generate fake answer 2 with larger variation
+            if len(fake_evidence_candidates) >= 2:
+                fake_answer2 = generate_fake_highest_impact_evidence_answer(
+                    structured_data, fake_evidence_candidates[1], variation_range=(0, 5)
+                )
+    
+    # Create options
+    opt1 = (correct_answer, True)
+    opt2 = (fake_answer1, False)
+    opt3 = (fake_answer2, False)
+    opt4 = ("None of the above", False)
+    
+    options = [opt1, opt2, opt3, opt4]
+    
+    q_text, q_correct = create_question(question, options, rng=randomizer)
+
+    # Add separators before each option for better readability
+    lines = q_text.split('\n')
+    formatted_lines = []
+    
+    for _, line in enumerate(lines):
+        if line.startswith(('A.', 'B.', 'C.', 'D.')):
+            formatted_lines.append("-----------")
+        
+        formatted_lines.append(line)
+    
+    return '\n'.join(formatted_lines), q_correct
+
