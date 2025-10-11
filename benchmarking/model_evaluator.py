@@ -1,7 +1,7 @@
 from ollama_helper.ollama_helper import answer_this_prompt
 from ollama_helper.prompts import TAKE_QUIZ_PROMPT
 from bn_helpers.bn_helpers import AnswerStructure, BnToolBox
-from bn_helpers.get_structures_print_tools import get_BN_structure
+from bn_helpers.get_structures_print_tools import get_BN_structure, getNetCPTStrings
 from bn_helpers.tool_agent import get_answer_from_tool_agent, chat_with_tools
 from benchmarking.quiz_generator import (create_dependency_quiz, create_common_cause_quiz, create_common_effect_quiz, create_blocked_evidence_quiz, 
 create_evidence_change_relationship_quiz, create_probability_quiz, create_highest_impact_evidence_quiz)
@@ -88,6 +88,7 @@ def probability_question(net, question_format=None, hasEvidence=False):
     node = pick_one_random_node(net)
     bn = get_BN_structure(net)
     prompt = f"In this Bayesian Network:\n{bn}\n"
+    prompt += f"CPT:\n{getNetCPTStrings(net)}\n"
     if hasEvidence:
         evidence = generate_evidence_nodes(net, (node,))
         evidence_str = ", ".join(evidence) if evidence else "∅"
