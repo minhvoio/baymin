@@ -1,5 +1,7 @@
 import random 
 import csv, datetime
+import time
+from pydantic_ai.exceptions import ModelHTTPError
 
 def pick_one_random_node(net):
     nodes = net.nodes()
@@ -596,3 +598,59 @@ def log_for_baymin_testing(quiz, y, y_hat, answer, testing_log):
             
     except Exception as e:
         print(f"[BayMin] Debug logging failed: {e}")
+
+
+def retry_test_with_backoff(test_function, net, max_retries=5, base_delay=1, max_delay=60, *args, **kwargs):
+    """
+    Retry a test function with exponential backoff when encountering HTTP errors.
+    
+    Args:
+        test_function: The test function to retry
+        net: The network parameter
+        max_retries: Maximum number of retry attempts
+        base_delay: Base delay in seconds for exponential backoff
+        max_delay: Maximum delay in seconds
+        *args, **kwargs: Additional arguments to pass to the test function
+    
+    Returns:
+        The result of the test function or raises the last exception if all retries fail
+    """
+    last_exception = None
+    
+    for attempt in range(max_retries + 1):
+        try:
+            print(f"Attempt {attempt + 1}/{max_retries + 1} for {test_function.__name__}")
+            result = test_function(net, *args, **kwargs)
+            print(f"✅ {test_function.__name__} completed successfully on attempt {attempt + 1}")
+            return result
+            
+        except ModelHTTPError as e:
+            last_exception = e
+            if e.status_code == 500:  # Internal Server Error
+                if attempt < max_retries:
+                    # Calculate delay with exponential backoff and jitter
+                    delay = min(base_delay * (2 ** attempt) + random.uniform(0, 1), max_delay)
+                    print(f"❌ HTTP 500 error on attempt {attempt + 1}. Retrying in {delay:.2f} seconds...")
+                    time.sleep(delay)
+                else:
+                    print(f"❌ All {max_retries + 1} attempts failed for {test_function.__name__}")
+                    break
+            else:
+                # For non-500 errors, don't retry
+                print(f"❌ Non-retryable HTTP error {e.status_code} for {test_function.__name__}")
+                raise e
+                
+        except Exception as e:
+            last_exception = e
+            print(f"❌ Unexpected error on attempt {attempt + 1}: {str(e)}")
+            if attempt < max_retries:
+                delay = min(base_delay * (2 ** attempt) + random.uniform(0, 1), max_delay)
+                print(f"Retrying in {delay:.2f} seconds...")
+                time.sleep(delay)
+            else:
+                print(f"❌ All {max_retries + 1} attempts failed for {test_function.__name__}")
+                break
+    
+    # If we get here, all retries failed
+    print(f"🚨 {test_function.__name__} failed after {max_retries + 1} attempts")
+    raise last_exception
