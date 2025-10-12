@@ -116,7 +116,7 @@ def raw_model_test(prompt, quiz, y, model=MODEL, max_tokens=1000, model_quiz=MOD
     return score, ans
 
 def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True):
-    answer, testing_log = chat_with_tools(net, question_output, model=model, max_tokens=max_tokens, isTesting=True)
+    answer, testing_log = chat_with_tools(net, question_output, model=model, max_tokens=max_tokens, isTesting=isTesting)
     y_hat = model_do_quiz(quiz, answer, model=model_quiz)
     
     score = validate_quiz_answer(y, y_hat)

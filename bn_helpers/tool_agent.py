@@ -85,7 +85,7 @@ def chat_with_tools(
     model: str = MODEL,    
     temperature: float = 0.0,
     max_tokens: int = 500,
-    max_rounds: int = 4,
+    max_rounds: int = 10,
     require_tool: bool = True,
     ollama_url: str = OLLAMA_CHAT_URL,
     isDebug: bool = False,
@@ -322,6 +322,7 @@ def chat_with_tools(
         retries_left -= 1
 
     # After all rounds, return the latest assistant content if any
+    final_answer = None  
     for m in reversed(messages):
         if m.get("role") == "assistant" and m.get("content", "").strip():
             final_answer = m["content"].strip()
