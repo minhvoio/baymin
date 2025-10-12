@@ -600,8 +600,8 @@ class BnToolBox():
                 f"No evidence provided. Relationship between {node1} and {node2} is {before} "
                 f"with no conditioning."
             )
-            template = raw_template.format(node1=node1, node2=node2, before=before)
-            return raw_template, template
+            answer = raw_template.format(node1=node1, node2=node2, before=before)
+            return answer, raw_template
 
         if changed:
             raw_template = (
@@ -609,20 +609,20 @@ class BnToolBox():
                 f"Before observing {{ev_str}}, they were {before}. After observing all evidence, they are {after}."
                 f"{flip_note}"
             )
-            template = raw_template.format(node1=node1, node2=node2, ev_str=ev_str, before=before, after=after)
+            answer = raw_template.format(node1=node1, node2=node2, ev_str=ev_str, before=before, after=after)
 
         else:
             raw_template = (
                 f"No - conditioning on {{ev_str}} does not change the dependency between {node1} and {node2}. "
                 f"Before observing {{ev_str}}, they were {before}. After observing all evidence, they remain {after}."
             )
-            template = raw_template.format(node1=node1, node2=node2, ev_str=ev_str, before=before, after=after)
+            answer = raw_template.format(node1=node1, node2=node2, ev_str=ev_str, before=before, after=after)
         
         if details.get("sequential"):
             steps = "; ".join(
                 f"+{s['added']} => {_conn_label(s['connected'])}"
                 for s in details["sequential"]
             )
-            template += f" Sequence: {steps}."
+            answer += f" Sequence: {steps}."
         
-        return template, raw_template
+        return answer, raw_template

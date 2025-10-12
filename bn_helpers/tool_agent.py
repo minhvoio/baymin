@@ -348,7 +348,7 @@ def make_explain_d_connected_tool(net):
     def check_d_connected(from_node: str, to_node: str) -> dict:
         """Explain whether two nodes are d-connected and why.
         d-connected means that entering evidence for one node will change the probability of the other node.
-        KEYWORDS: dependency, d-connected, d-separated, dependent, independent, path, influence, reachable, connection, correlation, reachable
+        KEYWORDS: dependency, d-connected, d-separated, dependent, independent, path, influence, reachable, connection, correlation, from, to
         """
         try:
             bn_tool_box = BnToolBox()
@@ -380,7 +380,7 @@ def get_d_connected_nodes_tool(net):
 def make_explain_common_cause_tool(net):
     def check_common_cause(node1: str, node2: str):
         """Check if there is a common cause between two nodes.
-        KEYWORDS: common cause, common parent, common ancestor, shared cause, root cause, upstream cause, by both
+        KEYWORDS: common cause, common parent, common ancestor, shared cause, root cause, upstream cause, by both, both
         """
         try:
             bn_tool_box = BnToolBox()
@@ -399,7 +399,7 @@ def make_explain_common_cause_tool(net):
 def make_explain_common_effect_tool(net):
     def check_common_effect(node1: str, node2: str):
         """Check if there is a common effect between two nodes.
-        KEYWORDS: common effect, common child, common descendant, shared effect, collider, outcome, by both
+        KEYWORDS: common effect, common child, common descendant, shared effect, collider, outcome, by both, both
         """
         try:
             bn_tool_box = BnToolBox()
@@ -435,7 +435,7 @@ def check_evidences_change_relationship_between_two_nodes_tool(net):
         """
         try:
             bn_tool_box = BnToolBox()
-            _, template = bn_tool_box.get_explain_evidence_change_dependency_XY(net, node1, node2, evidence)
+            template, _ = bn_tool_box.get_explain_evidence_change_dependency_XY(net, node1, node2, evidence)
             return template
 
         except Exception as e:

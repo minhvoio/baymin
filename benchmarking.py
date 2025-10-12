@@ -19,9 +19,9 @@ net_5, net_10, net_30, net_60 = load_nets_from_parquet(os.path.join(data_output,
 
 list_of_nets = [net_5, net_10, net_30, net_60]
 NUM_QUESTIONS = 30
-MAX_TOKENS = 1800
+MAX_TOKENS = 2000
 IS_TESTING = True
-PROBABILITY_MAX_TOKENS = 1200
+PROBABILITY_MAX_TOKENS = 2000
 
 
 # QWEN_MODEL = "qwen3:8b"
@@ -66,7 +66,7 @@ for net in list_of_nets:
         print("Continuing with next test...")
 
     try:
-        retry_test_with_backoff(probability_test, net, max_retries=10, base_delay=2, max_delay=30,\
+        retry_test_with_backoff(probability_test, net, max_retries=5, base_delay=2, max_delay=30,\
             num_questions=NUM_QUESTIONS, max_tokens=PROBABILITY_MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=True)
     except Exception as e:
         print(f"probability_test failed completely: {str(e)}")

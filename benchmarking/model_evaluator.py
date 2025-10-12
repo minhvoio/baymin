@@ -137,7 +137,7 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
     network_size = len(net.nodes())
     
     # Check for already completed questions
-    completed_questions = get_completed_questions('elementary_test', question_set_name, model, model_quiz, network_size)
+    completed_questions = get_completed_questions('elementary_test', question_set_name, model, model_quiz, network_size, test_baymin_only)
     
     print(f"Running {question_set_name} test for Net_{network_size} with {num_questions} questions")
     if completed_questions:
@@ -222,21 +222,28 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
     return final_raw_score, final_baymin_score
 
 def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
-    return elementary_test(net, DEPENDENCY_QUESTIONS, create_dependency_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
+    return elementary_test(net, DEPENDENCY_QUESTIONS, create_dependency_quiz, model=model, model_quiz=model_quiz, \
+        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
 
 def common_cause_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
-    return elementary_test(net, COMMON_CAUSE_QUESTIONS, create_common_cause_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
+    return elementary_test(net, COMMON_CAUSE_QUESTIONS, create_common_cause_quiz, model=model, model_quiz=model_quiz, \
+        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
 
 def common_effect_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
-    return elementary_test(net, COMMON_EFFECT_QUESTIONS, create_common_effect_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
+    return elementary_test(net, COMMON_EFFECT_QUESTIONS, create_common_effect_quiz, model=model, model_quiz=model_quiz, \
+        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
 
 def blocked_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
-    return elementary_test(net, BLOCKED_EVIDENCES_QUESTIONS, create_blocked_evidence_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
+    return elementary_test(net, BLOCKED_EVIDENCES_QUESTIONS, create_blocked_evidence_quiz, model=model, model_quiz=model_quiz, \
+        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
 
 def evidence_change_relationship_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=True, isTesting=True, test_baymin_only=False):
-    return elementary_test(net, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, create_evidence_change_relationship_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only)
+    return elementary_test(net, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, create_evidence_change_relationship_quiz, model=model, \
+    model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only)
 
-def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
+def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, \
+    max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
+    
     raw_model_total_score = 0
     baymin_total_score = 0
     
@@ -245,7 +252,7 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
     network_size = len(net.nodes())
     
     # Check for already completed questions
-    completed_questions = get_completed_questions('numerical_test', question_set_name, model, model_quiz, network_size)
+    completed_questions = get_completed_questions('numerical_test', question_set_name, model, model_quiz, network_size, test_baymin_only)
     
     print(f"Running {question_set_name} test for Net_{network_size} with {num_questions} questions")
     if completed_questions:
