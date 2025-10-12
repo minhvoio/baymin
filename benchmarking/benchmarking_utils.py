@@ -440,7 +440,8 @@ def get_completed_questions(test_type, question_set_name, model, model_quiz, net
 def log_test_result(test_type, question_set_name, question_index, quiz, expected_answer, model, model_quiz, 
                    raw_model_score, baymin_score, question_output=None, prompt=None, 
                    hasEvidence=None, max_tokens=None, network_size=None, node1=None, node2=None, 
-                   evidence=None, node=None, raw_model_answer=None, baymin_answer=None):
+                   evidence=None, node=None, raw_model_answer=None, baymin_answer=None, 
+                   raw_model_runtime=None, baymin_runtime=None, output_file='test_log.csv'):
     """
     Log test results to CSV file with comprehensive information for validation.
     Includes duplicate prevention to avoid re-logging the same test results.
@@ -466,9 +467,11 @@ def log_test_result(test_type, question_set_name, question_index, quiz, expected
         node: Single node for numerical tests #optional
         raw_model_answer: Raw model's answer text #optional
         baymin_answer: Baymin model's answer text #optional
+        raw_model_runtime: Raw model's runtime in seconds #optional
+        baymin_runtime: Baymin model's runtime in seconds #optional
     """
     try:
-        csv_file = 'test_log.csv'
+        csv_file = output_file
         
         # Check for duplicates using composite key
         duplicate_key = (test_type, question_set_name, question_index, model, model_quiz, network_size)
@@ -522,6 +525,8 @@ def log_test_result(test_type, question_set_name, question_index, quiz, expected
             'evidence': evidence if evidence else 'N/A',  # optional
             'raw_model_answer': raw_model_answer.replace('\n', ' ').replace('\r', ' ')[:500] if raw_model_answer else 'N/A',  # optional
             'baymin_answer': baymin_answer.replace('\n', ' ').replace('\r', ' ')[:500] if baymin_answer else 'N/A',  # optional
+            'raw_model_runtime': raw_model_runtime if raw_model_runtime is not None else 'N/A',  # optional
+            'baymin_runtime': baymin_runtime if baymin_runtime is not None else 'N/A',  # optional
         }
         
         # Append new row to CSV file
@@ -529,7 +534,8 @@ def log_test_result(test_type, question_set_name, question_index, quiz, expected
             fieldnames = ['timestamp', 'test_type', 'question_set_name', 'question_index', 'quiz', 'expected_answer', 
                          'model', 'model_quiz', 'raw_model_score', 'baymin_score', 
                          'question_output', 'prompt', 'hasEvidence', 'max_tokens', 'network_size', 
-                         'node1', 'node2', 'node', 'evidence', 'raw_model_answer', 'baymin_answer']
+                         'node1', 'node2', 'node', 'evidence', 'raw_model_answer', 'baymin_answer',
+                         'raw_model_runtime', 'baymin_runtime']
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             
             # Write header if file is new
