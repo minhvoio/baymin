@@ -151,6 +151,7 @@ def chat_with_tools(
 
     # state to avoid repeating failed/attempted calls
     seen_calls = set()          # {(tool_name, normalized_args_json)}
+    first_results = {}          # {(tool_name, normalized_args_json): first_result}
     recent_errors = []          # keep last few error messages for model guidance
 
     while retries_left > 0:
@@ -200,18 +201,24 @@ def chat_with_tools(
 
                 # Skip duplicate attempts (already tried same tool+args)
                 if call_key in seen_calls:
-                    # Tell the model not to repeat this combination
-                    recent_errors.append(
-                        f"Duplicate call blocked: {fn_name}({arg_key}) was already attempted."
-                    )
-                    # Synthesize a 'tool' message indicating it's blocked to keep turn structure
-                    payload = {"error": "DuplicateAttempt", "detail": "This exact tool/args were already tried."}
-                    tool_msgs.append({
-                        "role": "tool",
-                        "tool_name": fn_name,
-                        "content": json.dumps(payload)
-                    })
-                    continue
+                    # Return the first result instead of error
+                    if call_key in first_results:
+                        payload = first_results[call_key]
+                        tool_msgs.append({
+                            "role": "tool",
+                            "tool_name": fn_name,
+                            "content": json.dumps(payload)
+                        })
+                        continue
+                    else:
+                        # Fallback: synthesize a 'tool' message indicating it's blocked to keep turn structure
+                        payload = {"error": "DuplicateAttempt", "detail": "This exact tool/args were already tried."}
+                        tool_msgs.append({
+                            "role": "tool",
+                            "tool_name": fn_name,
+                            "content": json.dumps(payload)
+                        })
+                        continue
 
                 if isDebug:
                     print(f"[BayMin] tool_call #{i}: {fn_name}({args})")
@@ -224,6 +231,8 @@ def chat_with_tools(
                 if fn_name not in fns:
                     payload = {"error": f"ToolNotRegistered", "detail": f"Tool '{fn_name}' not registered"}
                     recent_errors.append(f"{fn_name} not registered.")
+                    # Store the first error result
+                    first_results[call_key] = payload
                 else:
                     try:
                         out = _bind_and_call(fns[fn_name], args)
@@ -232,9 +241,13 @@ def chat_with_tools(
                             payload = {"result": out}
                         except TypeError:
                             payload = {"result": repr(out)}
+                        # Store the first successful result
+                        first_results[call_key] = payload
                     except Exception as e:
                         payload = {"error": type(e).__name__, "detail": str(e)}
                         recent_errors.append(f"{fn_name} failed with {type(e).__name__}: {e}")
+                        # Store the first error result as well
+                        first_results[call_key] = payload
 
                 if isDebug:
                     print(f"[BayMin] tool_result #{i}: {payload}")
