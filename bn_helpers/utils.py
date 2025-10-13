@@ -10,6 +10,8 @@ def names(nodes):
 def set_findings(net, findings_dict):
     for k, v in findings_dict.items():
         node = net.node(k)
+        if node is None:
+            raise ValueError(f"Node '{k}' not found in the network")
         if v is None:
             node.retractFindings()
         else:
@@ -29,6 +31,8 @@ def temporarily_set_findings(net, findings_dict):
     try:
         for k, v in findings_dict.items():
             node = net.node(k)
+            if node is None:
+                raise ValueError(f"Node '{k}' not found in the network")
             if v is None:
                 node.retractFindings()
             else:
@@ -38,7 +42,9 @@ def temporarily_set_findings(net, findings_dict):
     finally:
         net.retractFindings()
         for k, v in (saved or {}).items():
-            net.node(k).finding(v)
+            node = net.node(k)
+            if node is not None:
+                node.finding(v)
         net.update()
 
 def output_distribution(node, original_beliefs, new_beliefs, impacts, threshold=0.05, tol=1e-8):
