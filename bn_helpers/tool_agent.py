@@ -467,7 +467,10 @@ def get_evidences_block_two_nodes_tool(net):
         try:
             bn_tool_box = BnToolBox()
             ans = bn_tool_box.evidences_block_XY(net, node1, node2)
-            template = f"The evidences that would block the dependency between {node1} and {node2} are: {', '.join(ans)}."
+            if ans:
+                template = f"The evidences that would block the dependency between {node1} and {node2} are: {', '.join(ans)}."
+            else:
+                template = f"There are no evidences that would block the dependency between {node1} and {node2}."
             return template
         except Exception as e:
             return {"get_evidences_block_two_nodes": None, "error": f"{type(e).__name__}: {e}"}
