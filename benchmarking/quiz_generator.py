@@ -84,7 +84,7 @@ def create_dependency_quiz(question, net, node1, node2, rng=None):
     is_connected = bn_tool_box.is_XY_dconnected(net, node1, node2)
 
     if is_connected:
-        # Ground-truth reason (d-connected path)
+        # d-connected path
         try:
             ground_truth_path = get_path(net, node1, node2)  
         except Exception:
@@ -104,7 +104,7 @@ def create_dependency_quiz(question, net, node1, node2, rng=None):
         options = [opt1, opt2, opt3, opt4]
 
     else:
-        # Ground-truth reason (blocked / no path)
+        # blocked / no path
         common_effects = bn_tool_box.get_common_effect(net, node1, node2)
         ce_list = list(common_effects) if common_effects else []
         ce_text = ", ".join(ce_list) if ce_list else "None"
