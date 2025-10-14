@@ -231,11 +231,10 @@ def baymin_test(
         net,
         question_output,
         model=model,
-        temperature=effective_model_temp,
         max_tokens=max_tokens,
         is_output_log=is_output_log,
         model_top_p=model_top_p,
-        model_temperature=model_temperature,
+        model_temperature=effective_model_temp,
     )
     baymin_response_time = time.time() - start_time
     
