@@ -42,10 +42,10 @@
 # }
 
 TAKE_QUIZ_PROMPT = """
-Use the provided Explanation to answer the Quiz below.
-Base your answer only on the Explanation — do NOT verify factual correctness.
-If none of the answer options match the Explanation, choose the letter of the “None of the above.” option.
-Do NOT output anything other than a ONE LETTER answer.
+Use the Explanation below to answer the Quiz.
+Base your answer only on the Explanation — do NOT check for factual accuracy.
+If none of the provided options match the Explanation, select the letter of the “None of the above.” option.
+Output ONLY a single uppercase letter corresponding to your chosen quiz option — no additional text, punctuation, or explanation.
 
 Quiz:
 {quiz}
@@ -53,7 +53,6 @@ Quiz:
 Explanation:
 {bn_explanation}
 
-You MUST respond with just a letter of the answer and no additional text, for example:
-
+Example of correct output:
 A
 """
