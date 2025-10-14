@@ -4,47 +4,10 @@ from bn_helpers.utils import (output_distribution, ensure_keys, logical_or, \
     logical_and, logical_xor, logical_xnor, fit_noisy_or, fit_noisy_and, fit_additive, _rmse, temporarily_set_findings, \
         names, resolve_state_index, state_names_by_indices, find_minimal_blockers, reduce_to_minimal_blocking_set, \
             is_independent_given, get_path, _state_label)
-from itertools import product
 import json
 import re
-from collections import deque
-import itertools
 from typing import List, Tuple, Dict, Any, Optional, Sequence, Union
 
-class QueryOneNode(BaseModel):
-    node: str
-
-# d_connected(X, Y) - True/False
-class QueryTwoNodes(BaseModel):
-    from_node: str
-    to_node: str
-
-class QueryThreeNodes(BaseModel):
-    from_node: str
-    to_node: str
-    evidence_node: str
-
-class QueryRelationship(BaseModel):
-    child_node: str
-    parent1_node: str
-    parent2_node: str
-
-# probabilities
-class QueryProbTargetGivenOneEvidence(BaseModel):
-    target_node: str
-    evidence_node: str
-    evidence_state: str = "Yes"
-
-class QueryProbTargetGivenTwoEvidences(BaseModel):
-    target_node: str
-    evidence_node1: str
-    evidence_state1: str = "Yes"
-    evidence_node2: str
-    evidence_state2: str = "Yes"
-
-# explanation
-class AnswerStructure(BaseModel):
-    answer: str
 
 class BnToolBox():
     # function_name: str

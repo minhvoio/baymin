@@ -16,6 +16,8 @@ def answer_this_prompt(
     stream=False,
     model=MODEL,
     temperature=0.0,
+    top_p=None,
+    seed=None,
     format=None,                # e.g., "json" to enable JSON mode; otherwise None
     num_ctx=8000,              # <= 131072 
     max_tokens=1800,            
@@ -27,6 +29,8 @@ def answer_this_prompt(
         "stream": stream,       
         "options": {
             "temperature": temperature,
+            **({"top_p": top_p} if top_p is not None else {}),
+            **({"seed": seed} if seed is not None else {}),
             "num_ctx": num_ctx,
             "num_predict": max_tokens,
             "num_keep": num_keep
@@ -56,7 +60,7 @@ def answer_this_prompt(
                 display(Markdown(full))
         return full
 
-async def get_answer_from_ollama(prompt, model=MODEL, max_tokens=1000, temperature=0.3, stream=False, show_thinking=False):
+async def get_answer_from_ollama(prompt, model=MODEL, max_tokens=1000, temperature=0.3, stream=False, show_thinking=False, top_p=None, seed=None):
     result = await _run_ollama_agent(
         prompt=prompt,
         model=model,
@@ -64,12 +68,14 @@ async def get_answer_from_ollama(prompt, model=MODEL, max_tokens=1000, temperatu
         temperature=temperature,
         output_type=AnswerStructure,
         stream=stream,
+        top_p=top_p,
+        seed=seed,
     )
     if show_thinking:
         return result.output.answer, getattr(result.output, 'thinking', None)
     return result.output.answer
 
-async def get_quiz_answer_from_thinking_model(prompt, model=MODEL, max_tokens=1000, temperature=0, format=None, stream=False):
+async def get_quiz_answer_from_thinking_model(prompt, model=MODEL, max_tokens=1000, temperature=0, format=None, stream=False, top_p=None, seed=None):
     result = await _run_ollama_agent(
         prompt=prompt,
         model=model,
@@ -77,10 +83,12 @@ async def get_quiz_answer_from_thinking_model(prompt, model=MODEL, max_tokens=10
         temperature=temperature,
         output_type=format,
         stream=stream,
+        top_p=top_p,
+        seed=seed,
     )
     return result.output.one_letter_answer
 
-async def _run_ollama_agent(prompt, model, max_tokens, temperature, output_type, stream=False):
+async def _run_ollama_agent(prompt, model, max_tokens, temperature, output_type, stream=False, top_p=None, seed=None):
     ollama_model = OpenAIChatModel(
         model_name=model,
         provider=OllamaProvider(base_url=OLLAMA_URL + 'v1'),  
@@ -92,5 +100,7 @@ async def _run_ollama_agent(prompt, model, max_tokens, temperature, output_type,
             "max_tokens": max_tokens,
             "temperature": temperature,
             "stream": stream,
+            **({"top_p": top_p} if top_p is not None else {}),
+            **({"seed": seed} if seed is not None else {}),
         },
     )

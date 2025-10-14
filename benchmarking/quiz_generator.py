@@ -36,7 +36,7 @@ def shuffle_options(options, rng=None):
             break
     return options, correct_letter
 
-def create_question(header_question, option_list, rng=None, leading_blank=False):
+def create_question(header_question, option_list, rng=None, leading_blank=False, shuffle=False):
     """
     Build a single multiple-choice question block from a header and options.
 
@@ -55,7 +55,8 @@ def create_question(header_question, option_list, rng=None, leading_blank=False)
 
     # Work on a shallow copy so caller's list isn't mutated
     opts = list(option_list)
-    randomizer.shuffle(opts)
+    if shuffle:
+        randomizer.shuffle(opts)
 
     lines = []
     if leading_blank:
@@ -63,11 +64,17 @@ def create_question(header_question, option_list, rng=None, leading_blank=False)
     lines.append(header_question)
 
     correct_letter = None
+    structured_options = []
     for idx, (text, is_correct) in enumerate(opts):
         letter = chr(65 + idx)  # A, B, C, ...
         lines.append(f"{letter}. {text}")
         if is_correct:
             correct_letter = letter
+        structured_options.append({
+            "original_letter": letter,
+            "text": text,
+            "is_correct": bool(is_correct),
+        })
 
     # Add separators before each option for better readability
     formatted_lines = []
@@ -76,7 +83,12 @@ def create_question(header_question, option_list, rng=None, leading_blank=False)
             formatted_lines.append("--------------------------------")
         formatted_lines.append(line)
 
-    return "\n".join(formatted_lines), correct_letter
+    # Build structured quiz dict for robust downstream handling
+    quiz_dict = {
+        "header": header_question,
+        "options": structured_options,
+    }
+    return "\n".join(formatted_lines), correct_letter, quiz_dict
 
 
 def create_dependency_quiz(question, net, node1, node2, rng=None):
@@ -122,8 +134,8 @@ def create_dependency_quiz(question, net, node1, node2, rng=None):
 
         options = [opt1, opt2, opt3, opt4]
 
-    q_text, q_correct = create_question(question, options, rng=randomizer)
-    return q_text, q_correct
+    q_text, q_correct, q_dict = create_question(question, options, rng=randomizer, shuffle=False)
+    return q_text, q_correct, q_dict
 
 
 def create_common_cause_quiz(question, net, node1, node2, rng=None):
@@ -160,8 +172,8 @@ def create_common_cause_quiz(question, net, node1, node2, rng=None):
 
     options = [opt1, opt2, opt3, opt4]
 
-    q_text, q_correct = create_question(question, options, rng=randomizer)
-    return q_text, q_correct
+    q_text, q_correct, q_dict = create_question(question, options, rng=randomizer, shuffle=False)
+    return q_text, q_correct, q_dict
 
 def create_common_effect_quiz(question, net, node1, node2, rng=None):
     randomizer = rng or _random
@@ -195,8 +207,8 @@ def create_common_effect_quiz(question, net, node1, node2, rng=None):
     opt4 = ("None of the above", False)
     options = [opt1, opt2, opt3, opt4]
 
-    q_text, q_correct = create_question(question, options, rng=randomizer)
-    return q_text, q_correct
+    q_text, q_correct, q_dict = create_question(question, options, rng=randomizer, shuffle=False)
+    return q_text, q_correct, q_dict
 
 def create_blocked_evidence_quiz(question, net, node1, node2, rng=None):
     randomizer = rng or _random
@@ -229,8 +241,8 @@ def create_blocked_evidence_quiz(question, net, node1, node2, rng=None):
     opt4 = ("None of the above", False)
     options = [opt1, opt2, opt3, opt4]
 
-    q_text, q_correct = create_question(question, options, rng=randomizer)
-    return q_text, q_correct
+    q_text, q_correct, q_dict = create_question(question, options, rng=randomizer, shuffle=False)
+    return q_text, q_correct, q_dict
 
 def create_evidence_change_relationship_quiz(question: str, net, node1: str, node2: str, evidence: list[str], rng=None):
     randomizer = rng or _random
@@ -301,8 +313,8 @@ def create_evidence_change_relationship_quiz(question: str, net, node1: str, nod
     opt4 = ("None of the above", False)
     options = [opt1, opt2, opt3, opt4]
 
-    q_text, q_correct = create_question(question, options, rng=randomizer)
-    return q_text, q_correct
+    q_text, q_correct, q_dict = create_question(question, options, rng=randomizer, shuffle=False)
+    return q_text, q_correct, q_dict
 
 def create_probability_quiz(question, net, node, evidence, rng=None):
     randomizer = rng or _random
@@ -323,8 +335,8 @@ def create_probability_quiz(question, net, node, evidence, rng=None):
     opt4 = ("None of the above", False)
     options = [opt1, opt2, opt3, opt4]
 
-    q_text, q_correct = create_question(question, options, rng=randomizer)
-    return q_text, q_correct
+    q_text, q_correct, q_dict = create_question(question, options, rng=randomizer, shuffle=False)
+    return q_text, q_correct, q_dict
 
 
 def create_highest_impact_evidence_quiz(question, net, node, evidence=None, order=None, rng=None):
@@ -392,6 +404,6 @@ def create_highest_impact_evidence_quiz(question, net, node, evidence=None, orde
     
     options = [opt1, opt2, opt3, opt4]
     
-    q_text, q_correct = create_question(question, options, rng=randomizer)
-    return q_text, q_correct
+    q_text, q_correct, q_dict = create_question(question, options, rng=randomizer)
+    return q_text, q_correct, q_dict
 

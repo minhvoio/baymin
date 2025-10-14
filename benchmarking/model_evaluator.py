@@ -13,25 +13,70 @@ import asyncio
 import time
 from bn_helpers.constants import MODEL, MODEL_QUIZ
 from benchmarking.question_types import DEPENDENCY_QUESTIONS, COMMON_CAUSE_QUESTIONS, COMMON_EFFECT_QUESTIONS, BLOCKED_EVIDENCES_QUESTIONS, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, PROBABILITY_QUESTIONS, HIGHEST_IMPACT_EVIDENCE_QUESTIONS
-from pydantic import BaseModel
-from typing import Literal
 
-class QuizAnswer(BaseModel):
-    one_letter_answer: Literal['A', 'B', 'C', 'D']
+def model_do_quiz(quiz, bn_explanation, model=MODEL_QUIZ, temperature_quiz: float = 0.0, max_tokens: int = 1000, top_p: float = 0.9, quiz_dict=None):
+    """
+    Majority vote over up to 5 runs with per-run shuffling using structured quiz dict when provided.
+    - Uses temperature=0.9, top_p=0.9, seeds 0..4
+    - Early-stops when any answer reaches 3 votes
+    - Falls back to a single run on the given quiz text if no dict is provided
+    """
+    import random as _random
 
+    if not quiz_dict or not isinstance(quiz_dict, dict) or not quiz_dict.get("options"):
+        prompt = TAKE_QUIZ_PROMPT.format(quiz=quiz, bn_explanation=bn_explanation)
+        return get_quiz_answer_from_thinking_model(
+            prompt,
+            model=model,
+            max_tokens=max_tokens,
+            temperature=0.9,
+            top_p=0.9,
+            seed=0,
+        )
 
+    header = quiz_dict.get("header", "")
+    options_struct = quiz_dict["options"]  # list of {original_letter, text, is_correct}
 
-def model_do_quiz(quiz, bn_explanation, model=MODEL_QUIZ, temperature_quiz: float = 0.0):
-    prompt = TAKE_QUIZ_PROMPT.format(quiz=quiz, bn_explanation=bn_explanation)
-    res_str = answer_this_prompt(prompt, format=QuizAnswer.model_json_schema(), model=model, temperature=temperature_quiz)
-    get_res = QuizAnswer.model_validate_json(res_str)
-    res = get_res.one_letter_answer
-    # print('MODEL QUIZ:', MODEL_QUIZ)
-    # print('prompt:\n', prompt)
-    # res = generate_chat(prompt, model=MODEL_QUIZ, model="qwen2.5:7b", num_predict=5)
-    # print('res:\n', res)
-    # print('ans:\n', ans)
-    return res
+    vote_counts = {"A": 0, "B": 0, "C": 0, "D": 0}
+
+    def build_quiz_from_presented(presented):
+        out_lines = [header]
+        for idx, opt in enumerate(presented):
+            letter = chr(65 + idx)
+            out_lines.append("--------------------------------")
+            out_lines.append(f"{letter}. {opt['text']}")
+        return "\n".join(out_lines)
+
+    for i in range(5):
+        rng = _random.Random(i)
+        presented = list(options_struct)
+        rng.shuffle(presented)
+
+        mapping = {}
+        for idx, opt in enumerate(presented):
+            presented_letter = chr(65 + idx)
+            mapping[presented_letter] = opt["original_letter"]
+
+        shuffled_quiz = build_quiz_from_presented(presented)
+        prompt = TAKE_QUIZ_PROMPT.format(quiz=shuffled_quiz, bn_explanation=bn_explanation)
+
+        picked = get_quiz_answer_from_thinking_model(
+            prompt,
+            model=model,
+            max_tokens=max_tokens,
+            temperature=0.9,
+            top_p=0.9,
+            seed=i,
+        )
+
+        mapped = mapping.get(str(picked).strip().upper()[:1])
+        if mapped in vote_counts:
+            vote_counts[mapped] += 1
+        if any(count >= 3 for count in vote_counts.values()):
+            break
+
+    best_letter = max(["A", "B", "C", "D"], key=lambda L: (vote_counts[L], -ord(L)))
+    return best_letter
 
 def validate_quiz_answer_list(y_list, y_hat_list):
     score = 0
@@ -77,7 +122,7 @@ def probability_question(net, question_format=None, hasEvidence=False):
         prompt += question
         return prompt, node, question
 
-def raw_model_test(prompt, quiz, y, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True, temperature: float = 0.0, temperature_quiz: float = 0.0):
+def raw_model_test(prompt, quiz, y, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True, temperature: float = 0.0, temperature_quiz: float = 0.0, quiz_dict=None):
     try:
         loop = asyncio.get_event_loop()
         if loop.is_running():
@@ -94,7 +139,7 @@ def raw_model_test(prompt, quiz, y, model=MODEL, max_tokens=1000, model_quiz=MOD
         raw_response_time = time.time() - start_time
     
     quiz_start_time = time.time()
-    y_hat = model_do_quiz(quiz, ans, model=model_quiz, temperature_quiz=temperature_quiz)
+    y_hat = model_do_quiz(quiz, ans, model=model_quiz, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
     quiz_time = time.time() - quiz_start_time
     
     if isTesting:
@@ -103,13 +148,13 @@ def raw_model_test(prompt, quiz, y, model=MODEL, max_tokens=1000, model_quiz=MOD
     score = validate_quiz_answer(y, y_hat)
     return score, ans
 
-def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True, temperature: float = 0.0, temperature_quiz: float = 0.0):
+def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True, temperature: float = 0.0, temperature_quiz: float = 0.0, quiz_dict=None):
     start_time = time.time()
     answer, testing_log = get_answer_from_tool_agent(net, question_output, model=model, temperature=temperature, max_tokens=max_tokens, isTesting=isTesting)
     baymin_response_time = time.time() - start_time
     
     quiz_start_time = time.time()
-    y_hat = model_do_quiz(quiz, answer, model=model_quiz, temperature_quiz=temperature_quiz)
+    y_hat = model_do_quiz(quiz, answer, model=model_quiz, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
     quiz_time = time.time() - quiz_start_time
     
     score = validate_quiz_answer(y, y_hat)
@@ -150,10 +195,10 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
         print(f"Running question {question_index}")
         if hasEvidence:
             prompt, node1, node2, question_output, evidence = two_nodes_question(net, question_format=question, hasEvidence=hasEvidence)
-            quiz, y = create_quiz_function(question_output, net, node1, node2, evidence)
+            quiz, y, quiz_dict = create_quiz_function(question_output, net, node1, node2, evidence)
         else:
             prompt, node1, node2, question_output = two_nodes_question(net, question_format=question, hasEvidence=hasEvidence)
-            quiz, y = create_quiz_function(question_output, net, node1, node2)
+            quiz, y, quiz_dict = create_quiz_function(question_output, net, node1, node2)
             evidence = None
         
         if isTesting:
@@ -162,7 +207,7 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
         if test_baymin_only:
             # Only run BayMin test
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz)
+            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
             baymin_runtime = time.time() - start_time
             raw_model_score, raw_model_answer = 0, "N/A (BayMin only)"
             raw_model_runtime = None
@@ -170,11 +215,11 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
         else:
             # Run both tests
             start_time = time.time()
-            raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz)
+            raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
             raw_model_runtime = time.time() - start_time
             
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz)
+            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
             baymin_runtime = time.time() - start_time
             
             raw_model_total_score += raw_model_score
@@ -239,7 +284,7 @@ def evidence_change_relationship_test(net, model=MODEL, model_quiz=MODEL_QUIZ, m
     return elementary_test(net, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, create_evidence_change_relationship_quiz, model=model, \
     model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only, temperature=temperature, temperature_quiz=temperature_quiz)
 
-def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, \
+def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, 
     max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, temperature: float = 0.0, temperature_quiz: float = 0.0):
     
     raw_model_total_score = 0
@@ -268,10 +313,10 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
         print(f"Running question {question_index}")
         if hasEvidence:
             prompt, node, question_output, evidence = probability_question(net, question_format=question, hasEvidence=hasEvidence)
-            quiz, y = create_quiz_function(question_output, net, node, evidence)
+            quiz, y, quiz_dict = create_quiz_function(question_output, net, node, evidence)
         else:
             prompt, node, question_output = probability_question(net, question_format=question, hasEvidence=hasEvidence)
-            quiz, y = create_quiz_function(question_output, net, node)
+            quiz, y, quiz_dict = create_quiz_function(question_output, net, node)
             evidence = None
         
         if isTesting:
@@ -280,7 +325,7 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
         if test_baymin_only:
             # Only run BayMin test
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz)
+            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
             baymin_runtime = time.time() - start_time
             raw_model_score, raw_model_answer = 0, "N/A (BayMin only)"
             raw_model_runtime = None
@@ -288,11 +333,11 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
         else:
             # Run both tests
             start_time = time.time()
-            raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz)
+            raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
             raw_model_runtime = time.time() - start_time
             
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz)
+            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
             baymin_runtime = time.time() - start_time
             
             raw_model_total_score += raw_model_score
