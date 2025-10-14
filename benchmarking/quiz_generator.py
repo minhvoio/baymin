@@ -256,7 +256,7 @@ def create_evidence_change_relationship_quiz(question: str, net, node1: str, nod
     # Option 2: Reverse the detailed explanation (common effect <-> common cause/chain)
     fake_answer2 = correct_answer
     if changed:
-        # Try to reverse the detailed explanation
+        # reverse the detailed explanation
         if "common effect (collider)" in fake_answer2:
             # Replace collider explanation with common cause explanation
             fake_answer2 = fake_answer2.replace("common effect (collider)", "common cause")

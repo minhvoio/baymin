@@ -254,8 +254,6 @@ class BnToolBox():
     def does_evidence_change_dependency_XY(self, net, X: str, Y: str, evidence: Optional[Union[Dict[str, Any], Sequence[Any], str]]) -> Tuple[bool, Dict[str, Any]]:
 
         node_names, display_items = self._normalize_evidence_inputs(net, evidence)
-        
-        # Validate that X and Y exist in the network
         self._validate_nodes_exist(net, X, Y)
         
         if not node_names:
