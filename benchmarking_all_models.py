@@ -20,7 +20,7 @@ net_5, net_10, net_30, net_60 = load_nets_from_parquet(os.path.join(data_output,
 list_of_nets = [net_5, net_10, net_30, net_60]
 NUM_QUESTIONS = 30
 MAX_TOKENS = 1800
-IS_TESTING = True
+IS_OUTPUT_LOG = True
 
 
 QWEN_MODEL = "qwen3:8b"
@@ -39,7 +39,7 @@ net = net_5
 for MODEL in MODEL_LIST:
     try:
         retry_test_with_backoff(dependency_test, net, max_retries=5, base_delay=2, max_delay=30,\
-            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False, \
+            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, is_output_log=IS_OUTPUT_LOG, model=MODEL, test_baymin_only=False, \
                 model_temperature=MODEL_TEMPERATURE, model_top_p=MODEL_TOP_P, model_quiz_temperature=MODEL_QUIZ_TEMPERATURE, model_quiz_top_p=MODEL_QUIZ_TOP_P)
     except Exception as e:
         print(f"dependency_test failed completely: {str(e)}")
@@ -47,7 +47,7 @@ for MODEL in MODEL_LIST:
 
     try:
         retry_test_with_backoff(common_cause_test, net, max_retries=5, base_delay=2, max_delay=30,\
-            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False,\
+            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, is_output_log=IS_OUTPUT_LOG, model=MODEL, test_baymin_only=False,\
             model_temperature=MODEL_TEMPERATURE, model_top_p=MODEL_TOP_P, model_quiz_temperature=MODEL_QUIZ_TEMPERATURE, model_quiz_top_p=MODEL_QUIZ_TOP_P)
     except Exception as e:
         print(f"common_cause_test failed completely: {str(e)}")
@@ -55,7 +55,7 @@ for MODEL in MODEL_LIST:
 
     try:
         retry_test_with_backoff(common_effect_test, net, max_retries=5, base_delay=2, max_delay=30,\
-            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False,\
+            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, is_output_log=IS_OUTPUT_LOG, model=MODEL, test_baymin_only=False,\
             model_temperature=MODEL_TEMPERATURE, model_top_p=MODEL_TOP_P, model_quiz_temperature=MODEL_QUIZ_TEMPERATURE, model_quiz_top_p=MODEL_QUIZ_TOP_P)
     except Exception as e:
         print(f"common_effect_test failed completely: {str(e)}")
@@ -63,7 +63,7 @@ for MODEL in MODEL_LIST:
 
     try:
         retry_test_with_backoff(blocked_evidence_test, net, max_retries=5, base_delay=2, max_delay=30,\
-            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False,\
+            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, is_output_log=IS_OUTPUT_LOG, model=MODEL, test_baymin_only=False,\
             model_temperature=MODEL_TEMPERATURE, model_top_p=MODEL_TOP_P, model_quiz_temperature=MODEL_QUIZ_TEMPERATURE, model_quiz_top_p=MODEL_QUIZ_TOP_P)
     except Exception as e:
         print(f"blocked_evidence_test failed completely: {str(e)}")
@@ -71,7 +71,7 @@ for MODEL in MODEL_LIST:
 
     try:
         retry_test_with_backoff(evidence_change_relationship_test, net, max_retries=5, base_delay=2, max_delay=30,\
-            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False,\
+            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, is_output_log=IS_OUTPUT_LOG, model=MODEL, test_baymin_only=False,\
             model_temperature=MODEL_TEMPERATURE, model_top_p=MODEL_TOP_P, model_quiz_temperature=MODEL_QUIZ_TEMPERATURE, model_quiz_top_p=MODEL_QUIZ_TOP_P)
     except Exception as e:
         print(f"evidence_change_relationship_test failed completely: {str(e)}")
@@ -79,7 +79,7 @@ for MODEL in MODEL_LIST:
 
     try:
         retry_test_with_backoff(probability_test, net, max_retries=5, base_delay=2, max_delay=30,\
-            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False,\
+            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, is_output_log=IS_OUTPUT_LOG, model=MODEL, test_baymin_only=False,\
             model_temperature=MODEL_TEMPERATURE, model_top_p=MODEL_TOP_P, model_quiz_temperature=MODEL_QUIZ_TEMPERATURE, model_quiz_top_p=MODEL_QUIZ_TOP_P)
     except Exception as e:
         print(f"probability_test failed completely: {str(e)}")

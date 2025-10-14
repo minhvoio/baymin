@@ -100,11 +100,11 @@ def validate_quiz_answer(y, y_hat):
     else:
         return 0
 
-def two_nodes_question(net, question_format=None, hasEvidence=False):
+def two_nodes_question(net, question_format=None, has_evidence=False):
     node1, node2 = pick_two_random_nodes(net)
     bn = get_BN_structure(net)
     prompt = f"In this Bayesian Network:\n{bn}\n"
-    if hasEvidence:
+    if has_evidence:
         evidence = generate_evidence_nodes(net, (node1, node2))
         evidence_str = ", ".join(evidence) if evidence else "∅"
         question = question_format.format(node1=node1, node2=node2, evidence=evidence_str)
@@ -115,12 +115,12 @@ def two_nodes_question(net, question_format=None, hasEvidence=False):
         prompt += question
         return prompt, node1, node2, question
 
-def probability_question(net, question_format=None, hasEvidence=False):
+def probability_question(net, question_format=None, has_evidence=False):
     node = pick_one_random_node(net)
     bn = get_BN_structure(net)
     prompt = f"In this Bayesian Network:\n{bn}\n"
     prompt += f"CPT:\n{getNetCPTStrings(net)}\n"
-    if hasEvidence:
+    if has_evidence:
         evidence = generate_evidence_nodes(net, (node,))
         evidence_str = ", ".join(evidence) if evidence else "∅"
         question = question_format.format(node=node, evidence=evidence_str)
@@ -139,7 +139,7 @@ def raw_model_test(
     model=MODEL,
     max_tokens=1000,
     model_quiz=MODEL_QUIZ,
-    isTesting=True,
+    is_output_log=False,
     quiz_dict=None,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
@@ -200,7 +200,7 @@ def raw_model_test(
     )
     quiz_time = time.time() - quiz_start_time
     
-    if isTesting:
+    if is_output_log:
         print(f"[Raw Model Testing] Response time: {raw_response_time:.2f}s, Quiz time: {quiz_time:.2f}s, Total: {raw_response_time + quiz_time:.2f}s")
     
     score = validate_quiz_answer(y, y_hat)
@@ -215,7 +215,7 @@ def baymin_test(
     model=MODEL,
     max_tokens=1000,
     model_quiz=MODEL_QUIZ,
-    isTesting=True,
+    is_output_log=False,
     quiz_dict=None,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
@@ -231,7 +231,7 @@ def baymin_test(
         model=model,
         temperature=effective_model_temp,
         max_tokens=max_tokens,
-        isTesting=isTesting,
+        isTesting=is_output_log,
     )
     baymin_response_time = time.time() - start_time
     
@@ -249,7 +249,7 @@ def baymin_test(
     
     score = validate_quiz_answer(y, y_hat)
 
-    if isTesting:
+    if is_output_log:
         print(f"[BayMin Testing] Response time: {baymin_response_time:.2f}s, Quiz time: {quiz_time:.2f}s, Total: {baymin_response_time + quiz_time:.2f}s")
 
     if score < 1:
@@ -265,10 +265,10 @@ def elementary_test(
     *,
     model=MODEL,
     model_quiz=MODEL_QUIZ,
-    hasEvidence=False,
+    has_evidence=False,
     max_tokens=1000,
     num_questions=30,
-    isTesting=True,
+    is_output_log=False,
     test_baymin_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
@@ -299,15 +299,15 @@ def elementary_test(
             continue
             
         print(f"Running question {question_index}")
-        if hasEvidence:
-            prompt, node1, node2, question_output, evidence = two_nodes_question(net, question_format=question, hasEvidence=hasEvidence)
+        if has_evidence:
+            prompt, node1, node2, question_output, evidence = two_nodes_question(net, question_format=question, has_evidence=has_evidence)
             quiz, y, quiz_dict = create_quiz_function(question_output, net, node1, node2, evidence)
         else:
-            prompt, node1, node2, question_output = two_nodes_question(net, question_format=question, hasEvidence=hasEvidence)
+            prompt, node1, node2, question_output = two_nodes_question(net, question_format=question, has_evidence=has_evidence)
             quiz, y, quiz_dict = create_quiz_function(question_output, net, node1, node2)
             evidence = None
         
-        if isTesting:
+        if is_output_log:
             print(f"[Testing Mode] Question {question_index}: {question_output[:100]}{'...' if len(question_output) > 100 else ''}")
 
         if test_baymin_only:
@@ -321,7 +321,7 @@ def elementary_test(
                 model=model,
                 max_tokens=max_tokens,
                 model_quiz=model_quiz,
-                isTesting=isTesting,
+                is_output_log=is_output_log,
                 quiz_dict=quiz_dict,
                 model_temperature=model_temperature,
                 model_quiz_temperature=model_quiz_temperature,
@@ -342,7 +342,7 @@ def elementary_test(
                 model=model,
                 max_tokens=max_tokens,
                 model_quiz=model_quiz,
-                isTesting=isTesting,
+                is_output_log=is_output_log,
                 quiz_dict=quiz_dict,
                 model_temperature=model_temperature,
                 model_quiz_temperature=model_quiz_temperature,
@@ -360,7 +360,7 @@ def elementary_test(
                 model=model,
                 max_tokens=max_tokens,
                 model_quiz=model_quiz,
-                isTesting=isTesting,
+                is_output_log=is_output_log,
                 quiz_dict=quiz_dict,
                 model_temperature=model_temperature,
                 model_quiz_temperature=model_quiz_temperature,
@@ -386,7 +386,7 @@ def elementary_test(
             baymin_score=baymin_score,
             question_output=question_output,  # optional
             prompt=prompt,  # optional
-            hasEvidence=hasEvidence,  # optional
+            hasEvidence=has_evidence,  # optional
             max_tokens=max_tokens,  # optional
             network_size=network_size,  # optional
             node1=node1,  # optional
@@ -418,7 +418,7 @@ def dependency_test(
     model_quiz=MODEL_QUIZ,
     max_tokens=1000,
     num_questions=30,
-    isTesting=True,
+    is_output_log=False,
     test_baymin_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
@@ -433,7 +433,7 @@ def dependency_test(
         model_quiz=model_quiz,
         max_tokens=max_tokens,
         num_questions=num_questions,
-        isTesting=isTesting,
+        is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
@@ -448,7 +448,7 @@ def common_cause_test(
     model_quiz=MODEL_QUIZ,
     max_tokens=1000,
     num_questions=30,
-    isTesting=True,
+    is_output_log=False,
     test_baymin_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
@@ -463,7 +463,7 @@ def common_cause_test(
         model_quiz=model_quiz,
         max_tokens=max_tokens,
         num_questions=num_questions,
-        isTesting=isTesting,
+        is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
@@ -478,7 +478,7 @@ def common_effect_test(
     model_quiz=MODEL_QUIZ,
     max_tokens=1000,
     num_questions=30,
-    isTesting=True,
+    is_output_log=False,
     test_baymin_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
@@ -493,7 +493,7 @@ def common_effect_test(
         model_quiz=model_quiz,
         max_tokens=max_tokens,
         num_questions=num_questions,
-        isTesting=isTesting,
+        is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
@@ -508,7 +508,7 @@ def blocked_evidence_test(
     model_quiz=MODEL_QUIZ,
     max_tokens=1000,
     num_questions=30,
-    isTesting=True,
+    is_output_log=False,
     test_baymin_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
@@ -523,7 +523,7 @@ def blocked_evidence_test(
         model_quiz=model_quiz,
         max_tokens=max_tokens,
         num_questions=num_questions,
-        isTesting=isTesting,
+        is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
@@ -538,8 +538,8 @@ def evidence_change_relationship_test(
     model_quiz=MODEL_QUIZ,
     max_tokens=1000,
     num_questions=30,
-    hasEvidence=True,
-    isTesting=True,
+    has_evidence=True,
+    is_output_log=False,
     test_baymin_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
@@ -554,8 +554,8 @@ def evidence_change_relationship_test(
         model_quiz=model_quiz,
         max_tokens=max_tokens,
         num_questions=num_questions,
-        hasEvidence=hasEvidence,
-        isTesting=isTesting,
+        has_evidence=has_evidence,
+        is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
@@ -570,10 +570,10 @@ def numerical_test(
     *,
     model=MODEL,
     model_quiz=MODEL_QUIZ,
-    hasEvidence=False,
+    has_evidence=False,
     max_tokens=1000,
     num_questions=30,
-    isTesting=True,
+    is_output_log=False,
     test_baymin_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
@@ -605,15 +605,15 @@ def numerical_test(
             continue
             
         print(f"Running question {question_index}")
-        if hasEvidence:
-            prompt, node, question_output, evidence = probability_question(net, question_format=question, hasEvidence=hasEvidence)
+        if has_evidence:
+            prompt, node, question_output, evidence = probability_question(net, question_format=question, has_evidence=has_evidence)
             quiz, y, quiz_dict = create_quiz_function(question_output, net, node, evidence)
         else:
-            prompt, node, question_output = probability_question(net, question_format=question, hasEvidence=hasEvidence)
+            prompt, node, question_output = probability_question(net, question_format=question, has_evidence=has_evidence)
             quiz, y, quiz_dict = create_quiz_function(question_output, net, node)
             evidence = None
         
-        if isTesting:
+        if is_output_log:
             print(f"[Testing Mode] Question {question_index}: {question_output[:100]}{'...' if len(question_output) > 100 else ''}")
 
         if test_baymin_only:
@@ -627,7 +627,7 @@ def numerical_test(
                 model=model,
                 max_tokens=max_tokens,
                 model_quiz=model_quiz,
-                isTesting=isTesting,
+                is_output_log=is_output_log,
                 quiz_dict=quiz_dict,
                 model_temperature=model_temperature,
                 model_quiz_temperature=model_quiz_temperature,
@@ -648,7 +648,7 @@ def numerical_test(
                 model=model,
                 max_tokens=max_tokens,
                 model_quiz=model_quiz,
-                isTesting=isTesting,
+                is_output_log=is_output_log,
                 quiz_dict=quiz_dict,
                 model_temperature=model_temperature,
                 model_quiz_temperature=model_quiz_temperature,
@@ -666,7 +666,7 @@ def numerical_test(
                 model=model,
                 max_tokens=max_tokens,
                 model_quiz=model_quiz,
-                isTesting=isTesting,
+                is_output_log=is_output_log,
                 quiz_dict=quiz_dict,
                 model_temperature=model_temperature,
                 model_quiz_temperature=model_quiz_temperature,
@@ -692,7 +692,7 @@ def numerical_test(
             baymin_score=baymin_score,
             question_output=question_output,  # optional
             prompt=prompt,  # optional
-            hasEvidence=hasEvidence,  # optional
+            hasEvidence=has_evidence,  # optional
             max_tokens=max_tokens,  # optional
             network_size=network_size,  # optional
             node=node,  # optional
@@ -723,8 +723,8 @@ def probability_test(
     model_quiz=MODEL_QUIZ,
     max_tokens=1000,
     num_questions=30,
-    hasEvidence=True,
-    isTesting=True,
+    has_evidence=True,
+    is_output_log=False,
     test_baymin_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
@@ -739,8 +739,8 @@ def probability_test(
         model_quiz=model_quiz,
         max_tokens=max_tokens,
         num_questions=num_questions,
-        hasEvidence=hasEvidence,
-        isTesting=isTesting,
+        has_evidence=has_evidence,
+        is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
@@ -755,8 +755,8 @@ def highest_impact_evidence_test(
     model_quiz=MODEL_QUIZ,
     max_tokens=1000,
     num_questions=30,
-    hasEvidence=False,
-    isTesting=True,
+    has_evidence=False,
+    is_output_log=False,
     test_baymin_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
@@ -771,8 +771,8 @@ def highest_impact_evidence_test(
         model_quiz=model_quiz,
         max_tokens=max_tokens,
         num_questions=num_questions,
-        hasEvidence=hasEvidence,
-        isTesting=isTesting,
+        has_evidence=has_evidence,
+        is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
