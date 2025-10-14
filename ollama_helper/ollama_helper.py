@@ -4,7 +4,7 @@ from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.ollama import OllamaProvider
 from bn_helpers.constants import MODEL, OLLAMA_URL
-from ollama_helper.structure_output import AnswerStructure
+from ollama_helper.structure_output import AnswerStructure, QuizAnswer
 try:
     import nest_asyncio
     nest_asyncio.apply()
@@ -75,13 +75,13 @@ async def get_answer_from_ollama(prompt, model=MODEL, max_tokens=1000, temperatu
         return result.output.answer, getattr(result.output, 'thinking', None)
     return result.output.answer
 
-async def get_quiz_answer_from_thinking_model(prompt, model=MODEL, max_tokens=1000, temperature=0, format=None, stream=False, top_p=None, seed=None):
+async def get_quiz_answer_from_thinking_model(prompt, model=MODEL, max_tokens=1000, temperature=0, stream=False, top_p=None, seed=None):
     result = await _run_ollama_agent(
         prompt=prompt,
         model=model,
         max_tokens=max_tokens,
         temperature=temperature,
-        output_type=format,
+        output_type=QuizAnswer,
         stream=stream,
         top_p=top_p,
         seed=seed,

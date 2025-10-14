@@ -14,7 +14,16 @@ import time
 from bn_helpers.constants import MODEL, MODEL_QUIZ
 from benchmarking.question_types import DEPENDENCY_QUESTIONS, COMMON_CAUSE_QUESTIONS, COMMON_EFFECT_QUESTIONS, BLOCKED_EVIDENCES_QUESTIONS, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, PROBABILITY_QUESTIONS, HIGHEST_IMPACT_EVIDENCE_QUESTIONS
 
-def model_do_quiz(quiz, bn_explanation, model=MODEL_QUIZ, temperature_quiz: float = 0.9, max_tokens: int = 1000, top_p: float = 0.9, quiz_dict=None):
+def model_do_quiz(
+    quiz,
+    bn_explanation,
+    *,
+    model=MODEL_QUIZ,
+    temperature_quiz: float = 0.7,
+    max_tokens: int = 1000,
+    top_p: float = 0.9,
+    quiz_dict=None,
+):
     """
     Majority vote over up to 5 runs with per-run shuffling using structured quiz dict when provided.
     - Uses temperature=0.9, top_p=0.9, seeds 0..4
@@ -122,24 +131,73 @@ def probability_question(net, question_format=None, hasEvidence=False):
         prompt += question
         return prompt, node, question
 
-def raw_model_test(prompt, quiz, y, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True, temperature: float = 0.0, temperature_quiz: float = 0.0, quiz_dict=None):
+def raw_model_test(
+    prompt,
+    quiz,
+    y,
+    *,
+    model=MODEL,
+    max_tokens=1000,
+    model_quiz=MODEL_QUIZ,
+    isTesting=True,
+    quiz_dict=None,
+    model_temperature: float = 0.0,
+    model_quiz_temperature: float = 0.7,
+    model_top_p: float = 1.0,
+    model_quiz_top_p: float = 0.9,
+):
+    # Model-specific params only
+    effective_model_temp = model_temperature
+    effective_quiz_temp = model_quiz_temperature
     try:
         loop = asyncio.get_event_loop()
         if loop.is_running():
             start_time = time.time()
-            ans = loop.run_until_complete(get_answer_from_ollama(prompt, model=model, max_tokens=max_tokens, temperature=temperature))
+            ans = loop.run_until_complete(
+                get_answer_from_ollama(
+                    prompt,
+                    model=model,
+                    max_tokens=max_tokens,
+                    temperature=effective_model_temp,
+                    top_p=model_top_p,
+                )
+            )
             raw_response_time = time.time() - start_time
         else:
             start_time = time.time()
-            ans = loop.run_until_complete(get_answer_from_ollama(prompt, model=model, max_tokens=max_tokens, temperature=temperature))
+            ans = loop.run_until_complete(
+                get_answer_from_ollama(
+                    prompt,
+                    model=model,
+                    max_tokens=max_tokens,
+                    temperature=effective_model_temp,
+                    top_p=model_top_p,
+                )
+            )
             raw_response_time = time.time() - start_time
     except RuntimeError:
         start_time = time.time()
-        ans = asyncio.run(get_answer_from_ollama(prompt, model=model, max_tokens=max_tokens, temperature=temperature))
+        ans = asyncio.run(
+            get_answer_from_ollama(
+                prompt,
+                model=model,
+                max_tokens=max_tokens,
+                temperature=effective_model_temp,
+                top_p=model_top_p,
+            )
+        )
         raw_response_time = time.time() - start_time
     
     quiz_start_time = time.time()
-    y_hat = model_do_quiz(quiz, ans, model=model_quiz, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
+    y_hat = model_do_quiz(
+        quiz,
+        ans,
+        model=model_quiz,
+        temperature_quiz=effective_quiz_temp,
+        max_tokens=max_tokens,
+        top_p=model_quiz_top_p,
+        quiz_dict=quiz_dict,
+    )
     quiz_time = time.time() - quiz_start_time
     
     if isTesting:
@@ -148,13 +206,45 @@ def raw_model_test(prompt, quiz, y, model=MODEL, max_tokens=1000, model_quiz=MOD
     score = validate_quiz_answer(y, y_hat)
     return score, ans
 
-def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True, temperature: float = 0.0, temperature_quiz: float = 0.0, quiz_dict=None):
+def baymin_test(
+    net,
+    quiz,
+    y,
+    question_output,
+    *,
+    model=MODEL,
+    max_tokens=1000,
+    model_quiz=MODEL_QUIZ,
+    isTesting=True,
+    quiz_dict=None,
+    model_temperature: float = 0.0,
+    model_quiz_temperature: float = 0.7,
+    model_top_p: float = 1.0,
+    model_quiz_top_p: float = 0.9,
+):
+    effective_model_temp = model_temperature
+    effective_quiz_temp = model_quiz_temperature
     start_time = time.time()
-    answer, testing_log = get_answer_from_tool_agent(net, question_output, model=model, temperature=temperature, max_tokens=max_tokens, isTesting=isTesting)
+    answer, testing_log = get_answer_from_tool_agent(
+        net,
+        question_output,
+        model=model,
+        temperature=effective_model_temp,
+        max_tokens=max_tokens,
+        isTesting=isTesting,
+    )
     baymin_response_time = time.time() - start_time
     
     quiz_start_time = time.time()
-    y_hat = model_do_quiz(quiz, answer, model=model_quiz, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
+    y_hat = model_do_quiz(
+        quiz,
+        answer,
+        model=model_quiz,
+        temperature_quiz=effective_quiz_temp,
+        max_tokens=max_tokens,
+        top_p=model_quiz_top_p,
+        quiz_dict=quiz_dict,
+    )
     quiz_time = time.time() - quiz_start_time
     
     score = validate_quiz_answer(y, y_hat)
@@ -168,7 +258,23 @@ def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, mod
     return score, answer
 
 # DEPENDENCY TEST
-def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, temperature: float = 0.0, temperature_quiz: float = 0.0):
+def elementary_test(
+    net,
+    question_set,
+    create_quiz_function,
+    *,
+    model=MODEL,
+    model_quiz=MODEL_QUIZ,
+    hasEvidence=False,
+    max_tokens=1000,
+    num_questions=30,
+    isTesting=True,
+    test_baymin_only=False,
+    model_temperature: float = 0.0,
+    model_quiz_temperature: float = 0.7,
+    model_top_p: float = 1.0,
+    model_quiz_top_p: float = 0.9,
+):
     raw_model_total_score = 0
     baymin_total_score = 0
     
@@ -207,7 +313,21 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
         if test_baymin_only:
             # Only run BayMin test
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
+            baymin_score, baymin_answer = baymin_test(
+                net,
+                quiz,
+                y,
+                question_output,
+                model=model,
+                max_tokens=max_tokens,
+                model_quiz=model_quiz,
+                isTesting=isTesting,
+                quiz_dict=quiz_dict,
+                model_temperature=model_temperature,
+                model_quiz_temperature=model_quiz_temperature,
+                model_top_p=model_top_p,
+                model_quiz_top_p=model_quiz_top_p,
+            )
             baymin_runtime = time.time() - start_time
             raw_model_score, raw_model_answer = 0, "N/A (BayMin only)"
             raw_model_runtime = None
@@ -215,11 +335,38 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
         else:
             # Run both tests
             start_time = time.time()
-            raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
+            raw_model_score, raw_model_answer = raw_model_test(
+                prompt,
+                quiz,
+                y,
+                model=model,
+                max_tokens=max_tokens,
+                model_quiz=model_quiz,
+                isTesting=isTesting,
+                quiz_dict=quiz_dict,
+                model_temperature=model_temperature,
+                model_quiz_temperature=model_quiz_temperature,
+                model_top_p=model_top_p,
+                model_quiz_top_p=model_quiz_top_p,
+            )
             raw_model_runtime = time.time() - start_time
             
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
+            baymin_score, baymin_answer = baymin_test(
+                net,
+                quiz,
+                y,
+                question_output,
+                model=model,
+                max_tokens=max_tokens,
+                model_quiz=model_quiz,
+                isTesting=isTesting,
+                quiz_dict=quiz_dict,
+                model_temperature=model_temperature,
+                model_quiz_temperature=model_quiz_temperature,
+                model_top_p=model_top_p,
+                model_quiz_top_p=model_quiz_top_p,
+            )
             baymin_runtime = time.time() - start_time
             
             raw_model_total_score += raw_model_score
@@ -264,28 +411,175 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
     print(f"Test completed: {total_questions_run} new questions run, {len(completed_questions)} skipped")
     return final_raw_score, final_baymin_score
 
-def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, temperature: float = 0.0, temperature_quiz: float = 0.0):
-    return elementary_test(net, DEPENDENCY_QUESTIONS, create_dependency_quiz, model=model, model_quiz=model_quiz, \
-        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only, temperature=temperature, temperature_quiz=temperature_quiz)
+def dependency_test(
+    net,
+    *,
+    model=MODEL,
+    model_quiz=MODEL_QUIZ,
+    max_tokens=1000,
+    num_questions=30,
+    isTesting=True,
+    test_baymin_only=False,
+    model_temperature: float = 0.0,
+    model_quiz_temperature: float = 0.7,
+    model_top_p: float = 1.0,
+    model_quiz_top_p: float = 0.9,
+):
+    return elementary_test(
+        net,
+        DEPENDENCY_QUESTIONS,
+        create_dependency_quiz,
+        model=model,
+        model_quiz=model_quiz,
+        max_tokens=max_tokens,
+        num_questions=num_questions,
+        isTesting=isTesting,
+        test_baymin_only=test_baymin_only,
+        model_temperature=model_temperature,
+        model_quiz_temperature=model_quiz_temperature,
+        model_top_p=model_top_p,
+        model_quiz_top_p=model_quiz_top_p,
+    )
 
-def common_cause_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, temperature: float = 0.0, temperature_quiz: float = 0.0):
-    return elementary_test(net, COMMON_CAUSE_QUESTIONS, create_common_cause_quiz, model=model, model_quiz=model_quiz, \
-        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only, temperature=temperature, temperature_quiz=temperature_quiz)
+def common_cause_test(
+    net,
+    *,
+    model=MODEL,
+    model_quiz=MODEL_QUIZ,
+    max_tokens=1000,
+    num_questions=30,
+    isTesting=True,
+    test_baymin_only=False,
+    model_temperature: float = 0.0,
+    model_quiz_temperature: float = 0.7,
+    model_top_p: float = 1.0,
+    model_quiz_top_p: float = 0.9,
+):
+    return elementary_test(
+        net,
+        COMMON_CAUSE_QUESTIONS,
+        create_common_cause_quiz,
+        model=model,
+        model_quiz=model_quiz,
+        max_tokens=max_tokens,
+        num_questions=num_questions,
+        isTesting=isTesting,
+        test_baymin_only=test_baymin_only,
+        model_temperature=model_temperature,
+        model_quiz_temperature=model_quiz_temperature,
+        model_top_p=model_top_p,
+        model_quiz_top_p=model_quiz_top_p,
+    )
 
-def common_effect_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, temperature: float = 0.0, temperature_quiz: float = 0.0):
-    return elementary_test(net, COMMON_EFFECT_QUESTIONS, create_common_effect_quiz, model=model, model_quiz=model_quiz, \
-        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only, temperature=temperature, temperature_quiz=temperature_quiz)
+def common_effect_test(
+    net,
+    *,
+    model=MODEL,
+    model_quiz=MODEL_QUIZ,
+    max_tokens=1000,
+    num_questions=30,
+    isTesting=True,
+    test_baymin_only=False,
+    model_temperature: float = 0.0,
+    model_quiz_temperature: float = 0.7,
+    model_top_p: float = 1.0,
+    model_quiz_top_p: float = 0.9,
+):
+    return elementary_test(
+        net,
+        COMMON_EFFECT_QUESTIONS,
+        create_common_effect_quiz,
+        model=model,
+        model_quiz=model_quiz,
+        max_tokens=max_tokens,
+        num_questions=num_questions,
+        isTesting=isTesting,
+        test_baymin_only=test_baymin_only,
+        model_temperature=model_temperature,
+        model_quiz_temperature=model_quiz_temperature,
+        model_top_p=model_top_p,
+        model_quiz_top_p=model_quiz_top_p,
+    )
 
-def blocked_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, temperature: float = 0.0, temperature_quiz: float = 0.0):
-    return elementary_test(net, BLOCKED_EVIDENCES_QUESTIONS, create_blocked_evidence_quiz, model=model, model_quiz=model_quiz, \
-        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only, temperature=temperature, temperature_quiz=temperature_quiz)
+def blocked_evidence_test(
+    net,
+    *,
+    model=MODEL,
+    model_quiz=MODEL_QUIZ,
+    max_tokens=1000,
+    num_questions=30,
+    isTesting=True,
+    test_baymin_only=False,
+    model_temperature: float = 0.0,
+    model_quiz_temperature: float = 0.7,
+    model_top_p: float = 1.0,
+    model_quiz_top_p: float = 0.9,
+):
+    return elementary_test(
+        net,
+        BLOCKED_EVIDENCES_QUESTIONS,
+        create_blocked_evidence_quiz,
+        model=model,
+        model_quiz=model_quiz,
+        max_tokens=max_tokens,
+        num_questions=num_questions,
+        isTesting=isTesting,
+        test_baymin_only=test_baymin_only,
+        model_temperature=model_temperature,
+        model_quiz_temperature=model_quiz_temperature,
+        model_top_p=model_top_p,
+        model_quiz_top_p=model_quiz_top_p,
+    )
 
-def evidence_change_relationship_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=True, isTesting=True, test_baymin_only=False, temperature: float = 0.0, temperature_quiz: float = 0.0):
-    return elementary_test(net, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, create_evidence_change_relationship_quiz, model=model, \
-    model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only, temperature=temperature, temperature_quiz=temperature_quiz)
+def evidence_change_relationship_test(
+    net,
+    *,
+    model=MODEL,
+    model_quiz=MODEL_QUIZ,
+    max_tokens=1000,
+    num_questions=30,
+    hasEvidence=True,
+    isTesting=True,
+    test_baymin_only=False,
+    model_temperature: float = 0.0,
+    model_quiz_temperature: float = 0.7,
+    model_top_p: float = 1.0,
+    model_quiz_top_p: float = 0.9,
+):
+    return elementary_test(
+        net,
+        EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS,
+        create_evidence_change_relationship_quiz,
+        model=model,
+        model_quiz=model_quiz,
+        max_tokens=max_tokens,
+        num_questions=num_questions,
+        hasEvidence=hasEvidence,
+        isTesting=isTesting,
+        test_baymin_only=test_baymin_only,
+        model_temperature=model_temperature,
+        model_quiz_temperature=model_quiz_temperature,
+        model_top_p=model_top_p,
+        model_quiz_top_p=model_quiz_top_p,
+    )
 
-def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, 
-    max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, temperature: float = 0.0, temperature_quiz: float = 0.0):
+def numerical_test(
+    net,
+    question_set,
+    create_quiz_function,
+    *,
+    model=MODEL,
+    model_quiz=MODEL_QUIZ,
+    hasEvidence=False,
+    max_tokens=1000,
+    num_questions=30,
+    isTesting=True,
+    test_baymin_only=False,
+    model_temperature: float = 0.0,
+    model_quiz_temperature: float = 0.7,
+    model_top_p: float = 1.0,
+    model_quiz_top_p: float = 0.9,
+):
     
     raw_model_total_score = 0
     baymin_total_score = 0
@@ -325,7 +619,21 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
         if test_baymin_only:
             # Only run BayMin test
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
+            baymin_score, baymin_answer = baymin_test(
+                net,
+                quiz,
+                y,
+                question_output,
+                model=model,
+                max_tokens=max_tokens,
+                model_quiz=model_quiz,
+                isTesting=isTesting,
+                quiz_dict=quiz_dict,
+                model_temperature=model_temperature,
+                model_quiz_temperature=model_quiz_temperature,
+                model_top_p=model_top_p,
+                model_quiz_top_p=model_quiz_top_p,
+            )
             baymin_runtime = time.time() - start_time
             raw_model_score, raw_model_answer = 0, "N/A (BayMin only)"
             raw_model_runtime = None
@@ -333,11 +641,38 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
         else:
             # Run both tests
             start_time = time.time()
-            raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
+            raw_model_score, raw_model_answer = raw_model_test(
+                prompt,
+                quiz,
+                y,
+                model=model,
+                max_tokens=max_tokens,
+                model_quiz=model_quiz,
+                isTesting=isTesting,
+                quiz_dict=quiz_dict,
+                model_temperature=model_temperature,
+                model_quiz_temperature=model_quiz_temperature,
+                model_top_p=model_top_p,
+                model_quiz_top_p=model_quiz_top_p,
+            )
             raw_model_runtime = time.time() - start_time
             
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, temperature=temperature, temperature_quiz=temperature_quiz, quiz_dict=quiz_dict)
+            baymin_score, baymin_answer = baymin_test(
+                net,
+                quiz,
+                y,
+                question_output,
+                model=model,
+                max_tokens=max_tokens,
+                model_quiz=model_quiz,
+                isTesting=isTesting,
+                quiz_dict=quiz_dict,
+                model_temperature=model_temperature,
+                model_quiz_temperature=model_quiz_temperature,
+                model_top_p=model_top_p,
+                model_quiz_top_p=model_quiz_top_p,
+            )
             baymin_runtime = time.time() - start_time
             
             raw_model_total_score += raw_model_score
@@ -381,8 +716,66 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
     print(f"Test completed: {total_questions_run} new questions run, {len(completed_questions)} skipped")
     return final_raw_score, final_baymin_score
 
-def probability_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=True, isTesting=True, test_baymin_only=False, temperature: float = 0.0, temperature_quiz: float = 0.0):
-    return numerical_test(net, PROBABILITY_QUESTIONS, create_probability_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only, temperature=temperature, temperature_quiz=temperature_quiz)
+def probability_test(
+    net,
+    *,
+    model=MODEL,
+    model_quiz=MODEL_QUIZ,
+    max_tokens=1000,
+    num_questions=30,
+    hasEvidence=True,
+    isTesting=True,
+    test_baymin_only=False,
+    model_temperature: float = 0.0,
+    model_quiz_temperature: float = 0.7,
+    model_top_p: float = 1.0,
+    model_quiz_top_p: float = 0.9,
+):
+    return numerical_test(
+        net,
+        PROBABILITY_QUESTIONS,
+        create_probability_quiz,
+        model=model,
+        model_quiz=model_quiz,
+        max_tokens=max_tokens,
+        num_questions=num_questions,
+        hasEvidence=hasEvidence,
+        isTesting=isTesting,
+        test_baymin_only=test_baymin_only,
+        model_temperature=model_temperature,
+        model_quiz_temperature=model_quiz_temperature,
+        model_top_p=model_top_p,
+        model_quiz_top_p=model_quiz_top_p,
+    )
 
-def highest_impact_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=False, isTesting=True, test_baymin_only=False, temperature: float = 0.0, temperature_quiz: float = 0.0):
-    return numerical_test(net, HIGHEST_IMPACT_EVIDENCE_QUESTIONS, create_highest_impact_evidence_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only, temperature=temperature, temperature_quiz=temperature_quiz)
+def highest_impact_evidence_test(
+    net,
+    *,
+    model=MODEL,
+    model_quiz=MODEL_QUIZ,
+    max_tokens=1000,
+    num_questions=30,
+    hasEvidence=False,
+    isTesting=True,
+    test_baymin_only=False,
+    model_temperature: float = 0.0,
+    model_quiz_temperature: float = 0.7,
+    model_top_p: float = 1.0,
+    model_quiz_top_p: float = 0.9,
+):
+    return numerical_test(
+        net,
+        HIGHEST_IMPACT_EVIDENCE_QUESTIONS,
+        create_highest_impact_evidence_quiz,
+        model=model,
+        model_quiz=model_quiz,
+        max_tokens=max_tokens,
+        num_questions=num_questions,
+        hasEvidence=hasEvidence,
+        isTesting=isTesting,
+        test_baymin_only=test_baymin_only,
+        model_temperature=model_temperature,
+        model_quiz_temperature=model_quiz_temperature,
+        model_top_p=model_top_p,
+        model_quiz_top_p=model_quiz_top_p,
+    )

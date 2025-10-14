@@ -30,34 +30,33 @@ MODEL='gpt-oss:latest'
 MODEL_LIST = [MODEL, LLAMA_MODEL, QWEN_MODEL]
 net = net_5
 for MODEL in MODEL_LIST:
-# for net in list_of_nets:
-    # try:
-    #     retry_test_with_backoff(dependency_test, net, max_retries=5, base_delay=2, max_delay=30,\
-    #         num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False)
-    # except Exception as e:
-    #     print(f"dependency_test failed completely: {str(e)}")
-    #     print("Continuing with next test...")
+    try:
+        retry_test_with_backoff(dependency_test, net, max_retries=5, base_delay=2, max_delay=30,\
+            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False)
+    except Exception as e:
+        print(f"dependency_test failed completely: {str(e)}")
+        print("Continuing with next test...")
 
-    # try:
-    #     retry_test_with_backoff(common_cause_test, net, max_retries=5, base_delay=2, max_delay=30,\
-    #         num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False)
-    # except Exception as e:
-    #     print(f"common_cause_test failed completely: {str(e)}")
-    #     print("Continuing with next test...")
+    try:
+        retry_test_with_backoff(common_cause_test, net, max_retries=5, base_delay=2, max_delay=30,\
+            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False)
+    except Exception as e:
+        print(f"common_cause_test failed completely: {str(e)}")
+        print("Continuing with next test...")
 
-    # try:
-    #     retry_test_with_backoff(common_effect_test, net, max_retries=5, base_delay=2, max_delay=30,\
-    #         num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False)
-    # except Exception as e:
-    #     print(f"common_effect_test failed completely: {str(e)}")
-    #     print("Continuing with next test...")
+    try:
+        retry_test_with_backoff(common_effect_test, net, max_retries=5, base_delay=2, max_delay=30,\
+            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False)
+    except Exception as e:
+        print(f"common_effect_test failed completely: {str(e)}")
+        print("Continuing with next test...")
 
-    # try:
-    #     retry_test_with_backoff(blocked_evidence_test, net, max_retries=5, base_delay=2, max_delay=30,\
-    #         num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False)
-    # except Exception as e:
-    #     print(f"blocked_evidence_test failed completely: {str(e)}")
-    #     print("Continuing with next test...")
+    try:
+        retry_test_with_backoff(blocked_evidence_test, net, max_retries=5, base_delay=2, max_delay=30,\
+            num_questions=NUM_QUESTIONS, max_tokens=MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False)
+    except Exception as e:
+        print(f"blocked_evidence_test failed completely: {str(e)}")
+        print("Continuing with next test...")
 
     try:
         retry_test_with_backoff(evidence_change_relationship_test, net, max_retries=5, base_delay=2, max_delay=30,\
@@ -66,13 +65,13 @@ for MODEL in MODEL_LIST:
         print(f"evidence_change_relationship_test failed completely: {str(e)}")
         print("Continuing with next test...")
 
-    # try:
-    #     retry_test_with_backoff(probability_test, net, max_retries=5, base_delay=2, max_delay=30,\
-    #         num_questions=NUM_QUESTIONS, max_tokens=PROBABILITY_MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False)
-    # except Exception as e:
-    #     print(f"probability_test failed completely: {str(e)}")
-    #     print("Continuing with next test...")
+    try:
+        retry_test_with_backoff(probability_test, net, max_retries=5, base_delay=2, max_delay=30,\
+            num_questions=NUM_QUESTIONS, max_tokens=PROBABILITY_MAX_TOKENS, isTesting=IS_TESTING, model=MODEL, test_baymin_only=False)
+    except Exception as e:
+        print(f"probability_test failed completely: {str(e)}")
+        print("Continuing with next test...")
 
-    # print(f"\nCompleted all tests for Net_{len(net.nodes())}")
+    print(f"\nCompleted all tests for Net_{len(net.nodes())}")
 
 print("Completed all tests!")
