@@ -3,7 +3,7 @@ from ollama_helper.prompts import TAKE_QUIZ_PROMPT
 from bn_helpers.bn_helpers import BnToolBox
 from ollama_helper.structure_output import QuizAnswer
 from bn_helpers.get_structures_print_tools import get_BN_structure, getNetCPTStrings
-from bn_helpers.tool_agent import get_answer_from_tool_agent, get_answer_from_tool_agent
+from bn_helpers.tool_agent import get_answer_from_tool_agent
 from benchmarking.quiz_generator import (create_dependency_quiz, create_common_cause_quiz, create_common_effect_quiz, create_blocked_evidence_quiz, 
 create_evidence_change_relationship_quiz, create_probability_quiz, create_highest_impact_evidence_quiz)
 from benchmarking.benchmarking_utils import (pick_two_random_nodes, fake_random_nodes, 
@@ -147,7 +147,9 @@ def raw_model_test(
     model_quiz_top_p: float = 0.9,
 ):
     # Model-specific params only
-    effective_model_temp = model_temperature
+    effective_model_temp = model_quiz_temperature
+    effective_model_top_p = model_quiz_top_p
+
     effective_quiz_temp = model_quiz_temperature
     try:
         loop = asyncio.get_event_loop()
@@ -159,7 +161,7 @@ def raw_model_test(
                     model=model,
                     max_tokens=max_tokens,
                     temperature=effective_model_temp,
-                    top_p=model_top_p,
+                    top_p=effective_model_top_p,
                 )
             )
             raw_response_time = time.time() - start_time
@@ -171,7 +173,7 @@ def raw_model_test(
                     model=model,
                     max_tokens=max_tokens,
                     temperature=effective_model_temp,
-                    top_p=model_top_p,
+                    top_p=effective_model_top_p,
                 )
             )
             raw_response_time = time.time() - start_time
@@ -183,7 +185,7 @@ def raw_model_test(
                 model=model,
                 max_tokens=max_tokens,
                 temperature=effective_model_temp,
-                top_p=model_top_p,
+                top_p=effective_model_top_p,
             )
         )
         raw_response_time = time.time() - start_time
@@ -231,7 +233,9 @@ def baymin_test(
         model=model,
         temperature=effective_model_temp,
         max_tokens=max_tokens,
-        isTesting=is_output_log,
+        is_output_log=is_output_log,
+        model_top_p=model_top_p,
+        model_temperature=model_temperature,
     )
     baymin_response_time = time.time() - start_time
     

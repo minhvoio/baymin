@@ -88,8 +88,10 @@ def chat_with_tools(
     max_rounds: int = 10,
     require_tool: bool = True,
     ollama_url: str = OLLAMA_CHAT_URL,
-    isDebug: bool = False,
-    isTesting: bool = False,
+    is_debug: bool = False,
+    is_output_log: bool = False,
+    model_top_p: float = 1.0,
+    model_temperature: float = 0.0,
 ):
     fns = get_tools_map(net)
     bn_str = get_BN_node_states(net)
@@ -102,7 +104,7 @@ def chat_with_tools(
     
     # Initialize testing log if needed
     testing_log = None
-    if isTesting:
+    if is_output_log:
         testing_log = {
             'prompt': prompt,
             'bn_str': bn_str,
@@ -161,7 +163,7 @@ def chat_with_tools(
                 "model": model,
                 "messages": messages,
                 "tools": tools,
-                "options": {"temperature": float(temperature), "num_predict": int(max_tokens)},
+                "options": {"temperature": float(temperature), "num_predict": int(max_tokens), "top_p": float(model_top_p)},
             },
             stream=True,
         )
@@ -220,10 +222,10 @@ def chat_with_tools(
                         })
                         continue
 
-                if isDebug:
+                if is_debug:
                     print(f"[BayMin] tool_call #{i}: {fn_name}({args})")
                     debug_tool_calls.append(f"{fn_name}({args})")
-                if isTesting and testing_log:
+                if is_output_log and testing_log:
                     testing_log['tool_calls'].append(f"{fn_name}({args})")
                 seen_calls.add(call_key)
 
@@ -249,10 +251,10 @@ def chat_with_tools(
                         # Store the first error result as well
                         first_results[call_key] = payload
 
-                if isDebug:
+                if is_debug:
                     print(f"[BayMin] tool_result #{i}: {payload}")
                     debug_tool_results.append(str(payload))
-                if isTesting and testing_log:
+                if is_output_log and testing_log:
                     testing_log['tool_results'].append(str(payload))
                 tool_msgs.append({
                     "role": "tool",
@@ -318,7 +320,7 @@ def chat_with_tools(
                 continue
             else:
                 final_answer = assistant_msg["content"].strip()
-                if isTesting and testing_log:
+                if is_output_log and testing_log:
                     testing_log['final_answer'] = final_answer
                     return final_answer, testing_log
                 else:
@@ -329,7 +331,7 @@ def chat_with_tools(
             for m in reversed(messages):
                 if m.get("role") == "tool":
                     final_answer = m["content"]  # raw JSON string
-                    if isTesting and testing_log:
+                    if is_output_log and testing_log:
                         testing_log['final_answer'] = final_answer
                         return final_answer, testing_log
                     else:
@@ -356,11 +358,11 @@ def chat_with_tools(
                 break
     
     # Update testing log with final answer
-    if isTesting and testing_log:
+    if is_output_log and testing_log:
         testing_log['final_answer'] = final_answer
     
     # Return answer and testing log if in testing mode
-    if isTesting:
+    if is_output_log:
         return final_answer, testing_log
     else:
         return final_answer
@@ -564,13 +566,13 @@ def extract_text(answer: str) -> str:
     except json.JSONDecodeError:
         return answer
 
-def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL, isTesting=False, isDebug=False):
+def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL, is_output_log=False, is_debug=False, model_top_p=1.0, model_temperature=0.0):
     import re
     import unicodedata
     import codecs
-    result = chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url, isTesting=isTesting, isDebug=isDebug)
+    result = chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url, is_output_log=is_output_log, is_debug=is_debug, model_top_p=model_top_p, model_temperature=model_temperature, is_output_log=is_output_log)
     result = extract_text(result)
-    if isTesting:
+    if is_output_log:
         answer, testing_log = result
     else:
         answer = result
@@ -593,10 +595,10 @@ def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_to
     text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
     text = text.replace('\u00A0', ' ').replace('\u202F', ' ').replace('\u2009', ' ').replace('\u2011', '-')
     text = unicodedata.normalize('NFKC', text)
-    if isTesting:
+    if is_output_log:
         return text, testing_log
     else:
         return text
 
-# def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL, isTesting=False, isDebug=False):
-#     return extract_text(chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url, isTesting=isTesting, isDebug=isDebug))
+# def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL, isTesting=False, is_debug=False):
+#     return extract_text(chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url, isTesting=isTesting, is_debug=is_debug))
