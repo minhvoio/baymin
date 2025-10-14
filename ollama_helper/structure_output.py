@@ -12,6 +12,6 @@ class AnswerWithThinking(BaseModel):
 
 
 class QuizAnswer(BaseModel):
-    one_letter_answer: Literal['A', 'B', 'C', 'D']
+    A_or_B_or_C_or_D: Literal['A', 'B', 'C', 'D']
 
 

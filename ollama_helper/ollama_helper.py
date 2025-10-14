@@ -87,7 +87,7 @@ async def get_quiz_answer_from_thinking_model(prompt, model=MODEL, max_tokens=10
         top_p=top_p,
         seed=seed,
     )
-    return result.output.one_letter_answer
+    return result.output.A_or_B_or_C_or_D
 
 def get_quiz_answer_from_thinking_model_sync(prompt, model=MODEL, max_tokens=1000, temperature=0, stream=False, top_p=None, seed=None):
     try:
