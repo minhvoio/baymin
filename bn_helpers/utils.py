@@ -214,10 +214,9 @@ def resolve_state_index(node, spec, use_title=False):
         raise ValueError(f"Unknown state '{spec}' for node '{node.name()}'")
     return st.stateNum
 
-from bni_netica import *
-from collections import deque
-
 def findAllDConnectedNodes(bn, source_node, dest_node, o=None):
+    from collections import deque
+    
     o = dict(o or {})
     o.setdefault("arcTraversal", False)
     o["arcs"] = o["arcTraversal"] or o.get("arcs", False)
@@ -377,9 +376,7 @@ def findAllDConnectedNodes(bn, source_node, dest_node, o=None):
         return ordered_arcs
 
     if o["returnPath"]:
-        # Find shortest path from source to destination
-        from collections import deque
-        
+        # Find shortest path from source to destination using BFS
         source_name = source_node.name()
         dest_name = dest_node.name()
         
@@ -409,7 +406,7 @@ def findAllDConnectedNodes(bn, source_node, dest_node, o=None):
                         visited.add(neighbor_name)
                         queue.append((neighbor_name, path + [neighbor_name]))
         
-        return []  # No path found
+        return []  
 
     ordered_nodes.sort(key=lambda dn: (depth.get(dn.id, 10**9), dn.id))
     return [bn.node(dn.id) for dn in ordered_nodes]
