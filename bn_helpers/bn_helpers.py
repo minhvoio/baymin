@@ -6,6 +6,7 @@ from bn_helpers.utils import (output_distribution, ensure_keys, logical_or, \
             is_independent_given, get_path, _state_label)
 import json
 import re
+from itertools import product
 from typing import List, Tuple, Dict, Any, Optional, Sequence, Union
 
 
@@ -13,34 +14,54 @@ class BnToolBox():
     # function_name: str
 
     # XY CONNECT
+    def _validate_nodes_exist(self, net, *node_names: str) -> None:
+        if not hasattr(net, 'node'):
+            raise ValueError("Network does not have a 'node' method")
+            
+        for node_name in node_names:
+            try:
+                node = net.node(node_name)
+                if not hasattr(node, 'name'):
+                    raise ValueError(f"Node {node_name} does not exist in the network")
+            except Exception:
+                raise ValueError(f"Node {node_name} does not exist in the network")
+
     def is_XY_dconnected(self, net, from_node, to_node):
-      relatedNodes = net.node(from_node).getRelated("d_connected, exclude_self")
-      for node in relatedNodes:
-        if node.name() == to_node:
-          return True
-      return False
+        self._validate_nodes_exist(net, from_node, to_node)
+        relatedNodes = net.node(from_node).getRelated("d_connected, exclude_self")
+        for node in relatedNodes:
+          if node.name() == to_node:
+            return True
+        return False
 
     def get_d_connected_nodes(self, net, node):
+        self._validate_nodes_exist(net, node)
         return names(net.node(node).getRelated("d_connected, exclude_self"))
 
     # COMMON CAUSE / EFFECT
     def ancestors(self, net, node):
+        self._validate_nodes_exist(net, node)
         return names(net.node(node).getRelated("ancestors, exclude_self"))
 
     def descendants(self, net, node):
+        self._validate_nodes_exist(net, node)
         return names(net.node(node).getRelated("descendents, exclude_self"))
 
     def get_common_cause(self, net, node1, node2) -> set[str]:
+        self._validate_nodes_exist(net, node1, node2)
         return self.ancestors(net, node1) & self.ancestors(net, node2)
 
     def get_common_effect(self, net, node1, node2) -> set[str]:
+        self._validate_nodes_exist(net, node1, node2)
         return self.descendants(net, node1) & self.descendants(net, node2)
     
     def is_common_cause(self, net, node1, node2, candidate_node) -> bool:
+        self._validate_nodes_exist(net, node1, node2, candidate_node)
         common_causes = self.get_common_cause(net, node1, node2)
         return candidate_node in common_causes
     
     def is_common_effect(self, net, node1, node2, candidate_node) -> bool:
+        self._validate_nodes_exist(net, node1, node2, candidate_node)
         common_effects = self.get_common_effect(net, node1, node2)
         return candidate_node in common_effects
     
@@ -230,46 +251,60 @@ class BnToolBox():
         return out
 
     def does_evidence_change_dependency_XY(self, net, X: str, Y: str, evidence: Optional[Union[Dict[str, Any], Sequence[Any], str]]) -> Tuple[bool, Dict[str, Any]]:
-        node_names, display_items = self._normalize_evidence_inputs(net, evidence)
-        if not node_names:
-            with temporarily_set_findings(net, {}):
-                dep = self.is_XY_dconnected(net, X, Y)
+        try:
+            node_names, display_items = self._normalize_evidence_inputs(net, evidence)
+            
+
+            self._validate_nodes_exist(net, X, Y)
+            
+            if not node_names:
+                with temporarily_set_findings(net, {}):
+                    dep = self.is_XY_dconnected(net, X, Y)
+                return False, {
+                    "before": dep,
+                    "after": dep,
+                    "conditioned_on": [],
+                    "sequential": []
+                }
+
+            # BEFORE: none of the evidence is observed
+            with temporarily_set_findings(net, {z: None for z in node_names}):
+                dep_before = self.is_XY_dconnected(net, X, Y)
+
+            # AFTER: all evidence nodes observed (value doesn't matter for d-sep)
+            with temporarily_set_findings(net, {z: 0 for z in node_names}):
+                dep_after = self.is_XY_dconnected(net, X, Y)
+
+            changed = dep_before != dep_after
+
+            # Sequential trace (adding evidence one by one)
+            sequential_trace = []
+            partial = {}
+            for z in node_names:
+                partial[z] = 0
+                with temporarily_set_findings(net, partial):
+                    conn = self.is_XY_dconnected(net, X, Y)
+                sequential_trace.append({"added": z, "connected": conn})
+
+            return changed, {
+                "before": dep_before,
+                "after": dep_after,
+                "conditioned_on": display_items if display_items else node_names,
+                "sequential": sequential_trace # how each evidence changes the dependency
+            }
+        except Exception as e:
+            print(f"Error in does_evidence_change_dependency_XY: {e}")
             return False, {
-                "before": dep,
-                "after": dep,
+                "before": False,
+                "after": False,
                 "conditioned_on": [],
                 "sequential": []
             }
 
-        # BEFORE: none of the evidence is observed
-        with temporarily_set_findings(net, {z: None for z in node_names}):
-            dep_before = self.is_XY_dconnected(net, X, Y)
-
-        # AFTER: all evidence nodes observed (value doesn't matter for d-sep)
-        with temporarily_set_findings(net, {z: 0 for z in node_names}):
-            dep_after = self.is_XY_dconnected(net, X, Y)
-
-        changed = dep_before != dep_after
-
-        # Sequential trace (adding evidence one by one)
-        sequential_trace = []
-        partial = {}
-        for z in node_names:
-            partial[z] = 0
-            with temporarily_set_findings(net, partial):
-                conn = self.is_XY_dconnected(net, X, Y)
-            sequential_trace.append({"added": z, "connected": conn})
-
-        return changed, {
-            "before": dep_before,
-            "after": dep_after,
-            "conditioned_on": display_items if display_items else node_names,
-            "sequential": sequential_trace # how each evidence changes the dependency
-        }
-
     # # EVIDENCES BLOCK XY
     def evidences_block_XY(self, net, X, Y):
         # node that will block the dependency between X and Y when observed
+        self._validate_nodes_exist(net, X, Y)
         ans = []
         evidences = findAllDConnectedNodes(net, X, Y)
         for e in evidences:
@@ -298,6 +333,7 @@ class BnToolBox():
         - net_after:       same net (for parity)
         - impacts: {ev -> {"diffs": [...], "l1": float, "max_abs": float}}
         """
+        self._validate_nodes_exist(net, X)
         # Normalize if evidence is not already a dict
         if evidence is None:
             evidence = {}
@@ -589,12 +625,14 @@ class BnToolBox():
 
 ### EXPLANERS
     def get_explain_XY_dconnected(self, net, node1, node2):
+        self._validate_nodes_exist(net, node1, node2)
         open_path = get_path(net, node1, node2)  
         return (f"Yes, {node1} is d-connected to {node2}, "
                 f"which means that entering evidence for {node1} would "
                 f"change the probability of {node2} and vice versa. They d-connected through the following path: {open_path}")
 
     def get_explain_XY_dseparated(self, net, node1, node2, get_minimal=False):
+        self._validate_nodes_exist(net, node1, node2)
         import random
         blocked_nodes = self.get_common_effect(net, node1, node2)
         
@@ -618,6 +656,7 @@ class BnToolBox():
         Get structured data and formatted explanation for P(X | evidence).
         Returns: (formatted_answer, structured_data)
         """
+        self._validate_nodes_exist(net, X)
         def _create_probability_distributions(node, original, new):
             """Create probability distribution data and text representations."""
             # Create probability distribution data
@@ -731,6 +770,7 @@ class BnToolBox():
         return answer, structured_data
 
     def get_explain_evidence_change_dependency_XY(self, net, node1, node2, evidence, include_sequential=False):
+        self._validate_nodes_exist(net, node1, node2)
         _, display_items = self._normalize_evidence_inputs(net, evidence)
         changed, details = self.does_evidence_change_dependency_XY(net, node1, node2, evidence)
 

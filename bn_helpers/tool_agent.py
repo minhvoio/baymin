@@ -608,6 +608,15 @@ def get_answer_from_tool_agent(net, prompt, model=MODEL, model_temperature=0.0, 
             pass
     text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
     text = text.replace('\u00A0', ' ').replace('\u202F', ' ').replace('\u2009', ' ').replace('\u2011', '-')
+    
+    # Fix common encoding issues
+    text = text.replace('‚Äë', '-')  # Fix mangled hyphen/dash
+    text = text.replace('‚Äì', '–')  # Fix mangled en-dash
+    text = text.replace('‚Äî', '—')  # Fix mangled em-dash
+    text = text.replace('‚Äô', "'")  # Fix mangled apostrophe
+    text = text.replace('‚Äù', '"')  # Fix mangled quote
+    text = text.replace('‚Äú', '"')  # Fix mangled quote
+    
     text = unicodedata.normalize('NFKC', text)
     if is_output_log:
         return text, testing_log
