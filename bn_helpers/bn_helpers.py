@@ -1,15 +1,15 @@
 from pydantic import BaseModel
-from ollama_helper.ollama_helper import answer_this_prompt
-from contextlib import contextmanager
 from bni_netica.bni_utils import findAllDConnectedNodes
 from bn_helpers.utils import (output_distribution, ensure_keys, logical_or, \
     logical_and, logical_xor, logical_xnor, fit_noisy_or, fit_noisy_and, fit_additive, _rmse, temporarily_set_findings, \
         names, resolve_state_index, state_names_by_indices, find_minimal_blockers, reduce_to_minimal_blocking_set, \
             is_independent_given, get_path, _state_label)
 from itertools import product
+import json
+import re
 from collections import deque
 import itertools
-from typing import List, Tuple, Dict, Any
+from typing import List, Tuple, Dict, Any, Optional, Sequence, Union
 
 class QueryOneNode(BaseModel):
     node: str
@@ -88,8 +88,159 @@ class BnToolBox():
 
     #     return (dep_before != dep_after), {"before": dep_before, "after": dep_after}
 
-    def does_evidence_change_dependency_XY(self, net, X: str, Y: str, evidence: List[str]) -> Tuple[bool, Dict[str, Any]]:
+    def _normalize_evidence_inputs(self, net, evidence: Optional[Union[Dict[str, Any], Sequence[Any], str]]) -> Tuple[List[str], List[str]]:
+        """Normalize various evidence input shapes to:
+        - node_names: list of node names (for d-separation; values ignored)
+        - display_items: list of strings like "B=True" for explanation text
+
+        Accepted forms:
+        - {"B": "True", ...}
+        - ["B", "C"], ["B=True", "C=0"], mixed lists
+        - [{"B": "True"}, {"C": 0}], or a single dict inside the list
+        - "B=True" or "B"
+        """
         if not evidence:
+            return [], []
+
+        node_names: List[str] = []
+        display_items: List[str] = []
+        seen = set()
+
+        def add_item(name: str, val: Any = None):
+            nonlocal node_names, display_items
+            if name not in seen:
+                seen.add(name)
+                node_names.append(name)
+            if val is None:
+                display_items.append(name)
+            else:
+                try:
+                    # Pretty-label value if it's an index; otherwise use as-is
+                    label = _state_label(net, name, val)
+                except Exception:
+                    label = str(val)
+                display_items.append(f"{name}={label}")
+
+        def handle_one(ev: Any):
+            if ev is None:
+                return
+            if isinstance(ev, dict):
+                for k, v in ev.items():
+                    add_item(str(k), v)
+            elif isinstance(ev, str):
+                s = ev.strip()
+                # Try JSON if it looks like JSON
+                if (s.startswith("[") and s.endswith("]")) or (s.startswith("{") and s.endswith("}")):
+                    try:
+                        loaded = json.loads(s)
+                        handle_one(loaded)
+                        return
+                    except Exception:
+                        pass
+                # Try comma-separated list
+                if "," in s and "=" not in s:
+                    parts = [p.strip() for p in s.split(",") if p.strip()]
+                    for p in parts:
+                        handle_one(p)
+                    return
+                # Key=Value
+                if "=" in s:
+                    k, v = s.split("=", 1)
+                    add_item(k.strip(), v.strip())
+                else:
+                    add_item(s)
+            else:
+                # Fallback: treat as node name
+                add_item(str(ev))
+
+        if isinstance(evidence, dict) or isinstance(evidence, str):
+            handle_one(evidence)
+        else:
+            for ev in evidence:  # type: ignore[assignment]
+                handle_one(ev)
+
+        return node_names, display_items
+
+    def _coerce_value(self, v: Any) -> Any:
+        """Best-effort coercion of textual values to int/bool where appropriate."""
+        if isinstance(v, str):
+            s = v.strip()
+            if re.fullmatch(r"[-+]?\d+", s):
+                try:
+                    return int(s)
+                except Exception:
+                    return s
+            low = s.lower()
+            if low in {"true", "yes", "t"}:
+                return True
+            if low in {"false", "no", "f"}:
+                return False
+            return s
+        return v
+
+    def _normalize_evidence_with_values(self, evidence: Optional[Union[Dict[str, Any], Sequence[Any], str]]) -> Dict[str, Any]:
+        """Normalize evidence where values are required (for probability queries).
+        Accepted forms:
+        - dict: {"B": 1} or {"B": "True"}
+        - list of dicts: [{"B": 1}, {"C": "high"}]
+        - list of strings: ["B=1", "C=True"]
+        - single string: "B=1" or JSON like '{"B":1}' or '["B=1","C=True"]' or "B=1, C=True"
+        Bare node names without values (e.g., ["B"]) are rejected.
+        """
+        if not evidence:
+            return {}
+
+        out: Dict[str, Any] = {}
+
+        def add_pair(k: Any, v: Any):
+            out[str(k)] = self._coerce_value(v)
+
+        def handle_one(ev: Any):
+            if ev is None:
+                return
+            if isinstance(ev, dict):
+                for k, v in ev.items():
+                    add_pair(k, v)
+            elif isinstance(ev, str):
+                s = ev.strip()
+                # Try JSON
+                if (s.startswith("[") and s.endswith("]")) or (s.startswith("{") and s.endswith("}")):
+                    try:
+                        loaded = json.loads(s)
+                        handle_one(loaded)
+                        return
+                    except Exception:
+                        pass
+                # Comma-separated key=value entries
+                if "," in s and "=" in s:
+                    parts = [p.strip() for p in s.split(",") if p.strip()]
+                    for p in parts:
+                        if "=" not in p:
+                            raise ValueError(f"Evidence entry '{p}' missing value; expected key=value")
+                        k, v = p.split("=", 1)
+                        add_pair(k.strip(), v.strip())
+                    return
+                if "=" in s:
+                    k, v = s.split("=", 1)
+                    add_pair(k.strip(), v.strip())
+                else:
+                    # No value provided -> reject
+                    raise ValueError(f"Evidence '{s}' missing value; expected key=value")
+            else:
+                # Unknown structure -> reject
+                raise ValueError(f"Unsupported evidence item type: {type(ev).__name__}")
+
+        if isinstance(evidence, dict) or isinstance(evidence, str):
+            handle_one(evidence)
+        else:
+            for ev in evidence:  # type: ignore[assignment]
+                handle_one(ev)
+
+        return out
+
+    def does_evidence_change_dependency_XY(self, net, X: str, Y: str, evidence: Optional[Union[Dict[str, Any], Sequence[Any], str]]) -> Tuple[bool, Dict[str, Any]]:
+        node_names, display_items = self._normalize_evidence_inputs(net, evidence)
+        if not node_names:
             with temporarily_set_findings(net, {}):
                 dep = self.is_XY_dconnected(net, X, Y)
             return False, {
@@ -100,11 +251,11 @@ class BnToolBox():
             }
 
         # BEFORE: none of the evidence is observed
-        with temporarily_set_findings(net, {z: None for z in evidence}):
+        with temporarily_set_findings(net, {z: None for z in node_names}):
             dep_before = self.is_XY_dconnected(net, X, Y)
 
         # AFTER: all evidence nodes observed (value doesn't matter for d-sep)
-        with temporarily_set_findings(net, {z: 0 for z in evidence}):
+        with temporarily_set_findings(net, {z: 0 for z in node_names}):
             dep_after = self.is_XY_dconnected(net, X, Y)
 
         changed = dep_before != dep_after
@@ -112,7 +263,7 @@ class BnToolBox():
         # Sequential trace (adding evidence one by one)
         sequential_trace = []
         partial = {}
-        for z in evidence:
+        for z in node_names:
             partial[z] = 0
             with temporarily_set_findings(net, partial):
                 conn = self.is_XY_dconnected(net, X, Y)
@@ -121,7 +272,7 @@ class BnToolBox():
         return changed, {
             "before": dep_before,
             "after": dep_after,
-            "conditioned_on": evidence,
+            "conditioned_on": display_items if display_items else node_names,
             "sequential": sequential_trace # how each evidence changes the dependency
         }
 
@@ -156,7 +307,11 @@ class BnToolBox():
         - net_after:       same net (for parity)
         - impacts: {ev -> {"diffs": [...], "l1": float, "max_abs": float}}
         """
-        evidence = evidence or {}
+        # Normalize if evidence is not already a dict
+        if evidence is None:
+            evidence = {}
+        elif not isinstance(evidence, dict):
+            evidence = self._normalize_evidence_with_values(evidence)
         node_X_before = net.node(X)
         original = node_X_before.beliefs()
 
@@ -186,7 +341,14 @@ class BnToolBox():
         Returns:
             out_str, net_after, structured_data
         """
-        evidence = evidence or {}
+        if evidence is None:
+            evidence = {}
+        elif not isinstance(evidence, dict):
+            # Only accept value-bearing inputs here
+            try:
+                evidence = self._normalize_evidence_with_values(evidence)
+            except ValueError:
+                evidence = {}
         if not evidence:
             # Derive candidate evidences from nodes d-connected to X
             candidates = self.get_d_connected_nodes(net, X)
@@ -546,7 +708,10 @@ class BnToolBox():
             )
             return answer
 
-        evidence = evidence or {}
+        if evidence is None:
+            evidence = {}
+        elif not isinstance(evidence, dict):
+            evidence = self._normalize_evidence_with_values(evidence)
 
         original, new, net_after, impacts = self.prob_X_given(net, X, evidence)
         node = net_after.node(X)
@@ -575,6 +740,7 @@ class BnToolBox():
         return answer, structured_data
 
     def get_explain_evidence_change_dependency_XY(self, net, node1, node2, evidence):
+        _, display_items = self._normalize_evidence_inputs(net, evidence)
         changed, details = self.does_evidence_change_dependency_XY(net, node1, node2, evidence)
 
         def _conn_label(b: bool) -> str:
@@ -586,7 +752,7 @@ class BnToolBox():
 
         before = _conn_label(details["before"])
         after  = _conn_label(details["after"])
-        ev_str = _fmt_ev_list(evidence)
+        ev_str = _fmt_ev_list(display_items)
 
         # Find first step (if any) where connectivity flips relative to BEFORE
         flip_note = ""

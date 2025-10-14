@@ -1,10 +1,20 @@
 import requests, json
 from IPython.display import display, Markdown, clear_output
+from pydantic_ai import Agent
+from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.providers.ollama import OllamaProvider
+from bn_helpers.constants import MODEL, OLLAMA_URL
+from ollama_helper.structure_output import AnswerStructure
+try:
+    import nest_asyncio
+    nest_asyncio.apply()
+except Exception:
+    pass
 
 def answer_this_prompt(
     prompt,
     stream=False,
-    model="llama3.1:70b",
+    model=MODEL,
     temperature=0.0,
     format=None,                # e.g., "json" to enable JSON mode; otherwise None
     num_ctx=8000,              # <= 131072 
@@ -45,3 +55,42 @@ def answer_this_prompt(
                 clear_output(wait=True)
                 display(Markdown(full))
         return full
+
+async def get_answer_from_ollama(prompt, model=MODEL, max_tokens=1000, temperature=0.3, stream=False, show_thinking=False):
+    result = await _run_ollama_agent(
+        prompt=prompt,
+        model=model,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        output_type=AnswerStructure,
+        stream=stream,
+    )
+    if show_thinking:
+        return result.output.answer, getattr(result.output, 'thinking', None)
+    return result.output.answer
+
+async def get_quiz_answer_from_thinking_model(prompt, model=MODEL, max_tokens=1000, temperature=0, format=None, stream=False):
+    result = await _run_ollama_agent(
+        prompt=prompt,
+        model=model,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        output_type=format,
+        stream=stream,
+    )
+    return result.output.one_letter_answer
+
+async def _run_ollama_agent(prompt, model, max_tokens, temperature, output_type, stream=False):
+    ollama_model = OpenAIChatModel(
+        model_name=model,
+        provider=OllamaProvider(base_url=OLLAMA_URL + 'v1'),  
+    )
+    agent = Agent(ollama_model, output_type=output_type)
+    return await agent.run(
+        prompt,
+        model_settings={
+            "max_tokens": max_tokens,
+            "temperature": temperature,
+            "stream": stream,
+        },
+    )

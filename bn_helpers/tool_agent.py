@@ -263,8 +263,14 @@ def chat_with_tools(
             # Attach tool results
             messages.extend(tool_msgs)
 
-            # If any tool produced an error, ask the model to try a different tool/params (avoiding seen_calls).
-            if any(json.loads(m["content"]).get("error") for m in tool_msgs):
+            # Guide follow-up based on tool outcomes:
+            # - If at least one success, ask to finalize using successful results.
+            # - Only if all produced errors, ask to try again with different params/tools.
+            tool_payloads = [json.loads(m["content"]) for m in tool_msgs]
+            has_error = any(p.get("error") for p in tool_payloads)
+            has_success = any("result" in p and not p.get("error") for p in tool_payloads)
+
+            if has_error and not has_success:
                 tried_list = [
                     f"{name}({args})" for (name, args) in list(seen_calls)[-6:]   # show up to last 6
                 ]
@@ -282,11 +288,13 @@ def chat_with_tools(
                         "Otherwise, pick a new approach."
                 })
             else:
-                # No errors → ask the model to finalize without calling tools again unless needed
                 messages.append({
                     "role": "user",
-                    "content": "Use the tool results above to answer the question. "
-                               "Do not call any tools again unless strictly necessary."
+                    "content": (
+                        "Use the successful tool result(s) above to answer the question. "
+                        "Ignore any tool outputs that indicate errors. "
+                        "Do not call any tools again unless strictly necessary."
+                    )
                 })
 
             retries_left -= 1
@@ -448,6 +456,11 @@ def check_evidences_change_relationship_between_two_nodes_tool(net):
         """
         try:
             bn_tool_box = BnToolBox()
+            if isinstance(evidence, str):
+                try:
+                    evidence = json.loads(evidence)
+                except Exception:
+                    pass
             template, _ = bn_tool_box.get_explain_evidence_change_dependency_XY(net, node1, node2, evidence)
             return template
 
@@ -483,6 +496,11 @@ def get_prob_node_given_any_evidence_tool(net):
         """
         try:
             bn_tool_box = BnToolBox()
+            if isinstance(evidence, str):
+                try:
+                    evidence = json.loads(evidence)
+                except Exception:
+                    pass
             prob_str, _ = bn_tool_box.get_explain_prob_X_given(net, node, evidence)
             return prob_str
         except Exception as e:
@@ -546,19 +564,39 @@ def extract_text(answer: str) -> str:
     except json.JSONDecodeError:
         return answer
 
-def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL, isTesting=False):
+def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL, isTesting=False, isDebug=False):
     import re
-    result = chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url, isTesting=isTesting)
-    
+    import unicodedata
+    import codecs
+    result = chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url, isTesting=isTesting, isDebug=isDebug)
+    result = extract_text(result)
     if isTesting:
         answer, testing_log = result
     else:
         answer = result
-        
-    readable = answer.encode('utf-8').decode('unicode_escape')  # converts \n and \u202f
-    readable = re.sub(r'\*\*(.*?)\*\*', r'\1', readable)
-    
+    text = answer
+    if isinstance(text, bytes):
+        try:
+            text = text.decode('utf-8', 'replace')
+        except Exception:
+            pass
+    if isinstance(text, str) and ('â\x80' in text or 'Ã' in text):
+        try:
+            text = text.encode('latin1', 'ignore').decode('utf-8', 'ignore')
+        except Exception:
+            pass
+    if isinstance(text, str) and ('\\u' in text or '\\n' in text or '\\t' in text):
+        try:
+            text = codecs.decode(text, 'unicode_escape')
+        except Exception:
+            pass
+    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
+    text = text.replace('\u00A0', ' ').replace('\u202F', ' ').replace('\u2009', ' ').replace('\u2011', '-')
+    text = unicodedata.normalize('NFKC', text)
     if isTesting:
-        return readable, testing_log
+        return text, testing_log
     else:
-        return readable
+        return text
+
+# def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL, isTesting=False, isDebug=False):
+#     return extract_text(chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url, isTesting=isTesting, isDebug=isDebug))
