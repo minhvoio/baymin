@@ -83,15 +83,14 @@ def chat_with_tools(
     net: Net,
     prompt: str,
     model: str = MODEL,    
-    temperature: float = 0.0,
+    model_temperature: float = 0.0,
     max_tokens: int = 500,
+    model_top_p: float = 1.0,
     max_rounds: int = 10,
     require_tool: bool = True,
     ollama_url: str = OLLAMA_CHAT_URL,
     is_debug: bool = False,
-    is_output_log: bool = False,
-    model_top_p: float = 1.0,
-    model_temperature: float = 0.0,
+    is_output_log: bool = False,    
 ):
     fns = get_tools_map(net)
     bn_str = get_BN_node_states(net)
@@ -163,7 +162,7 @@ def chat_with_tools(
                 "model": model,
                 "messages": messages,
                 "tools": tools,
-                "options": {"temperature": float(temperature), "num_predict": int(max_tokens), "top_p": float(model_top_p)},
+                "options": {"temperature": float(model_temperature), "num_predict": int(max_tokens), "top_p": float(model_top_p)},
             },
             stream=True,
         )
@@ -566,8 +565,8 @@ def extract_text(answer: str) -> str:
     except json.JSONDecodeError:
         return answer
 
-def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, \
-    ollama_url=OLLAMA_CHAT_URL, is_output_log=False, is_debug=False, model_top_p=1.0, model_temperature=0.0):
+def get_answer_from_tool_agent(net, prompt, model=MODEL, model_temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, \
+    ollama_url=OLLAMA_CHAT_URL, is_output_log=False, is_debug=False, model_top_p=1.0):
     import re
     import unicodedata
     import codecs
@@ -575,7 +574,6 @@ def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_to
         net,
         prompt,
         model,
-        temperature,
         max_tokens,
         max_rounds,
         require_tool,
@@ -587,7 +585,6 @@ def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_to
     )
 
     if is_output_log:
-        # chat_with_tools returns (final_answer, testing_log) in logging mode
         raw_answer, testing_log = result
         answer = extract_text(raw_answer)
     else:
