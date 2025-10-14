@@ -223,6 +223,7 @@ def findAllDConnectedNodes(bn, source_node, dest_node, o=None):
     o["arcs"] = o["arcTraversal"] or o.get("arcs", False)
     o.setdefault("noSourceParents", False)
     o.setdefault("noSourceChildren", False)
+    o.setdefault("returnPath", False)  # New option to return just the path
 
     if isinstance(source_node, str):
         source_node = bn.node(source_node)
@@ -375,13 +376,58 @@ def findAllDConnectedNodes(bn, source_node, dest_node, o=None):
     if o["arcs"]:
         return ordered_arcs
 
+    if o["returnPath"]:
+        # Find shortest path from source to destination
+        from collections import deque
+        
+        source_name = source_node.name()
+        dest_name = dest_node.name()
+        
+        # BFS to find shortest path
+        queue = deque([(source_name, [source_name])])
+        visited = {source_name}
+        
+        while queue:
+            current_name, path = queue.popleft()
+            
+            if current_name == dest_name:
+                return path
+            
+            # Get current node object
+            current_node = bn.node(current_name)
+            
+            # Check neighbors that are d-connected
+            neighbors = []
+            neighbors.extend([p.name() for p in current_node.parents()])
+            neighbors.extend([c.name() for c in current_node.children()])
+            
+            for neighbor_name in neighbors:
+                if neighbor_name not in visited:
+                    # Check if this neighbor is in our d-connected set
+                    neighbor_dn = next((dn for dn in ordered_nodes if dn.id == neighbor_name), None)
+                    if neighbor_dn is not None:
+                        visited.add(neighbor_name)
+                        queue.append((neighbor_name, path + [neighbor_name]))
+        
+        return []  # No path found
+
     ordered_nodes.sort(key=lambda dn: (depth.get(dn.id, 10**9), dn.id))
     return [bn.node(dn.id) for dn in ordered_nodes]
 
 def get_path(net, source_node, dest_node):
-    nodes = findAllDConnectedNodes(net, source_node, dest_node)
-    path = [n.name() for n in nodes]
-    return path
+    """
+    Find a consistent path from source_node to dest_node.
+    Returns a list of node names representing the path.
+    """
+    if isinstance(source_node, str):
+        source_node = net.node(source_node)
+    if isinstance(dest_node, str):
+        dest_node = net.node(dest_node)
+    
+    if source_node is dest_node:
+        return [source_node.name()]
+    
+    return findAllDConnectedNodes(net, source_node, dest_node, o={"returnPath": True})
 
 
 # helper to get minmal blockers
