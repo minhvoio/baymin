@@ -30,11 +30,39 @@ class BnToolBox():
     def descendants(self, net, node):
         return names(net.node(node).getRelated("descendents, exclude_self"))
 
-    def get_common_cause(self, net, node1, node2):
+    def get_common_cause(self, net, node1, node2) -> set[str]:
         return self.ancestors(net, node1) & self.ancestors(net, node2)
 
-    def get_common_effect(self, net, node1, node2):
+    def get_common_effect(self, net, node1, node2) -> set[str]:
         return self.descendants(net, node1) & self.descendants(net, node2)
+    
+    def is_common_cause(self, net, node1, node2, candidate_node) -> bool:
+        common_causes = self.get_common_cause(net, node1, node2)
+        return candidate_node in common_causes
+    
+    def is_common_effect(self, net, node1, node2, candidate_node) -> bool:
+        common_effects = self.get_common_effect(net, node1, node2)
+        return candidate_node in common_effects
+    
+    def is_chain(self, net, node1, node2) -> bool:
+        path = get_path(net, node1, node2)
+        
+        if not path or len(path) < 2:
+            return False
+        
+        # Check if any intermediate node is a common effect or common cause, if so, it's not a chain
+        for i in range(1, len(path) - 1):
+            current_node = path[i]
+            prev_node = path[i-1]
+            next_node = path[i+1]
+            
+            if self.is_common_effect(net, prev_node, next_node, current_node):
+                return False
+            
+            if self.is_common_cause(net, prev_node, next_node, current_node):
+                return False
+        
+        return True
     
 
     # Z CHANGE DEPENDENCY XY
@@ -561,7 +589,7 @@ class BnToolBox():
 
 ### EXPLANERS
     def get_explain_XY_dconnected(self, net, node1, node2):
-        open_path = get_path(net, node1, node2)  # must exist!
+        open_path = get_path(net, node1, node2)  
         return (f"Yes, {node1} is d-connected to {node2}, "
                 f"which means that entering evidence for {node1} would "
                 f"change the probability of {node2} and vice versa. They d-connected through the following path: {open_path}")
@@ -702,7 +730,7 @@ class BnToolBox():
 
         return answer, structured_data
 
-    def get_explain_evidence_change_dependency_XY(self, net, node1, node2, evidence):
+    def get_explain_evidence_change_dependency_XY(self, net, node1, node2, evidence, include_sequential=False):
         _, display_items = self._normalize_evidence_inputs(net, evidence)
         changed, details = self.does_evidence_change_dependency_XY(net, node1, node2, evidence)
 
@@ -719,10 +747,11 @@ class BnToolBox():
 
         # Find first step (if any) where connectivity flips relative to BEFORE
         flip_note = ""
-        for step in details.get("sequential", []):
-            if step["connected"] != details["before"]:
-                flip_note = f" The relationship first flips after conditioning on {step['added']}."
-                break
+        if include_sequential:
+            for step in details.get("sequential", []):
+                if step["connected"] != details["before"]:
+                    flip_note = f" The relationship first flips after conditioning on {step['added']}."
+                    break
 
         if not evidence:
             raw_template = (
@@ -733,10 +762,36 @@ class BnToolBox():
             return answer, raw_template
 
         if changed:
+            # Add detailed explanation based on the type of change
+            change_explanation = ""
+            
+            if details["before"] == False and details["after"] == True:
+                # Changed from separated to connected - evidence opened a path
+                # Check if any evidence node is a common effect (collider)
+                for ev_node in display_items:
+                    if self.is_common_effect(net, node1, node2, ev_node):
+                        path = get_path(net, node1, node2)
+                        path_str = " → ".join(path) if path else "unknown path"
+                        change_explanation = f" This happens because {ev_node} is a common effect (collider) of {node1} and {node2}. Observing {ev_node} opens the path: {path_str}."
+                        break
+            
+            elif details["before"] == True and details["after"] == False:
+                # Changed from connected to separated - evidence blocked a path
+                # Check if any evidence node is a common cause or part of a chain
+                for ev_node in display_items:
+                    if self.is_common_cause(net, node1, node2, ev_node):
+                        change_explanation = f" This happens because {ev_node} is a common cause of {node1} and {node2}. Observing {ev_node} blocks the path by conditioning on the common cause."
+                        break
+                    elif self.is_chain(net, node1, ev_node) and self.is_chain(net, ev_node, node2):
+                        path = get_path(net, node1, node2)
+                        path_str = " → ".join(path) if path else "unknown path"
+                        change_explanation = f" This happens because the path from {node1} to {node2} goes through {ev_node} as a chain. Observing {ev_node} blocks the chain: {path_str}."
+                        break
+            
             raw_template = (
                 f"Yes - conditioning on {{ev_str}} changes the dependency between {node1} and {node2}. "
                 f"Before observing {{ev_str}}, they were {before}. After observing all evidence, they are {after}."
-                f"{flip_note}"
+                f"{change_explanation}{flip_note}"
             )
             answer = raw_template.format(node1=node1, node2=node2, ev_str=ev_str, before=before, after=after)
 
@@ -747,7 +802,7 @@ class BnToolBox():
             )
             answer = raw_template.format(node1=node1, node2=node2, ev_str=ev_str, before=before, after=after)
         
-        if details.get("sequential"):
+        if include_sequential and details.get("sequential"):
             steps = "; ".join(
                 f"+{s['added']} => {_conn_label(s['connected'])}"
                 for s in details["sequential"]

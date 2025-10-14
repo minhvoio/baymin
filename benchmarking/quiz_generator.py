@@ -244,23 +244,30 @@ def create_blocked_evidence_quiz(question, net, node1, node2, rng=None):
     q_text, q_correct, q_dict = create_question(question, options, rng=randomizer, shuffle=False)
     return q_text, q_correct, q_dict
 
-def create_evidence_change_relationship_quiz(question: str, net, node1: str, node2: str, evidence: list[str], rng=None):
+def create_evidence_change_relationship_quiz(question: str, net, node1: str, node2: str, evidence: list[str], rng=None, include_sequential=False):
     randomizer = rng or _random
     bn_tool_box = BnToolBox()
-    correct_answer, _ = bn_tool_box.get_explain_evidence_change_dependency_XY(net, node1, node2, evidence)
+    correct_answer, _ = bn_tool_box.get_explain_evidence_change_dependency_XY(net, node1, node2, evidence, include_sequential)
     _, details = bn_tool_box.does_evidence_change_dependency_XY(net, node1, node2, evidence)
     
     opt1 = (correct_answer, True)
     
-    # Option 2: Reverse one of the sequential items (d-connected => d-separated and vice versa)
+    # Option 2: Reverse the detailed explanation (common effect <-> common cause/chain)
     fake_answer2 = correct_answer
-    if details.get("sequential"):
-        # Pick a random sequential step to reverse
-        step_to_reverse = randomizer.choice(details["sequential"])
-        original_conn = "d-connected" if step_to_reverse["connected"] else "d-separated"
-        reversed_conn = "d-separated" if step_to_reverse["connected"] else "d-connected"
-        # Replace the first occurrence of the original connection status with the reversed one
-        fake_answer2 = fake_answer2.replace(f"+{step_to_reverse['added']} => {original_conn}", f"+{step_to_reverse['added']} => {reversed_conn}", 1)
+    if changed:
+        # Try to reverse the detailed explanation
+        if "common effect (collider)" in fake_answer2:
+            # Replace collider explanation with common cause explanation
+            fake_answer2 = fake_answer2.replace("common effect (collider)", "common cause")
+            fake_answer2 = fake_answer2.replace("opens the path", "blocks the path by conditioning on the common cause")
+        elif "common cause" in fake_answer2:
+            # Replace common cause explanation with collider explanation
+            fake_answer2 = fake_answer2.replace("common cause", "common effect (collider)")
+            fake_answer2 = fake_answer2.replace("blocks the path by conditioning on the common cause", "opens the path")
+        elif "chain" in fake_answer2:
+            # Replace chain explanation with collider explanation
+            fake_answer2 = fake_answer2.replace("goes through", "is a common effect (collider) of")
+            fake_answer2 = fake_answer2.replace("blocks the chain", "opens the path")
     opt2 = (fake_answer2, False)
 
     # Option 3: Flip Yes/No from correct answer using the opposite template
@@ -280,19 +287,29 @@ def create_evidence_change_relationship_quiz(question: str, net, node1: str, nod
     
     # Find first step (if any) where connectivity flips relative to BEFORE (reversed)
     flip_note = ""
-    for step in details.get("sequential", []):
-        if step["connected"] != details["before"]:
-            flip_note = f" The relationship first flips after conditioning on {step['added']}."
-            break
+    if include_sequential:
+        for step in details.get("sequential", []):
+            if step["connected"] != details["before"]:
+                flip_note = f" The relationship first flips after conditioning on {step['added']}."
+                break
     
-    # Generate the opposite template
+    # Generate the opposite template with enhanced explanations
     if not evidence:
         fake_answer3 = f"No evidence provided. Relationship between {node1} and {node2} is {before_reversed} with no conditioning."
     elif not changed:  # Original was "No", so make it "Yes"
+        # Add fake detailed explanation for the reversed case
+        fake_explanation = ""
+        if details["before"] == False and details["after"] == True:
+            # Original: separated -> connected, so fake: connected -> separated
+            fake_explanation = f" This happens because {evidence[0] if evidence else 'the evidence'} is a common cause of {node1} and {node2}. Observing {evidence[0] if evidence else 'the evidence'} blocks the path by conditioning on the common cause."
+        elif details["before"] == True and details["after"] == False:
+            # Original: connected -> separated, so fake: separated -> connected  
+            fake_explanation = f" This happens because {evidence[0] if evidence else 'the evidence'} is a common effect (collider) of {node1} and {node2}. Observing {evidence[0] if evidence else 'the evidence'} opens the path."
+        
         fake_answer3 = (
             f"Yes - conditioning on {ev_str} changes the dependency between {node1} and {node2}. "
             f"Before observing {ev_str}, they were {_conn_label(details["before"])}. After observing all evidence, they are {after_reversed}."
-            f"{flip_note}"
+            f"{fake_explanation}{flip_note}"
         )
     else:  # Original was "Yes", so make it "No"
         fake_answer3 = (
@@ -300,8 +317,8 @@ def create_evidence_change_relationship_quiz(question: str, net, node1: str, nod
             f"Before observing {ev_str}, they were {before_reversed}. After observing all evidence, they remain {after_reversed}."
         )
     
-    # Add sequence if present (with reversed connection states)
-    if details.get("sequential"):
+    # Add sequence if present (with reversed connection states) - only if include_sequential is True
+    if include_sequential and details.get("sequential"):
         steps = "; ".join(
             f"+{s['added']} => {_conn_label(not s['connected'])}"
             for s in details["sequential"]
