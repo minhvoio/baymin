@@ -1,5 +1,6 @@
 import requests, json
 from IPython.display import display, Markdown, clear_output
+import asyncio
 from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.ollama import OllamaProvider
@@ -87,6 +88,46 @@ async def get_quiz_answer_from_thinking_model(prompt, model=MODEL, max_tokens=10
         seed=seed,
     )
     return result.output.one_letter_answer
+
+def get_quiz_answer_from_thinking_model_sync(prompt, model=MODEL, max_tokens=1000, temperature=0, stream=False, top_p=None, seed=None):
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            return loop.run_until_complete(
+                get_quiz_answer_from_thinking_model(
+                    prompt,
+                    model=model,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    stream=stream,
+                    top_p=top_p,
+                    seed=seed,
+                )
+            )
+        else:
+            return loop.run_until_complete(
+                get_quiz_answer_from_thinking_model(
+                    prompt,
+                    model=model,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    stream=stream,
+                    top_p=top_p,
+                    seed=seed,
+                )
+            )
+    except RuntimeError:
+        return asyncio.run(
+            get_quiz_answer_from_thinking_model(
+                prompt,
+                model=model,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                stream=stream,
+                top_p=top_p,
+                seed=seed,
+            )
+        )
 
 async def _run_ollama_agent(prompt, model, max_tokens, temperature, output_type, stream=False, top_p=None, seed=None):
     ollama_model = OpenAIChatModel(

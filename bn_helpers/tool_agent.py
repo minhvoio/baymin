@@ -571,17 +571,17 @@ def get_answer_from_tool_agent(net, prompt, model=MODEL, model_temperature=0.0, 
     import unicodedata
     import codecs
     result = chat_with_tools(
-        net,
-        prompt,
-        model,
-        max_tokens,
-        max_rounds,
-        require_tool,
-        ollama_url,
-        is_output_log=is_output_log,
-        is_debug=is_debug,
-        model_top_p=model_top_p,
+        net=net,
+        prompt=prompt,
+        model=model,
         model_temperature=model_temperature,
+        max_tokens=max_tokens,
+        model_top_p=model_top_p,
+        max_rounds=max_rounds,
+        require_tool=require_tool,
+        ollama_url=ollama_url,
+        is_debug=is_debug,
+        is_output_log=is_output_log,
     )
 
     if is_output_log:

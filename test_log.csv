@@ -1,0 +1,1 @@
+timestamp,test_type,question_set_name,question_index,quiz,expected_answer,model,model_quiz,raw_model_score,baymin_score,question_output,prompt,hasEvidence,max_tokens,network_size,node1,node2,node,evidence,raw_model_answer,baymin_answer,raw_model_runtime,baymin_runtime

@@ -8,7 +8,7 @@ from benchmarking.quiz_generator import (create_dependency_quiz, create_common_c
 create_evidence_change_relationship_quiz, create_probability_quiz, create_highest_impact_evidence_quiz)
 from benchmarking.benchmarking_utils import (pick_two_random_nodes, fake_random_nodes, 
 get_random_number_of_nodes, pick_one_random_node, generate_evidence_nodes, log_test_result, log_for_baymin_testing, get_completed_questions)
-from ollama_helper.ollama_helper import get_answer_from_ollama, get_quiz_answer_from_thinking_model
+from ollama_helper.ollama_helper import get_answer_from_ollama, get_quiz_answer_from_thinking_model_sync
 import asyncio
 import time
 from bn_helpers.constants import MODEL, MODEL_QUIZ
@@ -34,7 +34,7 @@ def model_do_quiz(
 
     if not quiz_dict or not isinstance(quiz_dict, dict) or not quiz_dict.get("options"):
         prompt = TAKE_QUIZ_PROMPT.format(quiz=quiz, bn_explanation=bn_explanation)
-        return get_quiz_answer_from_thinking_model(
+        return get_quiz_answer_from_thinking_model_sync(
             prompt,
             model=model,
             max_tokens=max_tokens,
@@ -69,7 +69,7 @@ def model_do_quiz(
         shuffled_quiz = build_quiz_from_presented(presented)
         prompt = TAKE_QUIZ_PROMPT.format(quiz=shuffled_quiz, bn_explanation=bn_explanation)
 
-        picked = get_quiz_answer_from_thinking_model(
+        picked = get_quiz_answer_from_thinking_model_sync(
             prompt,
             model=model,
             max_tokens=max_tokens,
