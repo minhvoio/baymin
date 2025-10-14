@@ -130,7 +130,7 @@ def chat_with_tools(
         "You are a tool-calling grammar-checking assistant.\n"
         "Rules:\n"
         "1) Do NOT perform calculations or external actions yourself.\n"
-        "2) Read the query carefully, think step by step, then ALWAYS call a related tool.\n"
+        "2) Read the query carefully, think step by step, then ALWAYS quickly call the most related tool.\n"
         # "3) After receiving tool results, return it as-is.\n"
         "3) After receiving tool results, if the return value is grammatically correct, return it exactly as the tool output; \n"
         "   otherwise fix only the grammar and return the grammar-corrected output.\n"
