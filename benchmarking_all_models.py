@@ -35,7 +35,6 @@ MODEL_TOP_P = 1.0
 MODEL_QUIZ_TEMPERATURE = 0.7
 MODEL_QUIZ_TOP_P = 0.9
 
-# Shared keyword arguments for all test calls (improves readability)
 COMMON_TEST_KWARGS = {
     "num_questions": NUM_QUESTIONS,
     "max_tokens": MAX_TOKENS,

@@ -19,24 +19,29 @@ net_5, net_10, net_30, net_60 = load_nets_from_parquet(os.path.join(data_output,
 
 list_of_nets = [net_5, net_10, net_30, net_60]
 NUM_QUESTIONS = 30
-MAX_TOKENS = 2000
-IS_TESTING = True
-PROBABILITY_MAX_TOKENS = 2000
+MAX_TOKENS = 1800
+IS_OUTPUT_LOG = True
 
-# Shared keyword arguments for baymin-only runs
+MODEL_TEMPERATURE = 0.0
+MODEL_TOP_P = 1.0
+MODEL_QUIZ_TEMPERATURE = 0.7
+MODEL_QUIZ_TOP_P = 0.9
+MODEL='gpt-oss:latest'
+MODEL_QUIZ = MODEL
+
 COMMON_TEST_KWARGS = {
     "num_questions": NUM_QUESTIONS,
     "max_tokens": MAX_TOKENS,
-    "isTesting": IS_TESTING,
+    "is_output_log": IS_OUTPUT_LOG,
     "test_baymin_only": True,
+    "model": MODEL,
+    "model_quiz": MODEL_QUIZ,
+    "model_temperature": MODEL_TEMPERATURE,
+    "model_top_p": MODEL_TOP_P,
+    "model_quiz_temperature": MODEL_QUIZ_TEMPERATURE,
+    "model_quiz_top_p": MODEL_QUIZ_TOP_P,
 }
 
-
-# QWEN_MODEL = "qwen3:8b"
-# LLAMA_MODEL = "llama3.1:70b"
-# MODEL_LIST = [LLAMA_MODEL, QWEN_MODEL]
-MODEL='gpt-oss:latest'
-# for MODEL in MODEL_LIST:
 for net in list_of_nets:
     try:
         retry_test_with_backoff(
@@ -45,7 +50,6 @@ for net in list_of_nets:
             max_retries=5,
             base_delay=2,
             max_delay=30,
-            model=MODEL,
             **COMMON_TEST_KWARGS,
         )
     except Exception as e:
@@ -59,7 +63,6 @@ for net in list_of_nets:
             max_retries=5,
             base_delay=2,
             max_delay=30,
-            model=MODEL,
             **COMMON_TEST_KWARGS,
         )
     except Exception as e:
@@ -73,7 +76,6 @@ for net in list_of_nets:
             max_retries=5,
             base_delay=2,
             max_delay=30,
-            model=MODEL,
             **COMMON_TEST_KWARGS,
         )
     except Exception as e:
@@ -87,7 +89,6 @@ for net in list_of_nets:
             max_retries=5,
             base_delay=2,
             max_delay=30,
-            model=MODEL,
             **COMMON_TEST_KWARGS,
         )
     except Exception as e:
@@ -101,7 +102,6 @@ for net in list_of_nets:
             max_retries=5,
             base_delay=2,
             max_delay=30,
-            model=MODEL,
             **COMMON_TEST_KWARGS,
         )
     except Exception as e:
@@ -115,11 +115,7 @@ for net in list_of_nets:
             max_retries=5,
             base_delay=2,
             max_delay=30,
-            model=MODEL,
-            num_questions=NUM_QUESTIONS,
-            max_tokens=PROBABILITY_MAX_TOKENS,
-            isTesting=IS_TESTING,
-            test_baymin_only=True,
+            **COMMON_TEST_KWARGS,
         )
     except Exception as e:
         print(f"probability_test failed completely: {str(e)}")
