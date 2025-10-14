@@ -26,7 +26,7 @@ IS_OUTPUT_LOG = True
 QWEN_MODEL = "qwen3:8b"
 LLAMA_MODEL = "llama3.1:70b"
 GPT_OSS_MODEL = 'gpt-oss:latest'
-MODEL_QUIZ = GPT_OSS_MODEL
+MODEL_QUIZ = 'gpt-oss:latest'
 
 MODEL_LIST = [GPT_OSS_MODEL, LLAMA_MODEL, QWEN_MODEL]
 

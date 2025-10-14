@@ -188,7 +188,7 @@ def chat_with_tools(
 
         messages.append(assistant_msg)
 
-        # === If the assistant requested tool calls, try to execute them ===
+        # If the assistant requested tool calls, try to execute them
         if assistant_msg["tool_calls"]:
             tool_msgs = []
 
