@@ -102,51 +102,45 @@ def probability_question(net, question_format=None, hasEvidence=False):
         prompt += question
         return prompt, node, question
 
-def raw_model_test(prompt, quiz, y, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isDebug=False):
-    # Time the main model response
-    start_time = time.time()
+def raw_model_test(prompt, quiz, y, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True):
     try:
         loop = asyncio.get_event_loop()
         if loop.is_running():
+            start_time = time.time()
             ans = loop.run_until_complete(get_answer_from_ollama(prompt, model=model, max_tokens=max_tokens))
+            raw_response_time = time.time() - start_time
         else:
+            start_time = time.time()
             ans = loop.run_until_complete(get_answer_from_ollama(prompt, model=model, max_tokens=max_tokens))
+            raw_response_time = time.time() - start_time
     except RuntimeError:
+        start_time = time.time()
         ans = asyncio.run(get_answer_from_ollama(prompt, model=model, max_tokens=max_tokens))
-    main_response_time = time.time() - start_time
+        raw_response_time = time.time() - start_time
     
-    # Time the quiz evaluation
     quiz_start_time = time.time()
     y_hat = model_do_quiz(quiz, ans, model=model_quiz)
     quiz_time = time.time() - quiz_start_time
     
-    if isDebug:
-        print(f"[DEBUG] Raw Model Response Time: {main_response_time:.2f}s")
-        print(f"[DEBUG] Quiz Evaluation Time: {quiz_time:.2f}s")
-        print(f"[DEBUG] Total Raw Model Time: {main_response_time + quiz_time:.2f}s")
+    if isTesting:
+        print(f"[Raw Model Testing] Response time: {raw_response_time:.2f}s, Quiz time: {quiz_time:.2f}s, Total: {raw_response_time + quiz_time:.2f}s")
     
     score = validate_quiz_answer(y, y_hat)
     return score, ans
 
-def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True, isDebug=False):
-    # Time the BayMin tool agent response
-    baymin_start_time = time.time()
+def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, model_quiz=MODEL_QUIZ, isTesting=True):
+    start_time = time.time()
     answer, testing_log = chat_with_tools(net, question_output, model=model, max_tokens=max_tokens, isTesting=isTesting)
-    baymin_response_time = time.time() - baymin_start_time
+    baymin_response_time = time.time() - start_time
     
-    # Time the quiz evaluation
     quiz_start_time = time.time()
     y_hat = model_do_quiz(quiz, answer, model=model_quiz)
     quiz_time = time.time() - quiz_start_time
     
-    if isDebug:
-        print(f"[DEBUG] BayMin Response Time: {baymin_response_time:.2f}s")
-        print(f"[DEBUG] Quiz Evaluation Time: {quiz_time:.2f}s")
-        print(f"[DEBUG] Total BayMin Time: {baymin_response_time + quiz_time:.2f}s")
-        if testing_log and 'tool_calls' in testing_log:
-            print(f"[DEBUG] BayMin Tool Calls: {len(testing_log['tool_calls'])}")
-    
     score = validate_quiz_answer(y, y_hat)
+
+    if isTesting:
+        print(f"[BayMin Testing] Response time: {baymin_response_time:.2f}s, Quiz time: {quiz_time:.2f}s, Total: {baymin_response_time + quiz_time:.2f}s")
 
     if score < 1:
         log_for_baymin_testing(quiz, y, y_hat, answer, testing_log)
@@ -154,7 +148,7 @@ def baymin_test(net, quiz, y, question_output, model=MODEL, max_tokens=1000, mod
     return score, answer
 
 # DEPENDENCY TEST
-def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, isDebug=False):
+def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
     raw_model_total_score = 0
     baymin_total_score = 0
     
@@ -186,11 +180,14 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
             prompt, node1, node2, question_output = two_nodes_question(net, question_format=question, hasEvidence=hasEvidence)
             quiz, y = create_quiz_function(question_output, net, node1, node2)
             evidence = None
+        
+        if isTesting:
+            print(f"[Testing Mode] Question {question_index}: {question_output[:100]}{'...' if len(question_output) > 100 else ''}")
 
         if test_baymin_only:
             # Only run BayMin test
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, isDebug=isDebug)
+            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
             baymin_runtime = time.time() - start_time
             raw_model_score, raw_model_answer = 0, "N/A (BayMin only)"
             raw_model_runtime = None
@@ -198,11 +195,11 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
         else:
             # Run both tests
             start_time = time.time()
-            raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isDebug=isDebug)
+            raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
             raw_model_runtime = time.time() - start_time
             
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, isDebug=isDebug)
+            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
             baymin_runtime = time.time() - start_time
             
             raw_model_total_score += raw_model_score
@@ -247,28 +244,28 @@ def elementary_test(net, question_set, create_quiz_function, model=MODEL, model_
     print(f"Test completed: {total_questions_run} new questions run, {len(completed_questions)} skipped")
     return final_raw_score, final_baymin_score
 
-def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, isDebug=False):
+def dependency_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
     return elementary_test(net, DEPENDENCY_QUESTIONS, create_dependency_quiz, model=model, model_quiz=model_quiz, \
-        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only, isDebug=isDebug)
+        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
 
-def common_cause_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, isDebug=False):
+def common_cause_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
     return elementary_test(net, COMMON_CAUSE_QUESTIONS, create_common_cause_quiz, model=model, model_quiz=model_quiz, \
-        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only, isDebug=isDebug)
+        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
 
-def common_effect_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, isDebug=False):
+def common_effect_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
     return elementary_test(net, COMMON_EFFECT_QUESTIONS, create_common_effect_quiz, model=model, model_quiz=model_quiz, \
-        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only, isDebug=isDebug)
+        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
 
-def blocked_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, isDebug=False):
+def blocked_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
     return elementary_test(net, BLOCKED_EVIDENCES_QUESTIONS, create_blocked_evidence_quiz, model=model, model_quiz=model_quiz, \
-        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only, isDebug=isDebug)
+        max_tokens=max_tokens, num_questions=num_questions, isTesting=isTesting, test_baymin_only=test_baymin_only)
 
-def evidence_change_relationship_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=True, isTesting=True, test_baymin_only=False, isDebug=False):
+def evidence_change_relationship_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=True, isTesting=True, test_baymin_only=False):
     return elementary_test(net, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, create_evidence_change_relationship_quiz, model=model, \
-    model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only, isDebug=isDebug)
+    model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only)
 
 def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_quiz=MODEL_QUIZ, hasEvidence=False, \
-    max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False, isDebug=False):
+    max_tokens=1000, num_questions=30, isTesting=True, test_baymin_only=False):
     
     raw_model_total_score = 0
     baymin_total_score = 0
@@ -301,11 +298,14 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
             prompt, node, question_output = probability_question(net, question_format=question, hasEvidence=hasEvidence)
             quiz, y = create_quiz_function(question_output, net, node)
             evidence = None
+        
+        if isTesting:
+            print(f"[Testing Mode] Question {question_index}: {question_output[:100]}{'...' if len(question_output) > 100 else ''}")
 
         if test_baymin_only:
             # Only run BayMin test
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, isDebug=isDebug)
+            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
             baymin_runtime = time.time() - start_time
             raw_model_score, raw_model_answer = 0, "N/A (BayMin only)"
             raw_model_runtime = None
@@ -313,11 +313,11 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
         else:
             # Run both tests
             start_time = time.time()
-            raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isDebug=isDebug)
+            raw_model_score, raw_model_answer = raw_model_test(prompt, quiz, y, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
             raw_model_runtime = time.time() - start_time
             
             start_time = time.time()
-            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting, isDebug=isDebug)
+            baymin_score, baymin_answer = baymin_test(net, quiz, y, question_output, model=model, max_tokens=max_tokens, model_quiz=model_quiz, isTesting=isTesting)
             baymin_runtime = time.time() - start_time
             
             raw_model_total_score += raw_model_score
@@ -361,8 +361,8 @@ def numerical_test(net, question_set, create_quiz_function, model=MODEL, model_q
     print(f"Test completed: {total_questions_run} new questions run, {len(completed_questions)} skipped")
     return final_raw_score, final_baymin_score
 
-def probability_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=True, isTesting=True, test_baymin_only=False, isDebug=False):
-    return numerical_test(net, PROBABILITY_QUESTIONS, create_probability_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only, isDebug=isDebug)
+def probability_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=True, isTesting=True, test_baymin_only=False):
+    return numerical_test(net, PROBABILITY_QUESTIONS, create_probability_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only)
 
-def highest_impact_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=False, isTesting=True, test_baymin_only=False, isDebug=False):
-    return numerical_test(net, HIGHEST_IMPACT_EVIDENCE_QUESTIONS, create_highest_impact_evidence_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only, isDebug=isDebug)
+def highest_impact_evidence_test(net, model=MODEL, model_quiz=MODEL_QUIZ, max_tokens=1000, num_questions=30, hasEvidence=False, isTesting=True, test_baymin_only=False):
+    return numerical_test(net, HIGHEST_IMPACT_EVIDENCE_QUESTIONS, create_highest_impact_evidence_quiz, model=model, model_quiz=model_quiz, max_tokens=max_tokens, num_questions=num_questions, hasEvidence=hasEvidence, isTesting=isTesting, test_baymin_only=test_baymin_only)
