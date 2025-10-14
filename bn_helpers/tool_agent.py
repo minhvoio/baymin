@@ -566,16 +566,33 @@ def extract_text(answer: str) -> str:
     except json.JSONDecodeError:
         return answer
 
-def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, ollama_url=OLLAMA_CHAT_URL, is_output_log=False, is_debug=False, model_top_p=1.0, model_temperature=0.0):
+def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, \
+    ollama_url=OLLAMA_CHAT_URL, is_output_log=False, is_debug=False, model_top_p=1.0, model_temperature=0.0):
     import re
     import unicodedata
     import codecs
-    result = chat_with_tools(net, prompt, model, temperature, max_tokens, max_rounds, require_tool, ollama_url, is_output_log=is_output_log, is_debug=is_debug, model_top_p=model_top_p, model_temperature=model_temperature, is_output_log=is_output_log)
-    result = extract_text(result)
+    result = chat_with_tools(
+        net,
+        prompt,
+        model,
+        temperature,
+        max_tokens,
+        max_rounds,
+        require_tool,
+        ollama_url,
+        is_output_log=is_output_log,
+        is_debug=is_debug,
+        model_top_p=model_top_p,
+        model_temperature=model_temperature,
+    )
+
     if is_output_log:
-        answer, testing_log = result
+        # chat_with_tools returns (final_answer, testing_log) in logging mode
+        raw_answer, testing_log = result
+        answer = extract_text(raw_answer)
     else:
-        answer = result
+        raw_answer = result
+        answer = extract_text(raw_answer)
     text = answer
     if isinstance(text, bytes):
         try:
