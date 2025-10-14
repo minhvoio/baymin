@@ -66,6 +66,7 @@ class BnToolBox():
         return candidate_node in common_effects
     
     def is_chain(self, net, node1, node2) -> bool:
+        self._validate_nodes_exist(net, node1, node2)
         path = get_path(net, node1, node2)
         
         if not path or len(path) < 2:
@@ -251,55 +252,48 @@ class BnToolBox():
         return out
 
     def does_evidence_change_dependency_XY(self, net, X: str, Y: str, evidence: Optional[Union[Dict[str, Any], Sequence[Any], str]]) -> Tuple[bool, Dict[str, Any]]:
-        try:
-            node_names, display_items = self._normalize_evidence_inputs(net, evidence)
-            
 
-            self._validate_nodes_exist(net, X, Y)
-            
-            if not node_names:
-                with temporarily_set_findings(net, {}):
-                    dep = self.is_XY_dconnected(net, X, Y)
-                return False, {
-                    "before": dep,
-                    "after": dep,
-                    "conditioned_on": [],
-                    "sequential": []
-                }
-
-            # BEFORE: none of the evidence is observed
-            with temporarily_set_findings(net, {z: None for z in node_names}):
-                dep_before = self.is_XY_dconnected(net, X, Y)
-
-            # AFTER: all evidence nodes observed (value doesn't matter for d-sep)
-            with temporarily_set_findings(net, {z: 0 for z in node_names}):
-                dep_after = self.is_XY_dconnected(net, X, Y)
-
-            changed = dep_before != dep_after
-
-            # Sequential trace (adding evidence one by one)
-            sequential_trace = []
-            partial = {}
-            for z in node_names:
-                partial[z] = 0
-                with temporarily_set_findings(net, partial):
-                    conn = self.is_XY_dconnected(net, X, Y)
-                sequential_trace.append({"added": z, "connected": conn})
-
-            return changed, {
-                "before": dep_before,
-                "after": dep_after,
-                "conditioned_on": display_items if display_items else node_names,
-                "sequential": sequential_trace # how each evidence changes the dependency
-            }
-        except Exception as e:
-            print(f"Error in does_evidence_change_dependency_XY: {e}")
+        node_names, display_items = self._normalize_evidence_inputs(net, evidence)
+        
+        # Validate that X and Y exist in the network
+        self._validate_nodes_exist(net, X, Y)
+        
+        if not node_names:
+            with temporarily_set_findings(net, {}):
+                dep = self.is_XY_dconnected(net, X, Y)
             return False, {
-                "before": False,
-                "after": False,
+                "before": dep,
+                "after": dep,
                 "conditioned_on": [],
                 "sequential": []
             }
+
+        # BEFORE: none of the evidence is observed
+        with temporarily_set_findings(net, {z: None for z in node_names}):
+            dep_before = self.is_XY_dconnected(net, X, Y)
+
+        # AFTER: all evidence nodes observed (value doesn't matter for d-sep)
+        with temporarily_set_findings(net, {z: 0 for z in node_names}):
+            dep_after = self.is_XY_dconnected(net, X, Y)
+
+        changed = dep_before != dep_after
+
+        # Sequential trace (adding evidence one by one)
+        sequential_trace = []
+        partial = {}
+        for z in node_names:
+            partial[z] = 0
+            with temporarily_set_findings(net, partial):
+                conn = self.is_XY_dconnected(net, X, Y)
+            sequential_trace.append({"added": z, "connected": conn})
+
+        return changed, {
+            "before": dep_before,
+            "after": dep_after,
+            "conditioned_on": display_items if display_items else node_names,
+            "sequential": sequential_trace # how each evidence changes the dependency
+        }
+
 
     # # EVIDENCES BLOCK XY
     def evidences_block_XY(self, net, X, Y):

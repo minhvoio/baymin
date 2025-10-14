@@ -248,7 +248,8 @@ def create_evidence_change_relationship_quiz(question: str, net, node1: str, nod
     randomizer = rng or _random
     bn_tool_box = BnToolBox()
     correct_answer, _ = bn_tool_box.get_explain_evidence_change_dependency_XY(net, node1, node2, evidence, include_sequential)
-    _, details = bn_tool_box.does_evidence_change_dependency_XY(net, node1, node2, evidence)
+
+    changed, details = bn_tool_box.does_evidence_change_dependency_XY(net, node1, node2, evidence)
     
     opt1 = (correct_answer, True)
     
@@ -271,8 +272,6 @@ def create_evidence_change_relationship_quiz(question: str, net, node1: str, nod
     opt2 = (fake_answer2, False)
 
     # Option 3: Flip Yes/No from correct answer using the opposite template
-    changed, details = bn_tool_box.does_evidence_change_dependency_XY(net, node1, node2, evidence)
-    
     def _conn_label(b: bool) -> str:
         return "d-connected" if b else "d-separated"
     
