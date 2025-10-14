@@ -14,7 +14,7 @@ import time
 from bn_helpers.constants import MODEL, MODEL_QUIZ
 from benchmarking.question_types import DEPENDENCY_QUESTIONS, COMMON_CAUSE_QUESTIONS, COMMON_EFFECT_QUESTIONS, BLOCKED_EVIDENCES_QUESTIONS, EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, PROBABILITY_QUESTIONS, HIGHEST_IMPACT_EVIDENCE_QUESTIONS
 
-def model_do_quiz(quiz, bn_explanation, model=MODEL_QUIZ, temperature_quiz: float = 0.0, max_tokens: int = 1000, top_p: float = 0.9, quiz_dict=None):
+def model_do_quiz(quiz, bn_explanation, model=MODEL_QUIZ, temperature_quiz: float = 0.9, max_tokens: int = 1000, top_p: float = 0.9, quiz_dict=None):
     """
     Majority vote over up to 5 runs with per-run shuffling using structured quiz dict when provided.
     - Uses temperature=0.9, top_p=0.9, seeds 0..4
@@ -29,13 +29,13 @@ def model_do_quiz(quiz, bn_explanation, model=MODEL_QUIZ, temperature_quiz: floa
             prompt,
             model=model,
             max_tokens=max_tokens,
-            temperature=0.9,
-            top_p=0.9,
+            temperature=temperature_quiz,
+            top_p=top_p,
             seed=0,
         )
 
     header = quiz_dict.get("header", "")
-    options_struct = quiz_dict["options"]  # list of {original_letter, text, is_correct}
+    options_struct = quiz_dict["options"]  
 
     vote_counts = {"A": 0, "B": 0, "C": 0, "D": 0}
 
@@ -64,8 +64,8 @@ def model_do_quiz(quiz, bn_explanation, model=MODEL_QUIZ, temperature_quiz: floa
             prompt,
             model=model,
             max_tokens=max_tokens,
-            temperature=0.9,
-            top_p=0.9,
+            temperature=temperature_quiz,
+            top_p=top_p,
             seed=i,
         )
 
