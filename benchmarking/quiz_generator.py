@@ -68,7 +68,14 @@ def create_question(header_question, option_list, rng=None, leading_blank=False)
         if is_correct:
             correct_letter = letter
 
-    return "\n".join(lines), correct_letter
+    # Add separators before each option for better readability
+    formatted_lines = []
+    for line in lines:
+        if line.startswith(('A.', 'B.', 'C.', 'D.')):
+            formatted_lines.append("--------------------------------")
+        formatted_lines.append(line)
+
+    return "\n".join(formatted_lines), correct_letter
 
 
 def create_dependency_quiz(question, net, node1, node2, rng=None):
@@ -316,18 +323,7 @@ def create_probability_quiz(question, net, node, evidence, rng=None):
     options = [opt1, opt2, opt3, opt4]
 
     q_text, q_correct = create_question(question, options, rng=randomizer)
-    
-    # Add separators before each option for better readability
-    lines = q_text.split('\n')
-    formatted_lines = []
-    
-    for _, line in enumerate(lines):
-        if line.startswith(('A.', 'B.', 'C.', 'D.')):
-            formatted_lines.append("-----------")
-        
-        formatted_lines.append(line)
-    
-    return '\n'.join(formatted_lines), q_correct
+    return q_text, q_correct
 
 
 def create_highest_impact_evidence_quiz(question, net, node, evidence=None, order=None, rng=None):
@@ -396,16 +392,5 @@ def create_highest_impact_evidence_quiz(question, net, node, evidence=None, orde
     options = [opt1, opt2, opt3, opt4]
     
     q_text, q_correct = create_question(question, options, rng=randomizer)
-
-    # Add separators before each option for better readability
-    lines = q_text.split('\n')
-    formatted_lines = []
-    
-    for _, line in enumerate(lines):
-        if line.startswith(('A.', 'B.', 'C.', 'D.')):
-            formatted_lines.append("-----------")
-        
-        formatted_lines.append(line)
-    
-    return '\n'.join(formatted_lines), q_correct
+    return q_text, q_correct
 
