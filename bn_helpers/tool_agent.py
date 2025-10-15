@@ -554,16 +554,29 @@ def get_tools_map(net):
     }
 
 def extract_text(answer: str) -> str:
-    try:
-        obj = json.loads(answer)
-        if isinstance(obj, dict):
-            if "result" in obj:
-                return obj["result"]
-            if "error" in obj:
-                return f"Error: {obj['error']}: {obj.get('detail','')}".strip()
-        return answer
-    except json.JSONDecodeError:
-        return answer
+    # Accept both raw strings and already-parsed dicts/lists
+    obj = None
+    if isinstance(answer, (dict, list)):
+        obj = answer
+    else:
+        try:
+            obj = json.loads(answer)
+        except json.JSONDecodeError:
+            # Not JSON; return as-is
+            return answer
+
+    if isinstance(obj, dict):
+        if "result" in obj:
+            res = obj["result"]
+            # Ensure a string is returned
+            return res if isinstance(res, str) else json.dumps(res, ensure_ascii=False)
+        if "error" in obj:
+            return f"Error: {obj['error']}: {obj.get('detail','')}".strip()
+        # Fallback to dumping dict if no known fields
+        return json.dumps(obj, ensure_ascii=False)
+
+    # If list or other JSON, stringify it
+    return json.dumps(obj, ensure_ascii=False)
 
 def get_answer_from_tool_agent(net, prompt, model=MODEL, model_temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, \
     ollama_url=OLLAMA_CHAT_URL, is_output_log=False, is_debug=False, model_top_p=1.0):
@@ -596,6 +609,12 @@ def get_answer_from_tool_agent(net, prompt, model=MODEL, model_temperature=0.0, 
             text = text.decode('utf-8', 'replace')
         except Exception:
             pass
+    # Ensure text is a string before regex/normalization
+    if not isinstance(text, str):
+        try:
+            text = json.dumps(text, ensure_ascii=False)
+        except Exception:
+            text = str(text)
     if isinstance(text, str) and ('â\x80' in text or 'Ã' in text):
         try:
             text = text.encode('latin1', 'ignore').decode('utf-8', 'ignore')
