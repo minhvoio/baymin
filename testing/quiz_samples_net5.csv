@@ -1,0 +1,259 @@
+test_type,set_key,question_index,question_format,generated_question,node1,node2,node,evidence,quiz_header,correct_letter,option_A_text,option_A_is_correct,option_B_text,option_B_is_correct,option_C_text,option_C_is_correct,option_D_text,option_D_is_correct
+elementary,dependency,1,Is changing the evidence of {node1} going to change the probability of {node2}?,Is changing the evidence of D going to change the probability of A?,D,A,,,Is changing the evidence of D going to change the probability of A?,A,"Yes, D is d-connected to A, which means that entering evidence for D would change the probability of A and vice versa. They d-connected through the following path: ['D', 'A']",True,"Yes, they are d-connected through the path E, C. Meaning that changing the evidence of D will change the probability of A.",False,None of the above,False,"No, there is no path between D and A. Meaning that changing the evidence of D will not change the probability of A.",False
+elementary,dependency,2,Is {node1} d-connected to {node2}?,Is C d-connected to B?,C,B,,,Is C d-connected to B?,A,"Yes, C is d-connected to B, which means that entering evidence for C would change the probability of B and vice versa. They d-connected through the following path: ['C', 'B']",True,"Yes, they are d-connected through the path D, A. Meaning that changing the evidence of C will change the probability of B.",False,None of the above,False,"No, there is no path between C and B. Meaning that changing the evidence of C will not change the probability of B.",False
+elementary,dependency,3,Is {node1} d-separated from {node2}?,Is A d-separated from D?,A,D,,,Is A d-separated from D?,A,"Yes, A is d-connected to D, which means that entering evidence for A would change the probability of D and vice versa. They d-connected through the following path: ['A', 'D']",True,"Yes, they are d-connected through the path B, C. Meaning that changing the evidence of A will change the probability of D.",False,None of the above,False,"No, there is no path between A and D. Meaning that changing the evidence of A will not change the probability of D.",False
+elementary,dependency,4,Is {node1} dependent on {node2}?,Is C dependent on D?,C,D,,,Is C dependent on D?,A,"Yes, C is d-connected to D, which means that entering evidence for C would change the probability of D and vice versa. They d-connected through the following path: ['C', 'D']",True,"Yes, they are d-connected through the path E, B. Meaning that changing the evidence of C will change the probability of D.",False,None of the above,False,"No, there is no path between C and D. Meaning that changing the evidence of C will not change the probability of D.",False
+elementary,dependency,5,Is {node1} independent of {node2}?,Is B independent of D?,B,D,,,Is B independent of D?,A,"Yes, B is d-connected to D, which means that entering evidence for B would change the probability of D and vice versa. They d-connected through the following path: ['B', 'C', 'D']",True,"Yes, they are d-connected through the path E, A. Meaning that changing the evidence of B will change the probability of D.",False,None of the above,False,"No, there is no path between B and D. Meaning that changing the evidence of B will not change the probability of D.",False
+elementary,common_cause,1,What is the common cause of {node1} and {node2}?,What is the common cause of A and E?,A,E,,,What is the common cause of A and E?,A,The common cause of A and E is: C.,True,"The common cause of A and E is: C, D.",False,"No, there is no common cause between A and E.",False,None of the above,False
+elementary,common_cause,2,Is there a common cause that influences both {node1} and {node2}?,Is there a common cause that influences both A and B?,A,B,,,Is there a common cause that influences both A and B?,A,"The common causes of A and B are: C, D, E.",True,The common causes of A and B are: .,False,"No, there is no common cause between A and B.",False,None of the above,False
+elementary,common_cause,3,Which variable acts as a common parent/grandparent of {node1} and {node2}?,Which variable acts as a common parent/grandparent of B and A?,B,A,,,Which variable acts as a common parent/grandparent of B and A?,A,"The common causes of B and A are: C, D, E.",True,The common causes of B and A are: .,False,"No, there is no common cause between B and A.",False,None of the above,False
+elementary,common_cause,4,Do {node1} and {node2} share the same parent/grandparent node?,Do B and D share the same parent/grandparent node?,B,D,,,Do B and D share the same parent/grandparent node?,A,"The common causes of B and D are: C, E.",True,"The common causes of B and D are: A, E.",False,"No, there is no common cause between B and D.",False,None of the above,False
+elementary,common_cause,5,List all possible common causes between {node1} and {node2}.,List all possible common causes between D and A.,D,A,,,List all possible common causes between D and A.,A,"The common causes of D and A are: C, E.",True,"The common causes of D and A are: E, B.",False,"No, there is no common cause between D and A.",False,None of the above,False
+elementary,common_effect,1,What is the common effect of {node1} and {node2}?,What is the common effect of C and A?,C,A,,,What is the common effect of C and A?,A,The common effect of C and A is: B.,True,The common effect of C and A is: E.,False,"No, there is no common effect between C and A.",False,None of the above,False
+elementary,common_effect,2,Is there a common effect that influences both {node1} and {node2}?,Is there a common effect that influences both A and E?,A,E,,,Is there a common effect that influences both A and E?,A,The common effect of A and E is: B.,True,"The common effect of A and E is: B, C.",False,"No, there is no common effect between A and E.",False,None of the above,False
+elementary,common_effect,3,Which variable acts as a common child/grandchild of {node1} and {node2}?,Which variable acts as a common child/grandchild of C and A?,C,A,,,Which variable acts as a common child/grandchild of C and A?,A,The common effect of C and A is: B.,True,The common effect of C and A is: E.,False,"No, there is no common effect between C and A.",False,None of the above,False
+elementary,common_effect,4,Do {node1} and {node2} share the same child/grandchild node?,Do B and A share the same child/grandchild node?,B,A,,,Do B and A share the same child/grandchild node?,C,"The common effect of B and A is: E, C.",False,"The common effect of B and A is: D, C.",False,"No, there is no common effect between B and A.",True,None of the above,False
+elementary,common_effect,5,List all possible common effects between {node1} and {node2}.,List all possible common effects between C and E.,C,E,,,List all possible common effects between C and E.,A,"The common effects of C and E are: D, A, B.",True,The common effects of C and E are: .,False,"No, there is no common effect between C and E.",False,None of the above,False
+elementary,blocked_evidence,1,What is the minimal set of nodes that would block the dependency between {node1} and {node2}?,What is the minimal set of nodes that would block the dependency between B and E?,B,E,,,What is the minimal set of nodes that would block the dependency between B and E?,C,"The evidence that would block the dependency between B and E is: A, C.",False,"The evidence that would block the dependency between B and E is: A, D.",False,"No, there is no evidence that would block the dependency between B and E.",True,None of the above,False
+elementary,blocked_evidence,2,Which node acts as a blocker for the dependency between {node1} and {node2}?,Which node acts as a blocker for the dependency between B and A?,B,A,,,Which node acts as a blocker for the dependency between B and A?,C,"The evidence that would block the dependency between B and A is: C, E.",False,The evidence that would block the dependency between B and A is: D.,False,"No, there is no evidence that would block the dependency between B and A.",True,None of the above,False
+elementary,blocked_evidence,3,"Is there a node that, when observed, would block the dependency between {node1} and {node2}?","Is there a node that, when observed, would block the dependency between D and B?",D,B,,,"Is there a node that, when observed, would block the dependency between D and B?",C,"The evidence that would block the dependency between D and B is: E, A.",False,"The evidence that would block the dependency between D and B is: C, E.",False,"No, there is no evidence that would block the dependency between D and B.",True,None of the above,False
+elementary,blocked_evidence,4,List all possible nodes that would block the dependency between {node1} and {node2}.,List all possible nodes that would block the dependency between C and B.,C,B,,,List all possible nodes that would block the dependency between C and B.,C,"The evidence that would block the dependency between C and B is: D, A.",False,"The evidence that would block the dependency between C and B is: A, E.",False,"No, there is no evidence that would block the dependency between C and B.",True,None of the above,False
+elementary,blocked_evidence,5,What set of evidences would block the path between {node1} and {node2}?,What set of evidences would block the path between A and B?,A,B,,,What set of evidences would block the path between A and B?,C,"The evidence that would block the dependency between A and B is: D, C.",False,"The evidence that would block the dependency between A and B is: E, D.",False,"No, there is no evidence that would block the dependency between A and B.",True,None of the above,False
+elementary,evidence_change_relationship,1,Is the relationship between {node1} and {node2} affected by the evidence of {evidence}?,"Is the relationship between C and B affected by the evidence of A, E?",C,B,,"A, E","Is the relationship between C and B affected by the evidence of A, E?",A,"No - conditioning on A, E does not change the dependency between C and B. Before observing A, E, they were d-connected. After observing all evidence, they remain d-connected.",True,"No - conditioning on A, E does not change the dependency between C and B. Before observing A, E, they were d-connected. After observing all evidence, they remain d-connected.",False,"Yes - conditioning on A, E changes the dependency between C and B. Before observing A, E, they were d-connected. After observing all evidence, they are d-separated.",False,None of the above,False
+elementary,evidence_change_relationship,2,Does observing {evidence} change the dependency between {node1} and {node2}?,Does observing D change the dependency between A and B?,A,B,,D,Does observing D change the dependency between A and B?,A,"No - conditioning on D does not change the dependency between A and B. Before observing D, they were d-connected. After observing all evidence, they remain d-connected.",True,"No - conditioning on D does not change the dependency between A and B. Before observing D, they were d-connected. After observing all evidence, they remain d-connected.",False,"Yes - conditioning on D changes the dependency between A and B. Before observing D, they were d-connected. After observing all evidence, they are d-separated.",False,None of the above,False
+elementary,evidence_change_relationship,3,Can information flow from {node1} to {node2} through knowing {evidence}?,"Can information flow from C to E through knowing D, B?",C,E,,"D, B","Can information flow from C to E through knowing D, B?",A,"No - conditioning on D, B does not change the dependency between C and E. Before observing D, B, they were d-connected. After observing all evidence, they remain d-connected.",True,"No - conditioning on D, B does not change the dependency between C and E. Before observing D, B, they were d-connected. After observing all evidence, they remain d-connected.",False,"Yes - conditioning on D, B changes the dependency between C and E. Before observing D, B, they were d-connected. After observing all evidence, they are d-separated.",False,None of the above,False
+elementary,evidence_change_relationship,4,Is there a path that links {node1} to {node2} through knowing {evidence}?,Is there a path that links A to E through knowing D?,A,E,,D,Is there a path that links A to E through knowing D?,A,"No - conditioning on D does not change the dependency between A and E. Before observing D, they were d-connected. After observing all evidence, they remain d-connected.",True,"No - conditioning on D does not change the dependency between A and E. Before observing D, they were d-connected. After observing all evidence, they remain d-connected.",False,"Yes - conditioning on D changes the dependency between A and E. Before observing D, they were d-connected. After observing all evidence, they are d-separated.",False,None of the above,False
+elementary,evidence_change_relationship,5,Is {node2} reachable from {node1} through knowing {evidence}?,Is A reachable from D through knowing B?,D,A,,B,Is A reachable from D through knowing B?,A,"No - conditioning on B does not change the dependency between D and A. Before observing B, they were d-connected. After observing all evidence, they remain d-connected.",True,"No - conditioning on B does not change the dependency between D and A. Before observing B, they were d-connected. After observing all evidence, they remain d-connected.",False,"Yes - conditioning on B changes the dependency between D and A. Before observing B, they were d-connected. After observing all evidence, they are d-separated.",False,None of the above,False
+numerical,probability,1,What is the probability of {node} given {evidence}?,"What is the probability of A given C, D, E?",,,A,"C, D, E","What is the probability of A given C, D, E?",A,"P(A | C=True, D=True, E=True):
+  P(A=False) = 0.6931
+  P(A=True) = 0.3069
+
+Original distribution:
+  P(A=False) = 0.3971
+  P(A=True) = 0.6029
+
+Conclusion:
+  Belief in 'False' increased by 0.2960
+  Belief in 'True' decreased by 0.2960
+  Largest overall per-state shift: 0.2960.
+Evidence impact (leave-one-out):
+  - D: L1=0.7036, max_abs=0.3518
+  - E: L1=0.2299, max_abs=0.1149
+  - C: L1=0.2044, max_abs=0.1022
+  => Most influential evidence: D (by L1 contribution).",True,"P(A | C=True, D=True, E=True):
+  P(A=False) = 0.6895
+  P(A=True) = 0.3105
+
+Original distribution:
+  P(A=False) = 0.3971
+  P(A=True) = 0.6029
+
+Conclusion:
+  Belief in 'False' increased by 0.2924
+  Belief in 'True' decreased by 0.2924
+  Largest overall per-state shift: 0.2924.
+Evidence impact (leave-one-out):
+  - D: L1=0.7036, max_abs=0.3518
+  - E: L1=0.2299, max_abs=0.1149
+  - C: L1=0.2044, max_abs=0.1022
+  => Most influential evidence: D (by L1 contribution).",False,"P(A | C=True, D=True, E=True):
+  P(A=False) = 0.7028
+  P(A=True) = 0.2972
+
+Original distribution:
+  P(A=False) = 0.3971
+  P(A=True) = 0.6029
+
+Conclusion:
+  Belief in 'False' increased by 0.3057
+  Belief in 'True' decreased by 0.3057
+  Largest overall per-state shift: 0.3057.
+Evidence impact (leave-one-out):
+  - D: L1=0.7036, max_abs=0.3518
+  - E: L1=0.2299, max_abs=0.1149
+  - C: L1=0.2044, max_abs=0.1022
+  => Most influential evidence: D (by L1 contribution).",False,None of the above,False
+numerical,probability,2,"Given {evidence}, what is the probability of {node}?","Given B, A, D, what is the probability of C?",,,C,"B, A, D","Given B, A, D, what is the probability of C?",A,"P(C | B=True, A=True, D=True):
+  P(C=False) = 0.0725
+  P(C=True) = 0.9275
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Belief in 'False' decreased by 0.1135
+  Belief in 'True' increased by 0.1135
+  Largest overall per-state shift: 0.1135.
+Evidence impact (leave-one-out):
+  - B: L1=0.5643, max_abs=0.2822
+  - A: L1=0.1333, max_abs=0.0666
+  - D: L1=0.0867, max_abs=0.0434
+  => Most influential evidence: B (by L1 contribution).",True,"P(C | B=True, A=True, D=True):
+  P(C=False) = 0.0704
+  P(C=True) = 0.9296
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Belief in 'False' decreased by 0.1156
+  Belief in 'True' increased by 0.1156
+  Largest overall per-state shift: 0.1156.
+Evidence impact (leave-one-out):
+  - B: L1=0.5643, max_abs=0.2822
+  - A: L1=0.1333, max_abs=0.0666
+  - D: L1=0.0867, max_abs=0.0434
+  => Most influential evidence: B (by L1 contribution).",False,"P(C | B=True, A=True, D=True):
+  P(C=False) = 0.0788
+  P(C=True) = 0.9212
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Belief in 'False' decreased by 0.1072
+  Belief in 'True' increased by 0.1072
+  Largest overall per-state shift: 0.1072.
+Evidence impact (leave-one-out):
+  - B: L1=0.5643, max_abs=0.2822
+  - A: L1=0.1333, max_abs=0.0666
+  - D: L1=0.0867, max_abs=0.0434
+  => Most influential evidence: B (by L1 contribution).",False,None of the above,False
+numerical,probability,3,"Knowing {evidence}, what is the probability of {node}?","Knowing E, A, B, what is the probability of C?",,,C,"E, A, B","Knowing E, A, B, what is the probability of C?",A,"P(C | E=True, A=True, B=True):
+  P(C=False) = 0.1659
+  P(C=True) = 0.8341
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Overall, the update is minimal (all changes ≤ threshold).
+Evidence impact (leave-one-out):
+  - E: L1=0.2736, max_abs=0.1368
+  - B: L1=0.0998, max_abs=0.0499
+  - A: L1=0.0142, max_abs=0.0071
+  => Most influential evidence: E (by L1 contribution).",True,"P(C | E=True, A=True, B=True):
+  P(C=False) = 0.1637
+  P(C=True) = 0.8363
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Overall, the update is minimal (0.0223).
+Evidence impact (leave-one-out):
+  - E: L1=0.2736, max_abs=0.1368
+  - B: L1=0.0998, max_abs=0.0499
+  - A: L1=0.0142, max_abs=0.0071
+  => Most influential evidence: E (by L1 contribution).",False,"P(C | E=True, A=True, B=True):
+  P(C=False) = 0.1321
+  P(C=True) = 0.8679
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Belief in 'False' decreased by 0.0539
+  Belief in 'True' increased by 0.0539
+  Largest overall per-state shift: 0.0539.
+Evidence impact (leave-one-out):
+  - E: L1=0.2736, max_abs=0.1368
+  - B: L1=0.0998, max_abs=0.0499
+  - A: L1=0.0142, max_abs=0.0071
+  => Most influential evidence: E (by L1 contribution).",False,None of the above,False
+numerical,probability,4,"If I know {evidence}, what is the probability of {node}?","If I know D, what is the probability of C?",,,C,D,"If I know D, what is the probability of C?",A,"P(C | D=True):
+  P(C=False) = 0.3304
+  P(C=True) = 0.6696
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Belief in 'False' increased by 0.1444
+  Belief in 'True' decreased by 0.1444
+  Largest overall per-state shift: 0.1444.
+Evidence impact (leave-one-out):
+  - D: L1=0.2889, max_abs=0.1444
+  => Most influential evidence: D (by L1 contribution).",True,"P(C | D=True):
+  P(C=False) = 0.3428
+  P(C=True) = 0.6572
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Belief in 'False' increased by 0.1568
+  Belief in 'True' decreased by 0.1568
+  Largest overall per-state shift: 0.1568.
+Evidence impact (leave-one-out):
+  - D: L1=0.2889, max_abs=0.1444
+  => Most influential evidence: D (by L1 contribution).",False,"P(C | D=True):
+  P(C=False) = 0.3179
+  P(C=True) = 0.6821
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Belief in 'False' increased by 0.1318
+  Belief in 'True' decreased by 0.1318
+  Largest overall per-state shift: 0.1318.
+Evidence impact (leave-one-out):
+  - D: L1=0.2889, max_abs=0.1444
+  => Most influential evidence: D (by L1 contribution).",False,None of the above,False
+numerical,probability,5,What is P({node} | {evidence})?,"What is P(C | D, E, B)?",,,C,"D, E, B","What is P(C | D, E, B)?",A,"P(C | D=True, E=True, B=True):
+  P(C=False) = 0.2388
+  P(C=True) = 0.7612
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Belief in 'False' increased by 0.0528
+  Belief in 'True' decreased by 0.0528
+  Largest overall per-state shift: 0.0528.
+Evidence impact (leave-one-out):
+  - B: L1=0.5055, max_abs=0.2527
+  - E: L1=0.1994, max_abs=0.0997
+  - D: L1=0.1600, max_abs=0.0800
+  => Most influential evidence: B (by L1 contribution).",True,"P(C | D=True, E=True, B=True):
+  P(C=False) = 0.2354
+  P(C=True) = 0.7646
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Overall, the update is minimal (0.0494).
+Evidence impact (leave-one-out):
+  - B: L1=0.5055, max_abs=0.2527
+  - E: L1=0.1994, max_abs=0.0997
+  - D: L1=0.1600, max_abs=0.0800
+  => Most influential evidence: B (by L1 contribution).",False,"P(C | D=True, E=True, B=True):
+  P(C=False) = 0.2405
+  P(C=True) = 0.7595
+
+Original distribution:
+  P(C=False) = 0.1860
+  P(C=True) = 0.8140
+
+Conclusion:
+  Belief in 'False' increased by 0.0545
+  Belief in 'True' decreased by 0.0545
+  Largest overall per-state shift: 0.0545.
+Evidence impact (leave-one-out):
+  - B: L1=0.5055, max_abs=0.2527
+  - E: L1=0.1994, max_abs=0.0997
+  - D: L1=0.1600, max_abs=0.0800
+  => Most influential evidence: B (by L1 contribution).",False,None of the above,False

@@ -782,3 +782,263 @@ def highest_impact_evidence_test(
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
     )
+
+
+def debug_print_elementary_quiz(
+    net,
+    question_set,
+    create_quiz_function,
+    *,
+    has_evidence=False,
+    num_questions=1,
+    question_index=1
+):
+    """
+    Debug function to print out quiz for elementary tests without running the actual test.
+    
+    Args:
+        net: Bayesian network
+        question_set: List of question formats
+        create_quiz_function: Function to create quiz (e.g., create_dependency_quiz)
+        has_evidence: Whether to include evidence
+        num_questions: Number of questions to generate (default 1)
+        question_index: Starting question index (default 1)
+    """
+    print(f"=== DEBUG: Printing Elementary Quiz ===")
+    print(f"Quiz function: {create_quiz_function.__name__}")
+    print(f"Network size: {len(net.nodes())}")
+    print(f"Has evidence: {has_evidence}")
+    print(f"Number of questions: {num_questions}")
+    print("=" * 50)
+    
+    for i in range(num_questions):
+        current_index = question_index + i
+        if i < len(question_set):
+            question_format = question_set[i]
+        else:
+            question_format = question_set[0]  # Use first question format if we run out
+            
+        print(f"\n--- Question {current_index} ---")
+        
+        # Determine if the question format requires evidence, override if needed
+        requires_evidence = "{evidence}" in (question_format or "")
+        effective_has_evidence = has_evidence or requires_evidence
+
+        # Generate question
+        if effective_has_evidence:
+            prompt, node1, node2, question_output, evidence = two_nodes_question(net, question_format=question_format, has_evidence=True)
+            quiz, y, quiz_dict = create_quiz_function(question_output, net, node1, node2, evidence)
+            print(f"Node1: {node1}")
+            print(f"Node2: {node2}")
+            print(f"Evidence: {evidence}")
+            if requires_evidence and not has_evidence:
+                print("(Auto-enabled evidence for this question format)")
+        else:
+            prompt, node1, node2, question_output = two_nodes_question(net, question_format=question_format, has_evidence=False)
+            quiz, y, quiz_dict = create_quiz_function(question_output, net, node1, node2)
+            print(f"Node1: {node1}")
+            print(f"Node2: {node2}")
+            print(f"Evidence: None")
+        
+        print(f"\nQuestion Format: {question_format}")
+        print(f"Generated Question: {question_output}")
+        print(f"Correct Answer: {y}")
+        print(f"\nQuiz:")
+        print(quiz)
+        print(f"\nQuiz Dict Structure:")
+        print(f"Header: {quiz_dict.get('header', 'N/A')}")
+        print(f"Options: {len(quiz_dict.get('options', []))} options")
+        for idx, opt in enumerate(quiz_dict.get('options', [])):
+            print(f"  {chr(65 + idx)}. {opt.get('text', 'N/A')} (Correct: {opt.get('is_correct', False)})")
+        print("-" * 50)
+
+
+def debug_print_numerical_quiz(
+    net,
+    question_set,
+    create_quiz_function,
+    *,
+    has_evidence=False,
+    num_questions=1,
+    question_index=1
+):
+    """
+    Debug function to print out quiz for numerical tests without running the actual test.
+    
+    Args:
+        net: Bayesian network
+        question_set: List of question formats
+        create_quiz_function: Function to create quiz (e.g., create_probability_quiz)
+        has_evidence: Whether to include evidence
+        num_questions: Number of questions to generate (default 1)
+        question_index: Starting question index (default 1)
+    """
+    print(f"=== DEBUG: Printing Numerical Quiz ===")
+    print(f"Quiz function: {create_quiz_function.__name__}")
+    print(f"Network size: {len(net.nodes())}")
+    print(f"Has evidence: {has_evidence}")
+    print(f"Number of questions: {num_questions}")
+    print("=" * 50)
+    
+    for i in range(num_questions):
+        current_index = question_index + i
+        if i < len(question_set):
+            question_format = question_set[i]
+        else:
+            question_format = question_set[0]  # Use first question format if we run out
+            
+        print(f"\n--- Question {current_index} ---")
+        
+        # Determine if the question format requires evidence, override if needed
+        requires_evidence = "{evidence}" in (question_format or "")
+        effective_has_evidence = has_evidence or requires_evidence
+
+        # Generate question
+        if effective_has_evidence:
+            prompt, node, question_output, evidence = probability_question(net, question_format=question_format, has_evidence=True)
+            quiz, y, quiz_dict = create_quiz_function(question_output, net, node, evidence)
+            print(f"Node: {node}")
+            print(f"Evidence: {evidence}")
+            if requires_evidence and not has_evidence:
+                print("(Auto-enabled evidence for this question format)")
+        else:
+            prompt, node, question_output = probability_question(net, question_format=question_format, has_evidence=False)
+            quiz, y, quiz_dict = create_quiz_function(question_output, net, node)
+            print(f"Node: {node}")
+            print(f"Evidence: None")
+        
+        print(f"\nQuestion Format: {question_format}")
+        print(f"Generated Question: {question_output}")
+        print(f"Correct Answer: {y}")
+        print(f"\nQuiz:")
+        print(quiz)
+        print(f"\nQuiz Dict Structure:")
+        print(f"Header: {quiz_dict.get('header', 'N/A')}")
+        print(f"Options: {len(quiz_dict.get('options', []))} options")
+        for idx, opt in enumerate(quiz_dict.get('options', [])):
+            print(f"  {chr(65 + idx)}. {opt.get('text', 'N/A')} (Correct: {opt.get('is_correct', False)})")
+        print("-" * 50)
+
+
+def export_quiz_samples_to_csv(
+    net,
+    *,
+    num_questions=2,
+    output_file_path="quiz_samples.csv",
+    include_sets=None,
+):
+    """
+    Generate quiz samples for the provided network and write them to a CSV file.
+
+    Args:
+        net: Bayesian network
+        num_questions (int): Number of questions per question set to generate
+        output_file_path (str): Path to CSV output file
+        include_sets (list[str] | None): Optional subset of set keys to include
+
+    The CSV columns include metadata, question text, header, options A-D, and correctness flags.
+    Evidence is auto-enabled if the question format contains "{evidence}".
+    """
+    import csv
+
+    # Map of question set labels to (question_list, create_quiz_function, test_type, generator)
+    # generator is either two_nodes_question (elementary) or probability_question (numerical)
+    question_sets = {
+        "dependency": (DEPENDENCY_QUESTIONS, create_dependency_quiz, "elementary", two_nodes_question),
+        "common_cause": (COMMON_CAUSE_QUESTIONS, create_common_cause_quiz, "elementary", two_nodes_question),
+        "common_effect": (COMMON_EFFECT_QUESTIONS, create_common_effect_quiz, "elementary", two_nodes_question),
+        "blocked_evidence": (BLOCKED_EVIDENCES_QUESTIONS, create_blocked_evidence_quiz, "elementary", two_nodes_question),
+        "evidence_change_relationship": (EVIDENCE_CHANGE_RELATIONSHIP_QUESTIONS, create_evidence_change_relationship_quiz, "elementary", two_nodes_question),
+        "probability": (PROBABILITY_QUESTIONS, create_probability_quiz, "numerical", probability_question),
+        "highest_impact_evidence": (HIGHEST_IMPACT_EVIDENCE_QUESTIONS, create_highest_impact_evidence_quiz, "numerical", probability_question),
+    }
+
+    if include_sets:
+        include_sets = set(include_sets)
+        question_sets = {k: v for k, v in question_sets.items() if k in include_sets}
+
+    fieldnames = [
+        "test_type",
+        "set_key",
+        "question_index",
+        "question_format",
+        "generated_question",
+        "node1",
+        "node2",
+        "node",
+        "evidence",
+        "quiz_header",
+        "correct_letter",
+        "option_A_text",
+        "option_A_is_correct",
+        "option_B_text",
+        "option_B_is_correct",
+        "option_C_text",
+        "option_C_is_correct",
+        "option_D_text",
+        "option_D_is_correct",
+    ]
+
+    with open(output_file_path, mode="w", newline="") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for set_key, (q_list, make_quiz, test_type, generator) in question_sets.items():
+            for i in range(num_questions):
+                # Pick question format (cycle if fewer provided)
+                if len(q_list) == 0:
+                    continue
+                question_format = q_list[i % len(q_list)]
+
+                # Evidence auto-detection
+                requires_evidence = "{evidence}" in (question_format or "")
+
+                row = {
+                    "test_type": test_type,
+                    "set_key": set_key,
+                    "question_index": i + 1,
+                    "question_format": question_format,
+                    "node1": None,
+                    "node2": None,
+                    "node": None,
+                    "evidence": None,
+                }
+
+                if generator is two_nodes_question:
+                    if requires_evidence:
+                        prompt, node1, node2, question_output, evidence = generator(net, question_format=question_format, has_evidence=True)
+                        quiz_text, correct_letter, quiz_dict = make_quiz(question_output, net, node1, node2, evidence)
+                        row["node1"], row["node2"], row["evidence"] = node1, node2, ", ".join(evidence) if evidence else ""
+                    else:
+                        prompt, node1, node2, question_output = generator(net, question_format=question_format, has_evidence=False)
+                        quiz_text, correct_letter, quiz_dict = make_quiz(question_output, net, node1, node2)
+                        row["node1"], row["node2"] = node1, node2
+                else:
+                    # probability_question generator
+                    if requires_evidence:
+                        prompt, node, question_output, evidence = generator(net, question_format=question_format, has_evidence=True)
+                        quiz_text, correct_letter, quiz_dict = make_quiz(question_output, net, node, evidence)
+                        row["node"], row["evidence"] = node, ", ".join(evidence) if evidence else ""
+                    else:
+                        prompt, node, question_output = generator(net, question_format=question_format, has_evidence=False)
+                        quiz_text, correct_letter, quiz_dict = make_quiz(question_output, net, node)
+                        row["node"] = node
+
+                row["generated_question"] = question_output
+                row["quiz_header"] = quiz_dict.get("header", "") if isinstance(quiz_dict, dict) else ""
+                row["correct_letter"] = correct_letter
+
+                # Write options A..D when present
+                options = list(quiz_dict.get("options", [])) if isinstance(quiz_dict, dict) else []
+                for idx, letter in enumerate(["A", "B", "C", "D"]):
+                    if idx < len(options):
+                        opt = options[idx]
+                        row[f"option_{letter}_text"] = opt.get("text", "")
+                        row[f"option_{letter}_is_correct"] = bool(opt.get("is_correct", False))
+                    else:
+                        row[f"option_{letter}_text"] = ""
+                        row[f"option_{letter}_is_correct"] = False
+
+                writer.writerow(row)
+
+    print(f"Wrote quiz samples to: {output_file_path}")
