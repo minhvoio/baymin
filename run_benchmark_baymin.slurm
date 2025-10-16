@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=llmbn-ibm
-#SBATCH --partition=gpu
+#SBATCH --job-name=baymin-benchmark
+#SBATCH --qos=desktopq
+#SBATCH --partition=desktop
 #SBATCH --gres=gpu:A40:1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=240G
-#SBATCH --time=4:00:00
-#SBATCH --constraint=r9
+#SBATCH --mem=240000M
+#SBATCH --time=10:30:00
 #SBATCH --ntasks=1
+#SBATCH --constraint=r9
 #SBATCH --output=%x-%j.out
 #SBATCH --error=%x-%j.err
 
@@ -43,6 +43,6 @@ done
 
 # 3) Run your benchmark with srun (binds the GPU/CPUs cleanly)
 echo "[INFO] Running benchmark ..."
-srun python /home/mvo1/lb64_scratch/projects/llm-bn/benchmarking_all_models.py
+srun python /home/mvo1/lb64_scratch/projects/llm-bn/benchmarking_baymin.py
 
 echo "[INFO] Done at $(date)"
