@@ -1,11 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=llm-bn-ollama-a40
-#SBATCH --qos=desktopq
-#SBATCH --partition=desktop
+#SBATCH --job-name=llmbn-ibm
+#SBATCH --partition=gpu
 #SBATCH --gres=gpu:A40:1
 #SBATCH --mem=240000M
-#SBATCH --time=12:00:00
-#SBATCH --ntasks=13
+#SBATCH --time=4:00:00
+#SBATCH --ntasks=2
 #SBATCH --constraint=r9
 #SBATCH --output=%x-%j.out
 #SBATCH --error=%x-%j.err
