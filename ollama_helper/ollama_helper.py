@@ -90,6 +90,8 @@ async def get_quiz_answer_from_thinking_model(prompt, model=MODEL, max_tokens=10
     return result.output.A_or_B_or_C_or_D
 
 def get_quiz_answer_from_thinking_model_sync(prompt, model=MODEL, max_tokens=1000, temperature=0, stream=False, top_p=None, seed=None):
+    import re
+    
     try:
         loop = asyncio.get_event_loop()
         if loop.is_running():
@@ -128,13 +130,51 @@ def get_quiz_answer_from_thinking_model_sync(prompt, model=MODEL, max_tokens=100
                 seed=seed,
             )
         )
+    except Exception as e:
+        # Fallback: try to extract answer from raw model output when validation fails
+        print(f"[Warning] Quiz validation failed: {e}")
+        try:
+            # Get raw output without structured validation
+            raw_result = asyncio.run(
+                _run_ollama_agent(
+                    prompt=prompt,
+                    model=model,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    output_type=None, 
+                    stream=stream,
+                    top_p=top_p,
+                    seed=seed,
+                )
+            )
+            
+            # Extract letter from raw output
+            raw_text = str(raw_result.output) if hasattr(raw_result, 'output') else str(raw_result)
+            
+            # Clean up common formatting issues
+            raw_text = raw_text.strip()
+            
+            # Remove LaTeX formatting
+            raw_text = re.sub(r'\\boxed\{([^}]*)\}', r'\1', raw_text)
+            raw_text = re.sub(r'\\text\{([^}]*)\}', r'\1', raw_text)
+            
+            # Extract first valid letter
+            match = re.search(r'[ABCD]', raw_text.upper())
+            if match:
+                print(f"[Info] Extracted answer '{match.group()}' from: {raw_text[:100]}...")
+                return match.group()
+            else:
+                print(f"[Error] Could not extract valid answer from: {raw_text}")
+                
+        except Exception as fallback_error:
+            print(f"[Error] Fallback also failed: {fallback_error}")
 
 async def _run_ollama_agent(prompt, model, max_tokens, temperature, output_type, stream=False, top_p=None, seed=None):
     ollama_model = OpenAIChatModel(
         model_name=model,
         provider=OllamaProvider(base_url=OLLAMA_URL + 'v1'),  
     )
-    agent = Agent(ollama_model, output_type=output_type, max_retries=5)
+    agent = Agent(ollama_model, output_type=output_type)
     return await agent.run(
         prompt,
         model_settings={
