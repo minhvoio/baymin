@@ -62,36 +62,130 @@ def answer_this_prompt(
         return full
 
 async def get_answer_from_ollama(prompt, model=MODEL, max_tokens=1000, temperature=0.3, stream=False, show_thinking=False, top_p=None, seed=None):
-    result = await _run_ollama_agent(
-        prompt=prompt,
-        model=model,
-        max_tokens=max_tokens,
-        temperature=temperature,
-        output_type=AnswerStructure,
-        stream=stream,
-        top_p=top_p,
-        seed=seed,
-    )
-    if show_thinking:
-        return result.output.answer, getattr(result.output, 'thinking', None)
-    return result.output.answer
-
-async def get_quiz_answer_from_thinking_model(prompt, model=MODEL, max_tokens=1000, temperature=0, stream=False, top_p=None, seed=None):
-    result = await _run_ollama_agent(
-        prompt=prompt,
-        model=model,
-        max_tokens=max_tokens,
-        temperature=temperature,
-        output_type=QuizAnswer,
-        stream=stream,
-        top_p=top_p,
-        seed=seed,
-    )
-    return result.output.A_or_B_or_C_or_D
-
-def get_quiz_answer_from_thinking_model_sync(prompt, model=MODEL, max_tokens=1000, temperature=0, stream=False, top_p=None, seed=None):
     import re
     
+    try:
+        result = await _run_ollama_agent(
+            prompt=prompt,
+            model=model,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            output_type=AnswerStructure,
+            stream=stream,
+            top_p=top_p,
+            seed=seed,
+        )
+        if show_thinking:
+            return result.output.answer, getattr(result.output, 'thinking', None)
+        return result.output.answer
+    except Exception as e:
+        # Fallback when pydantic-ai validation fails for AnswerStructure
+        print(f"[Warning] Answer validation failed in get_answer_from_ollama: {e}")
+        try:
+            # Use raw Ollama API directly to bypass pydantic-ai entirely
+            import aiohttp
+            
+            payload = {
+                "model": model,
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "temperature": temperature,
+                    **({"top_p": top_p} if top_p is not None else {}),
+                    **({"seed": seed} if seed is not None else {}),
+                    "num_predict": max_tokens,
+                }
+            }
+            
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    "http://localhost:11434/api/generate",
+                    json=payload,
+                    headers={"Content-Type": "application/json"}
+                ) as response:
+                    if response.status == 200:
+                        result = await response.json()
+                        raw_text = result.get("response", "").strip()
+                        
+                        # Clean up common formatting issues
+                        raw_text = re.sub(r'\\boxed\{([^}]*)\}', r'\1', raw_text)
+                        raw_text = re.sub(r'\\text\{([^}]*)\}', r'\1', raw_text)
+                        
+                        print(f"[Info] Extracted answer from raw Ollama API: {raw_text[:200]}...")
+                        return raw_text
+                    else:
+                        print(f"[Error] Raw Ollama API failed with status {response.status}")
+                        return "Unable to generate answer due to API errors."
+            
+        except Exception as fallback_error:
+            print(f"[Error] Fallback also failed: {fallback_error}")
+            return "Unable to generate answer due to validation errors."
+
+async def get_quiz_answer_from_thinking_model(prompt, model=MODEL, max_tokens=1000, temperature=0, stream=False, top_p=None, seed=None):
+    import re
+    
+    try:
+        result = await _run_ollama_agent(
+            prompt=prompt,
+            model=model,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            output_type=QuizAnswer,
+            stream=stream,
+            top_p=top_p,
+            seed=seed,
+        )
+        return result.output.A_or_B_or_C_or_D
+    except Exception as e:
+        # Fallback when pydantic-ai validation fails
+        print(f"[Warning] Quiz validation failed in async function: {e}")
+        try:
+            # Use raw Ollama API directly to bypass pydantic-ai entirely
+            import aiohttp
+            
+            payload = {
+                "model": model,
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "temperature": temperature,
+                    **({"top_p": top_p} if top_p is not None else {}),
+                    **({"seed": seed} if seed is not None else {}),
+                    "num_predict": max_tokens,
+                }
+            }
+            
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    "http://localhost:11434/api/generate",
+                    json=payload,
+                    headers={"Content-Type": "application/json"}
+                ) as response:
+                    if response.status == 200:
+                        result = await response.json()
+                        raw_text = result.get("response", "").strip()
+                        
+                        # Clean up common formatting issues
+                        raw_text = re.sub(r'\\boxed\{([^}]*)\}', r'\1', raw_text)
+                        raw_text = re.sub(r'\\text\{([^}]*)\}', r'\1', raw_text)
+                        
+                        # Extract first valid letter
+                        match = re.search(r'[ABCD]', raw_text.upper())
+                        if match:
+                            print(f"[Info] Extracted quiz answer '{match.group()}' from: {raw_text[:100]}...")
+                            return match.group()
+                        else:
+                            print(f"[Error] Could not extract valid quiz answer from: {raw_text}")
+                            return 'A'  # Default fallback
+                    else:
+                        print(f"[Error] Raw Ollama API failed with status {response.status}")
+                        return 'A'  # Default fallback
+                
+        except Exception as fallback_error:
+            print(f"[Error] Quiz fallback also failed: {fallback_error}")
+            return 'A'  # Ultimate fallback
+
+def get_quiz_answer_from_thinking_model_sync(prompt, model=MODEL, max_tokens=1000, temperature=0, stream=False, top_p=None, seed=None):
     try:
         loop = asyncio.get_event_loop()
         if loop.is_running():
@@ -130,44 +224,6 @@ def get_quiz_answer_from_thinking_model_sync(prompt, model=MODEL, max_tokens=100
                 seed=seed,
             )
         )
-    except Exception as e:
-        # Fallback: try to extract answer from raw model output when validation fails
-        print(f"[Warning] Quiz validation failed: {e}")
-        try:
-            # Get raw output without structured validation
-            raw_result = asyncio.run(
-                _run_ollama_agent(
-                    prompt=prompt,
-                    model=model,
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    output_type=None, 
-                    stream=stream,
-                    top_p=top_p,
-                    seed=seed,
-                )
-            )
-            
-            # Extract letter from raw output
-            raw_text = str(raw_result.output) if hasattr(raw_result, 'output') else str(raw_result)
-            
-            # Clean up common formatting issues
-            raw_text = raw_text.strip()
-            
-            # Remove LaTeX formatting
-            raw_text = re.sub(r'\\boxed\{([^}]*)\}', r'\1', raw_text)
-            raw_text = re.sub(r'\\text\{([^}]*)\}', r'\1', raw_text)
-            
-            # Extract first valid letter
-            match = re.search(r'[ABCD]', raw_text.upper())
-            if match:
-                print(f"[Info] Extracted answer '{match.group()}' from: {raw_text[:100]}...")
-                return match.group()
-            else:
-                print(f"[Error] Could not extract valid answer from: {raw_text}")
-                
-        except Exception as fallback_error:
-            print(f"[Error] Fallback also failed: {fallback_error}")
 
 async def _run_ollama_agent(prompt, model, max_tokens, temperature, output_type, stream=False, top_p=None, seed=None):
     ollama_model = OpenAIChatModel(

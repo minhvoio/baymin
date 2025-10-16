@@ -46,7 +46,7 @@ Use the Explanation below to answer the Quiz.
 Base your answer only on the Explanation — do NOT check for factual accuracy.
 If none of the provided options match the Explanation, select the letter of the "None of the above." option.
 
-CRITICAL: Output ONLY a single uppercase letter (A, B, C, or D) — no additional text, punctuation, explanation, formatting, or LaTeX commands like \boxed{}.
+CRITICAL: Output ONLY a single uppercase letter (A, B, C, or D) — no additional text, punctuation, explanation, formatting, or LaTeX commands like \boxed{{}}.
 
 Quiz:
 {quiz}

@@ -33,7 +33,10 @@ def model_do_quiz(
     import random as _random
 
     if not quiz_dict or not isinstance(quiz_dict, dict) or not quiz_dict.get("options"):
-        prompt = TAKE_QUIZ_PROMPT.format(quiz=quiz, bn_explanation=bn_explanation)
+        # Escape braces to avoid str.format errors when model output contains '{' or '}'
+        safe_quiz = str(quiz).replace('{', '{{').replace('}', '}}')
+        safe_explanation = str(bn_explanation).replace('{', '{{').replace('}', '}}')
+        prompt = TAKE_QUIZ_PROMPT.format(quiz=safe_quiz, bn_explanation=safe_explanation)
         return get_quiz_answer_from_thinking_model_sync(
             prompt,
             model=model,
@@ -67,7 +70,9 @@ def model_do_quiz(
             mapping[presented_letter] = opt["original_letter"]
 
         shuffled_quiz = build_quiz_from_presented(presented)
-        prompt = TAKE_QUIZ_PROMPT.format(quiz=shuffled_quiz, bn_explanation=bn_explanation)
+        safe_quiz = str(shuffled_quiz).replace('{', '{{').replace('}', '}}')
+        safe_explanation = str(bn_explanation).replace('{', '{{').replace('}', '}}')
+        prompt = TAKE_QUIZ_PROMPT.format(quiz=safe_quiz, bn_explanation=safe_explanation)
 
         picked = get_quiz_answer_from_thinking_model_sync(
             prompt,
