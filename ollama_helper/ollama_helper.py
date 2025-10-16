@@ -134,7 +134,7 @@ async def _run_ollama_agent(prompt, model, max_tokens, temperature, output_type,
         model_name=model,
         provider=OllamaProvider(base_url=OLLAMA_URL + 'v1'),  
     )
-    agent = Agent(ollama_model, output_type=output_type)
+    agent = Agent(ollama_model, output_type=output_type, max_retries=5)
     return await agent.run(
         prompt,
         model_settings={
