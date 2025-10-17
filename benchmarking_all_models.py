@@ -19,7 +19,7 @@ net_5, net_10, net_30, net_60 = load_nets_from_parquet(os.path.join(data_output,
 
 list_of_nets = [net_5, net_10, net_30, net_60]
 
-IS_DEBUG = True
+IS_DEBUG = False 
 
 NUM_QUESTIONS = 30
 MAX_TOKENS = 1800
