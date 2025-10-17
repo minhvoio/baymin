@@ -48,7 +48,7 @@ def answer_this_prompt(
             return f"Failed to retrieve response: {r.status_code}"
         full = ""
         for line in r.iter_lines(decode_unicode=True):
-            if not line:
+            if not line or line is None:
                 continue
             try:
                 obj = json.loads(line)

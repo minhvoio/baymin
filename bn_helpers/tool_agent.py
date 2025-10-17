@@ -143,9 +143,13 @@ def chat_with_tools(
     # Give the model the “catalog” of node/state names to extract from
     prompt += (
         "\n\nFrom the query above, extract the correct parameters for the tools using these nodes and states below. If the query related to multiple nodes, "
-        "check for the abbreviations first (e.g., 'Tuberculosis or Cancer' can be 'TbOrCa') then check for the full names:\n"
+        "check for the abbreviations first (e.g., 'Tuberculosis or Cancer' can be 'TbOrCa') then check for the full names.\n"
+        "NODES AND STATES:\n"
         f"{bn_str}\n"
     )
+
+    if is_debug:
+        print(f"[DEBUG] prompt: {prompt}")
 
     messages = [{"role":"system","content":system_prompt}, {"role":"user","content":prompt}]
     retries_left = max_rounds
@@ -162,7 +166,7 @@ def chat_with_tools(
                 "model": model,
                 "messages": messages,
                 "tools": tools,
-                "options": {"temperature": float(model_temperature), "num_predict": int(max_tokens), "top_p": float(model_top_p)},
+                "options": {"temperature": float(model_temperature), "num_predict": int(max_tokens), "top_p": float(model_top_p), "num_ctx": 32000},
             },
             stream=True,
         )
@@ -170,8 +174,11 @@ def chat_with_tools(
             raise RuntimeError(f"Ollama error {r.status_code}: {r.text}")
 
         assistant_msg = {"role":"assistant","content":"", "tool_calls":[]}
+        if is_debug:
+            print(f"[DEBUG] Initialized assistant_msg: {assistant_msg}")
+        
         for line in r.iter_lines(decode_unicode=True):
-            if not line:
+            if not line or line is None:
                 continue
             try:
                 chunk = json.loads(line)
@@ -180,11 +187,20 @@ def chat_with_tools(
             if "message" in chunk:
                 m = chunk["message"]
                 if m.get("content"):
+                    if is_debug:
+                        print(f"[DEBUG] Adding content to assistant_msg: '{m['content']}'")
                     assistant_msg["content"] += m["content"]
+
+                    if is_debug:
+                        print(f"[DEBUG] assistant_msg content now: '{assistant_msg['content']}'")
                 if "tool_calls" in m and m["tool_calls"]:
                     assistant_msg["tool_calls"] = m["tool_calls"]
+                    if is_debug:
+                        print(f"[DEBUG] assistant_msg tool_calls: {assistant_msg['tool_calls']}")
             if chunk.get("done"):
                 break
+        
+        print(f"[DEBUG] Final assistant_msg: {assistant_msg}")
 
         messages.append(assistant_msg)
 
@@ -255,10 +271,21 @@ def chat_with_tools(
                     debug_tool_results.append(str(payload))
                 if is_output_log and testing_log:
                     testing_log['tool_results'].append(str(payload))
+                try:
+                    content = json.dumps(payload)
+                    if content is None:
+                        if is_debug:
+                            print(f"[ERROR] json.dumps returned None for payload: {payload}")
+                        content = "null"
+                except (TypeError, ValueError) as e:
+                    if is_debug:
+                        print(f"[ERROR] Failed to serialize payload: {e}, payload: {payload}")
+                    content = json.dumps({"error": "serialization_failed", "detail": str(e)})
+                
                 tool_msgs.append({
                     "role": "tool",
                     "tool_name": fn_name,
-                    "content": json.dumps(payload)
+                    "content": content
                 })
 
             # Attach tool results
@@ -267,7 +294,13 @@ def chat_with_tools(
             # Guide follow-up based on tool outcomes:
             # - If at least one success, ask to finalize using successful results.
             # - Only if all produced errors, ask to try again with different params/tools.
-            tool_payloads = [json.loads(m["content"]) for m in tool_msgs]
+            try:
+                tool_payloads = [json.loads(m["content"]) for m in tool_msgs]
+            except (json.JSONDecodeError, TypeError) as e:
+                print(f"[ERROR] Failed to parse tool message content: {e}")
+                print(f"[ERROR] tool_msgs: {tool_msgs}")
+                print(f"[ERROR] Problematic content: {[m.get('content') for m in tool_msgs]}")
+                raise
             has_error = any(p.get("error") for p in tool_payloads)
             has_success = any("result" in p and not p.get("error") for p in tool_payloads)
 
@@ -319,6 +352,7 @@ def chat_with_tools(
                 continue
             else:
                 final_answer = assistant_msg["content"].strip()
+                print(f"[DEBUG] chat_with_tools early return - final_answer: type={type(final_answer)}, value={final_answer}")
                 if is_output_log and testing_log:
                     testing_log['final_answer'] = final_answer
                     return final_answer, testing_log
@@ -330,6 +364,7 @@ def chat_with_tools(
             for m in reversed(messages):
                 if m.get("role") == "tool":
                     final_answer = m["content"]  # raw JSON string
+                    print(f"[DEBUG] chat_with_tools fallback return - final_answer: type={type(final_answer)}, value={final_answer}")
                     if is_output_log and testing_log:
                         testing_log['final_answer'] = final_answer
                         return final_answer, testing_log
@@ -361,9 +396,12 @@ def chat_with_tools(
         testing_log['final_answer'] = final_answer
     
     # Return answer and testing log if in testing mode
+    print(f"[DEBUG] chat_with_tools final_answer: type={type(final_answer)}, value={final_answer}")
     if is_output_log:
+        print(f"[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)")
         return final_answer, testing_log
     else:
+        print(f"[DEBUG] chat_with_tools returning single value: final_answer")
         return final_answer
 
 def make_explain_d_connected_tool(net):
@@ -555,13 +593,18 @@ def get_tools_map(net):
 
 def extract_text(answer: str) -> str:
     # Accept both raw strings and already-parsed dicts/lists
+    if answer is None:
+        print(f"[ERROR] extract_text received None answer")
+        # return "None answer received"
+    
     obj = None
     if isinstance(answer, (dict, list)):
         obj = answer
     else:
         try:
             obj = json.loads(answer)
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as e:
+            print(f"[ERROR] extract_text JSON decode failed: {e}, answer: {answer}")
             # Not JSON; return as-is
             return answer
 
@@ -583,9 +626,15 @@ def get_answer_from_tool_agent(net, prompt, model=MODEL, model_temperature=0.0, 
     import re
     import unicodedata
     import codecs
+    format_prompt = f"QUERY: '{prompt}'"
+    formatted_prompt = format_prompt.format(prompt=format_prompt)
+     
+    if is_debug:
+        print(f"[DEBUG] get_answer_from_tool_agent called with model={model}, prompt length={len(prompt)}")
+    
     result = chat_with_tools(
         net=net,
-        prompt=prompt,
+        prompt=formatted_prompt,
         model=model,
         model_temperature=model_temperature,
         max_tokens=max_tokens,
@@ -596,13 +645,24 @@ def get_answer_from_tool_agent(net, prompt, model=MODEL, model_temperature=0.0, 
         is_debug=is_debug,
         is_output_log=is_output_log,
     )
-
+    
+    if is_debug:
+        print(f"[DEBUG] chat_with_tools returned: type={type(result)}, value={result}")
+    
     if is_output_log:
         raw_answer, testing_log = result
+        if is_debug:
+            print(f"[DEBUG] raw_answer from chat_with_tools: type={type(raw_answer)}, value={raw_answer}")
         answer = extract_text(raw_answer)
+        if is_debug:
+            print(f"[DEBUG] extract_text result: type={type(answer)}, value={answer}")
     else:
         raw_answer = result
+        if is_debug:
+            print(f"[DEBUG] raw_answer from chat_with_tools (no log): type={type(raw_answer)}, value={raw_answer}")
         answer = extract_text(raw_answer)
+        if is_debug:
+            print(f"[DEBUG] extract_text result (no log): type={type(answer)}, value={answer}")
     text = answer
     if isinstance(text, bytes):
         try:

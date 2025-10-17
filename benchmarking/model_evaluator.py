@@ -23,6 +23,7 @@ def model_do_quiz(
     max_tokens: int = 1000,
     top_p: float = 0.9,
     quiz_dict=None,
+    is_debug: bool = False,
 ):
     """
     Majority vote over up to 5 runs with per-run shuffling using structured quiz dict when provided.
@@ -30,6 +31,9 @@ def model_do_quiz(
     - Early-stops when any answer reaches 3 votes
     - Falls back to a single run on the given quiz text if no dict is provided
     """
+    if is_debug:
+        print(f"[DEBUG] model_do_quiz called with model={model}, quiz_dict type={type(quiz_dict)}")
+        print(f"[DEBUG] bn_explanation type={type(bn_explanation)}, length={len(str(bn_explanation)) if bn_explanation else 0}")
     import random as _random
 
     if not quiz_dict or not isinstance(quiz_dict, dict) or not quiz_dict.get("options"):
@@ -37,6 +41,9 @@ def model_do_quiz(
         safe_quiz = str(quiz).replace('{', '{{').replace('}', '}}')
         safe_explanation = str(bn_explanation).replace('{', '{{').replace('}', '}}')
         prompt = TAKE_QUIZ_PROMPT.format(quiz=safe_quiz, bn_explanation=safe_explanation)
+        if is_debug:
+            print(f"[DEBUG] Using fallback quiz prompt (no quiz_dict)")
+            print(f"[DEBUG] Prompt length: {len(prompt)}")
         return get_quiz_answer_from_thinking_model_sync(
             prompt,
             model=model,
@@ -68,12 +75,18 @@ def model_do_quiz(
         for idx, opt in enumerate(presented):
             presented_letter = chr(65 + idx)
             mapping[presented_letter] = opt["original_letter"]
+        
+        if is_debug:
+            print(f"[DEBUG] Run {i+1} mapping: {mapping}")
+            print(f"[DEBUG] Run {i+1} presented options: {[opt['text'][:50] + '...' for opt in presented]}")
 
         shuffled_quiz = build_quiz_from_presented(presented)
         safe_quiz = str(shuffled_quiz).replace('{', '{{').replace('}', '}}')
         safe_explanation = str(bn_explanation).replace('{', '{{').replace('}', '}}')
         prompt = TAKE_QUIZ_PROMPT.format(quiz=safe_quiz, bn_explanation=safe_explanation)
 
+        if is_debug:
+            print(f"[DEBUG] Quiz run {i+1}/5, prompt length: {len(prompt)}")
         picked = get_quiz_answer_from_thinking_model_sync(
             prompt,
             model=model,
@@ -82,14 +95,22 @@ def model_do_quiz(
             top_p=top_p,
             seed=i,
         )
+        if is_debug:
+            print(f"[DEBUG] Quiz run {i+1} picked: {picked}")
 
         mapped = mapping.get(str(picked).strip().upper()[:1])
+        if is_debug:
+            print(f"[DEBUG] Run {i+1} picked '{picked}' -> mapped to '{mapped}'")
         if mapped in vote_counts:
             vote_counts[mapped] += 1
+            if is_debug:
+                print(f"[DEBUG] Vote counts after run {i+1}: {vote_counts}")
         if any(count >= 3 for count in vote_counts.values()):
             break
 
     best_letter = max(["A", "B", "C", "D"], key=lambda L: (vote_counts[L], -ord(L)))
+    if is_debug:
+        print(f"[DEBUG] Final vote counts: {vote_counts}, best_letter: {best_letter}")
     return best_letter
 
 def validate_quiz_answer_list(y_list, y_hat_list):
@@ -150,16 +171,24 @@ def raw_model_test(
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
+    is_debug: bool = False,
 ):
     # Model-specific params only
     effective_model_temp = model_quiz_temperature
     effective_model_top_p = model_quiz_top_p
 
     effective_quiz_temp = model_quiz_temperature
+    
+    if is_debug:
+        print(f"[DEBUG] raw_model_test called with model={model}, prompt length={len(prompt)}")
+        print(f"[DEBUG] quiz type={type(quiz)}, quiz_dict type={type(quiz_dict)}")
+        print(f"[DEBUG] expected answer y={y}")
     try:
         loop = asyncio.get_event_loop()
         if loop.is_running():
             start_time = time.time()
+            if is_debug:
+                print(f"[DEBUG] Getting answer from ollama (loop running) with model={model}")
             ans = loop.run_until_complete(
                 get_answer_from_ollama(
                     prompt,
@@ -170,8 +199,13 @@ def raw_model_test(
                 )
             )
             raw_response_time = time.time() - start_time
+            if is_debug:
+                print(f"[DEBUG] Got answer from ollama (loop running), type={type(ans)}, length={len(str(ans)) if ans else 0}")
+                print(f"[DEBUG] Answer preview: {str(ans)[:200] if ans else 'None'}...")
         else:
             start_time = time.time()
+            if is_debug:
+                print(f"[DEBUG] Getting answer from ollama (else branch) with model={model}")
             ans = loop.run_until_complete(
                 get_answer_from_ollama(
                     prompt,
@@ -182,8 +216,12 @@ def raw_model_test(
                 )
             )
             raw_response_time = time.time() - start_time
+            if is_debug:
+                print(f"[DEBUG] Got answer from ollama (else branch), type={type(ans)}, length={len(str(ans)) if ans else 0}")
     except RuntimeError:
         start_time = time.time()
+        if is_debug:
+            print(f"[DEBUG] Getting answer from ollama (RuntimeError branch) with model={model}")
         ans = asyncio.run(
             get_answer_from_ollama(
                 prompt,
@@ -191,11 +229,16 @@ def raw_model_test(
                 max_tokens=max_tokens,
                 temperature=effective_model_temp,
                 top_p=effective_model_top_p,
+                is_debug=is_debug,
             )
         )
         raw_response_time = time.time() - start_time
+        if is_debug:
+            print(f"[DEBUG] Got answer from ollama (RuntimeError branch), type={type(ans)}, length={len(str(ans)) if ans else 0}")
     
     quiz_start_time = time.time()
+    if is_debug:
+        print(f"[DEBUG] Starting quiz with answer type={type(ans)}, quiz_dict type={type(quiz_dict)}")
     y_hat = model_do_quiz(
         quiz,
         ans,
@@ -204,8 +247,12 @@ def raw_model_test(
         max_tokens=max_tokens,
         top_p=model_quiz_top_p,
         quiz_dict=quiz_dict,
+        is_debug=is_debug,
     )
     quiz_time = time.time() - quiz_start_time
+    
+    if is_debug:
+        print(f"[DEBUG] Quiz completed, y_hat={y_hat}, quiz_time={quiz_time:.2f}s")
     
     if is_output_log:
         print(f"[Raw Model Testing] Response time: {raw_response_time:.2f}s, Quiz time: {quiz_time:.2f}s, Total: {raw_response_time + quiz_time:.2f}s")
@@ -228,22 +275,38 @@ def baymin_test(
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
+    is_debug: bool = False,
 ):
     effective_model_temp = model_temperature
     effective_quiz_temp = model_quiz_temperature
+    
+    if is_debug:
+        print(f"[DEBUG] baymin_test called with model={model}, question_output length={len(question_output)}")
+        print(f"[DEBUG] quiz type={type(quiz)}, quiz_dict type={type(quiz_dict)}")
+        print(f"[DEBUG] expected answer y={y}")
+    
     start_time = time.time()
+    if is_debug:
+        print(f"[DEBUG] Getting answer from tool agent")
     answer, testing_log = get_answer_from_tool_agent(
         net,
         question_output,
         model=model,
         max_tokens=max_tokens,
         is_output_log=is_output_log,
+        is_debug=is_debug,
         model_top_p=model_top_p,
         model_temperature=effective_model_temp,
     )
     baymin_response_time = time.time() - start_time
     
+    if is_debug:
+        print(f"[DEBUG] Got answer from tool agent, type={type(answer)}, length={len(str(answer)) if answer else 0}")
+        print(f"[DEBUG] Answer preview: {str(answer)[:200] if answer else 'None'}...")
+    
     quiz_start_time = time.time()
+    if is_debug:
+        print(f"[DEBUG] Starting baymin quiz with answer type={type(answer)}, quiz_dict type={type(quiz_dict)}")
     y_hat = model_do_quiz(
         quiz,
         answer,
@@ -252,8 +315,12 @@ def baymin_test(
         max_tokens=max_tokens,
         top_p=model_quiz_top_p,
         quiz_dict=quiz_dict,
+        is_debug=is_debug,
     )
     quiz_time = time.time() - quiz_start_time
+    
+    if is_debug:
+        print(f"[DEBUG] Baymin quiz completed, y_hat={y_hat}, quiz_time={quiz_time:.2f}s")
     
     score = validate_quiz_answer(y, y_hat)
 
@@ -282,6 +349,7 @@ def elementary_test(
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
+    is_debug: bool = False,
 ):
     raw_model_total_score = 0
     baymin_total_score = 0
@@ -335,6 +403,7 @@ def elementary_test(
                 model_quiz_temperature=model_quiz_temperature,
                 model_top_p=model_top_p,
                 model_quiz_top_p=model_quiz_top_p,
+                is_debug=is_debug,
             )
             baymin_runtime = time.time() - start_time
             raw_model_score, raw_model_answer = 0, "N/A (BayMin only)"
@@ -356,6 +425,7 @@ def elementary_test(
                 model_quiz_temperature=model_quiz_temperature,
                 model_top_p=model_top_p,
                 model_quiz_top_p=model_quiz_top_p,
+                is_debug=is_debug,
             )
             raw_model_runtime = time.time() - start_time
             
@@ -374,6 +444,7 @@ def elementary_test(
                 model_quiz_temperature=model_quiz_temperature,
                 model_top_p=model_top_p,
                 model_quiz_top_p=model_quiz_top_p,
+                is_debug=is_debug,
             )
             baymin_runtime = time.time() - start_time
             
@@ -432,6 +503,7 @@ def dependency_test(
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
+    is_debug: bool = False,
 ):
     return elementary_test(
         net,
@@ -447,6 +519,7 @@ def dependency_test(
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
+        is_debug=is_debug,
     )
 
 def common_cause_test(
@@ -462,6 +535,7 @@ def common_cause_test(
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
+    is_debug: bool = False,
 ):
     return elementary_test(
         net,
@@ -477,6 +551,7 @@ def common_cause_test(
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
+        is_debug=is_debug,
     )
 
 def common_effect_test(
@@ -492,6 +567,7 @@ def common_effect_test(
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
+    is_debug: bool = False,
 ):
     return elementary_test(
         net,
@@ -507,6 +583,7 @@ def common_effect_test(
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
+        is_debug=is_debug,
     )
 
 def blocked_evidence_test(
@@ -522,6 +599,7 @@ def blocked_evidence_test(
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
+    is_debug: bool = False,
 ):
     return elementary_test(
         net,
@@ -537,6 +615,7 @@ def blocked_evidence_test(
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
+        is_debug=is_debug,
     )
 
 def evidence_change_relationship_test(
@@ -553,6 +632,7 @@ def evidence_change_relationship_test(
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
+    is_debug: bool = False,
 ):
     return elementary_test(
         net,
@@ -569,6 +649,7 @@ def evidence_change_relationship_test(
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
+        is_debug=is_debug,
     )
 
 def numerical_test(
@@ -587,6 +668,7 @@ def numerical_test(
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
+    is_debug: bool = False,
 ):
     
     raw_model_total_score = 0
@@ -641,6 +723,7 @@ def numerical_test(
                 model_quiz_temperature=model_quiz_temperature,
                 model_top_p=model_top_p,
                 model_quiz_top_p=model_quiz_top_p,
+                is_debug=is_debug,
             )
             baymin_runtime = time.time() - start_time
             raw_model_score, raw_model_answer = 0, "N/A (BayMin only)"
@@ -662,6 +745,7 @@ def numerical_test(
                 model_quiz_temperature=model_quiz_temperature,
                 model_top_p=model_top_p,
                 model_quiz_top_p=model_quiz_top_p,
+                is_debug=is_debug,
             )
             raw_model_runtime = time.time() - start_time
             
@@ -680,6 +764,7 @@ def numerical_test(
                 model_quiz_temperature=model_quiz_temperature,
                 model_top_p=model_top_p,
                 model_quiz_top_p=model_quiz_top_p,
+                is_debug=is_debug,
             )
             baymin_runtime = time.time() - start_time
             
@@ -738,6 +823,7 @@ def probability_test(
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
+    is_debug: bool = False,
 ):
     return numerical_test(
         net,
@@ -754,6 +840,7 @@ def probability_test(
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
+        is_debug=is_debug,
     )
 
 def highest_impact_evidence_test(
@@ -770,6 +857,7 @@ def highest_impact_evidence_test(
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
+    is_debug: bool = False,
 ):
     return numerical_test(
         net,
@@ -786,6 +874,7 @@ def highest_impact_evidence_test(
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
+        is_debug=is_debug,
     )
 
 

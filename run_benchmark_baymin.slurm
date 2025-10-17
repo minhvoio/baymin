@@ -1,10 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=baymin-benchmark
-#SBATCH --qos=desktopq
-#SBATCH --partition=desktop
+#SBATCH --partition=gpu
 #SBATCH --gres=gpu:A40:1
 #SBATCH --mem=240000M
-#SBATCH --time=10:30:00
+#SBATCH --time=3:00:00
 #SBATCH --ntasks=1
 #SBATCH --constraint=r9
 #SBATCH --output=%x-%j.out

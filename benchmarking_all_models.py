@@ -18,6 +18,9 @@ print(f"Loading nets from: {data_output}")
 net_5, net_10, net_30, net_60 = load_nets_from_parquet(os.path.join(data_output, "nets_dataset.parquet"))
 
 list_of_nets = [net_5, net_10, net_30, net_60]
+
+IS_DEBUG = True
+
 NUM_QUESTIONS = 30
 MAX_TOKENS = 1800
 IS_OUTPUT_LOG = True
@@ -42,12 +45,13 @@ COMMON_TEST_KWARGS = {
     "num_questions": NUM_QUESTIONS,
     "max_tokens": MAX_TOKENS,
     "is_output_log": IS_OUTPUT_LOG,
-    "test_baymin_only": False,
+    "test_baymin_only": True,
     "model_temperature": MODEL_TEMPERATURE,
     "model_top_p": MODEL_TOP_P,
     "model_quiz_temperature": MODEL_QUIZ_TEMPERATURE,
     "model_quiz_top_p": MODEL_QUIZ_TOP_P,
     "model_quiz": MODEL_QUIZ,
+    "is_debug": IS_DEBUG,  
 }
 
 net = net_5
