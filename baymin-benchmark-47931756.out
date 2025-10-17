@@ -1,0 +1,1750 @@
+[INFO] Host: m3a113  JobID: 47931756  Time: Fri Oct 17 11:07:43 PM AEDT 2025
+[INFO] Starting ollama serve ...
+[INFO] Ollama is up.
+[INFO] Running benchmark ...
+Loading Netica
+Loading nets from: /fs04/scratch2/lb64/projects/llm-bn/benchmarking/data
+Loaded 4 nets from /fs04/scratch2/lb64/projects/llm-bn/benchmarking/data/nets_dataset.parquet
+Attempt 1/6 for dependency_test
+Running dependency test for Net_5 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ dependency_test completed successfully on attempt 1
+Attempt 1/6 for common_cause_test
+Running common_cause test for Net_5 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ common_cause_test completed successfully on attempt 1
+Attempt 1/6 for common_effect_test
+Running common_effect test for Net_5 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ common_effect_test completed successfully on attempt 1
+Attempt 1/6 for blocked_evidence_test
+Running blocked_evidence test for Net_5 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ blocked_evidence_test completed successfully on attempt 1
+Attempt 1/6 for evidence_change_relationship_test
+Running evidence_change_relationship test for Net_5 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ evidence_change_relationship_test completed successfully on attempt 1
+Attempt 1/6 for probability_test
+Running probability test for Net_5 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ probability_test completed successfully on attempt 1
+
+Completed all tests for Net_5
+Attempt 1/6 for dependency_test
+Running dependency test for Net_10 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ dependency_test completed successfully on attempt 1
+Attempt 1/6 for common_cause_test
+Running common_cause test for Net_10 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ common_cause_test completed successfully on attempt 1
+Attempt 1/6 for common_effect_test
+Running common_effect test for Net_10 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ common_effect_test completed successfully on attempt 1
+Attempt 1/6 for blocked_evidence_test
+Running blocked_evidence test for Net_10 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ blocked_evidence_test completed successfully on attempt 1
+Attempt 1/6 for evidence_change_relationship_test
+Running evidence_change_relationship test for Net_10 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ evidence_change_relationship_test completed successfully on attempt 1
+Attempt 1/6 for probability_test
+Running probability test for Net_10 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ probability_test completed successfully on attempt 1
+
+Completed all tests for Net_10
+Attempt 1/6 for dependency_test
+Running dependency test for Net_30 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ dependency_test completed successfully on attempt 1
+Attempt 1/6 for common_cause_test
+Running common_cause test for Net_30 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ common_cause_test completed successfully on attempt 1
+Attempt 1/6 for common_effect_test
+Running common_effect test for Net_30 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ common_effect_test completed successfully on attempt 1
+Attempt 1/6 for blocked_evidence_test
+Running blocked_evidence test for Net_30 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ blocked_evidence_test completed successfully on attempt 1
+Attempt 1/6 for evidence_change_relationship_test
+Running evidence_change_relationship test for Net_30 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ evidence_change_relationship_test completed successfully on attempt 1
+Attempt 1/6 for probability_test
+Running probability test for Net_30 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ probability_test completed successfully on attempt 1
+
+Completed all tests for Net_30
+Attempt 1/6 for dependency_test
+Running dependency test for Net_60 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ dependency_test completed successfully on attempt 1
+Attempt 1/6 for common_cause_test
+Running common_cause test for Net_60 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ common_cause_test completed successfully on attempt 1
+Attempt 1/6 for common_effect_test
+Running common_effect test for Net_60 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ common_effect_test completed successfully on attempt 1
+Attempt 1/6 for blocked_evidence_test
+Running blocked_evidence test for Net_60 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ blocked_evidence_test completed successfully on attempt 1
+Attempt 1/6 for evidence_change_relationship_test
+Running evidence_change_relationship test for Net_60 with 30 questions
+Found 30 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Skipping question 15 (already completed)
+Skipping question 16 (already completed)
+Skipping question 17 (already completed)
+Skipping question 18 (already completed)
+Skipping question 19 (already completed)
+Skipping question 20 (already completed)
+Skipping question 21 (already completed)
+Skipping question 22 (already completed)
+Skipping question 23 (already completed)
+Skipping question 24 (already completed)
+Skipping question 25 (already completed)
+Skipping question 26 (already completed)
+Skipping question 27 (already completed)
+Skipping question 28 (already completed)
+Skipping question 29 (already completed)
+Skipping question 30 (already completed)
+Test completed: 0 new questions run, 30 skipped
+✅ evidence_change_relationship_test completed successfully on attempt 1
+Attempt 1/6 for probability_test
+Running probability test for Net_60 with 30 questions
+Found 14 already completed questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+Skipping completed questions and continuing from where we left off...
+Skipping question 1 (already completed)
+Skipping question 2 (already completed)
+Skipping question 3 (already completed)
+Skipping question 4 (already completed)
+Skipping question 5 (already completed)
+Skipping question 6 (already completed)
+Skipping question 7 (already completed)
+Skipping question 8 (already completed)
+Skipping question 9 (already completed)
+Skipping question 10 (already completed)
+Skipping question 11 (already completed)
+Skipping question 12 (already completed)
+Skipping question 13 (already completed)
+Skipping question 14 (already completed)
+Running question 15
+[Testing Mode] Question 15: If we observe O, D, Y, L, B1, F, W1, I, E2, H1, E, Y1, H2, G, U, V, S, A, D1, R1, B, P, U1, W, D2, Q...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A': 'True', 'B': 'True', 'B1': 'True', 'C': 'True', 'C1': 'True', 'C2': 'True', 'D': 'True', 'D1': 'True', 'D2': 'True', 'E': 'True', 'E1': 'True', 'E2': 'True', 'F': 'True', 'F2': 'True', 'G': 'True', 'G1': 'True', 'H1': 'True', 'H2': 'True', 'I': 'True', 'I1': 'True', 'J': 'True', 'K': 'True', 'L': 'True', 'M': 'True', 'N': 'True', 'O': 'True', 'O1': 'True', 'P': 'True', 'P1': 'True', 'Q': 'True', 'R': 'True', 'R1': 'True', 'S': 'True', 'T1': 'True', 'U': 'True', 'U1': 'True', 'V': 'True', 'V1': 'True', 'W': 'True', 'W1': 'True', 'X': 'True', 'X1': 'True', 'Y': 'True', 'Y1': 'True', 'Z': 'True'}, 'node': 'L1'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(L1 | A=True, B=True, B1=True, C=True, C1=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, E2=True, F=True, F2=True, G=True, G1=True, H1=True, H2=True, I=True, I1=True, J=True, K=True, L=True, M=True, N=True, O=True, O1=True, P=True, P1=True, Q=True, R=True, R1=True, S=True, T1=True, U=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, X1=True, Y=True, Y1=True, Z=True):\\n  P(L1=False) = 0.4067\\n  P(L1=True) = 0.5933\\n\\nOriginal distribution:\\n  P(L1=False) = 0.4973\\n  P(L1=True) = 0.5027\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.0906\\n  Belief in \'True\' increased by 0.0906\\n  Largest overall per-state shift: 0.0906.\\nEvidence impact (leave-one-out):\\n  - R1: L1=0.7808, max_abs=0.3904\\n  - U1: L1=0.7552, max_abs=0.3776\\n', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(L1 | A=True, B=True, B1=True, C=True, C1=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, E2=True, F=True, F2=True, G=True, G1=True, H1=True, H2=True, I=True, I1=True, J=True, K=True, L=True, M=True, N=True, O=True, O1=True, P=True, P1=True, Q=True, R=True, R1=True, S=True, T1=True, U=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, X1=True, Y=True, Y1=True, Z=True):\\n  P(L1=False) = 0.4067\\n  P(L1=True) = 0.5933\\n\\nOriginal distribution:\\n  P(L1=False) = 0.4973\\n  P(L1=True) = 0.5027\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.0906\\n  Belief in \'True\' increased by 0.0906\\n  Largest overall per-state shift: 0.0906.\\nEvidence impact (leave-one-out):\\n  - R1: L1=0.7808, max_abs=0.3904\\n  - U1: L1=0.7552, max_abs=0.3776"}', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(L1 | A=True, B=True, B1=True, C=True, C1=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, E2=True, F=True, F2=True, G=True, G1=True, H1=True, H2=True, I=True, I1=True, J=True, K=True, L=True, M=True, N=True, O=True, O1=True, P=True, P1=True, Q=True, R=True, R1=True, S=True, T1=True, U=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, X1=True, Y=True, Y1=True, Z=True):\\n  P(L1=False) = 0.4067\\n  P(L1=True) = 0.5933\\n\\nOriginal distribution:\\n  P(L1=False) = 0.4973\\n  P(L1=True) = 0.5027\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.0906\\n  Belief in \'True\' increased by 0.0906\\n  Largest overall per-state shift: 0.0906.\\nEvidence impact (leave-one-out):\\n  - R1: L1=0.7808, max_abs=0.3904\\n  - U1: L1=0.7552, max_abs=0.3776"}', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(L1 | A=True, B=True, B1=True, C=True, C1=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, E2=True, F=True, F2=True, G=True, G1=True, H1=True, H2=True, I=True, I1=True, J=True, K=True, L=True, M=True, N=True, O=True, O1=True, P=True, P1=True, Q=True, R=True, R1=True, S=True, T1=True, U=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, X1=True, Y=True, Y1=True, Z=True):\\n  P(L1=False) = 0.4067\\n  P(L1=True) = 0.5933\\n\\nOriginal distribution:\\n  P(L1=False) = 0.4973\\n  P(L1=True) = 0.5027\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.0906\\n  Belief in \'True\' increased by 0.0906\\n  Largest overall per-state shift: 0.0906.\\nEvidence impact (leave-one-out):\\n  - R1: L1=0.7808, max_abs=0.3904\\n  - U1: L1=0.7552, max_abs=0.3776"}', 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value={"result":"P(L1 | A=True, B=True, B1=True, C=True, C1=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, E2=True, F=True, F2=True, G=True, G1=True, H1=True, H2=True, I=True, I1=True, J=True, K=True, L=True, M=True, N=True, O=True, O1=True, P=True, P1=True, Q=True, R=True, R1=True, S=True, T1=True, U=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, X1=True, Y=True, Y1=True, Z=True):\n  P(L1=False) = 0.4067\n  P(L1=True) = 0.5933\n\nOriginal distribution:\n  P(L1=False) = 0.4973\n  P(L1=True) = 0.5027\n\nConclusion:\n  Belief in 'False' decreased by 0.0906\n  Belief in 'True' increased by 0.0906\n  Largest overall per-state shift: 0.0906.\nEvidence impact (leave-one-out):\n  - R1: L1=0.7808, max_abs=0.3904\n  - U1: L1=0.7552, max_abs=0.3776"}
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[BayMin Testing] Response time: 346.82s, Quiz time: 48.28s, Total: 395.10s
+[Test] Logged: numerical_test - probability - Q15
+Running question 16
+[Testing Mode] Question 16: Given that F, M1, J, E occurred, what’s the chance that A1 will occur?
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'E': 'True', 'F': 'True', 'J': 'True', 'M1': 'True'}, 'node': 'A1'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': 'The probability that **A1** will occur, given that **F**, **M1**, **J**, and **E** are all true, is:\n\n\\[\nP(A1 = \\text{True}\\mid F=\\text{True}, M1=\\text{True}, J=\\text{True}, E=\\text{True}) = 0.5394\n\\]\n\nSo there is a **53.94\u202f%** chance that **A1** will occur.', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node', 'arguments': {'node': 'A1'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(A1 | E=True, F=True, J=True, M1=True):\n  P(A1=False) = 0.4606\n  P(A1=True) = 0.5394\n\nOriginal distribution:\n  P(A1=False) = 0.3922\n  P(A1=True) = 0.6078\n\nConclusion:\n  Belief in 'False' increased by 0.0684\n  Belief in 'True' decreased by 0.0684\n  Largest overall per-state shift: 0.0684.\nEvidence impact (leave-one-out):\n  - M1: L1=0.1353, max_abs=0.0677\n  - J: L1=0.0047, max_abs=0.0023\n  - E: L1=0.0024, max_abs=0.0012\n  - F: L1=0.0000, max_abs=0.0000\n  => Most influential evidence: M1 (by L1 contribution).", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(A1 | E=True, F=True, J=True, M1=True):\n  P(A1=False) = 0.4606\n  P(A1=True) = 0.5394\n\nOriginal distribution:\n  P(A1=False) = 0.3922\n  P(A1=True) = 0.6078\n\nConclusion:\n  Belief in 'False' increased by 0.0684\n  Belief in 'True' decreased by 0.0684\n  Largest overall per-state shift: 0.0684.\nEvidence impact (leave-one-out):\n  - M1: L1=0.1353, max_abs=0.0677\n  - J: L1=0.0047, max_abs=0.0023\n  - E: L1=0.0024, max_abs=0.0012\n  - F: L1=0.0000, max_abs=0.0000\n  => Most influential evidence: M1 (by L1 contribution).", 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value=P(A1 | E=True, F=True, J=True, M1=True):
+  P(A1=False) = 0.4606
+  P(A1=True) = 0.5394
+
+Original distribution:
+  P(A1=False) = 0.3922
+  P(A1=True) = 0.6078
+
+Conclusion:
+  Belief in 'False' increased by 0.0684
+  Belief in 'True' decreased by 0.0684
+  Largest overall per-state shift: 0.0684.
+Evidence impact (leave-one-out):
+  - M1: L1=0.1353, max_abs=0.0677
+  - J: L1=0.0047, max_abs=0.0023
+  - E: L1=0.0024, max_abs=0.0012
+  - F: L1=0.0000, max_abs=0.0000
+  => Most influential evidence: M1 (by L1 contribution).
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[ERROR] extract_text JSON decode failed: Expecting value: line 1 column 1 (char 0), answer: P(A1 | E=True, F=True, J=True, M1=True):
+  P(A1=False) = 0.4606
+  P(A1=True) = 0.5394
+
+Original distribution:
+  P(A1=False) = 0.3922
+  P(A1=True) = 0.6078
+
+Conclusion:
+  Belief in 'False' increased by 0.0684
+  Belief in 'True' decreased by 0.0684
+  Largest overall per-state shift: 0.0684.
+Evidence impact (leave-one-out):
+  - M1: L1=0.1353, max_abs=0.0677
+  - J: L1=0.0047, max_abs=0.0023
+  - E: L1=0.0024, max_abs=0.0012
+  - F: L1=0.0000, max_abs=0.0000
+  => Most influential evidence: M1 (by L1 contribution).
+[BayMin Testing] Response time: 68.20s, Quiz time: 20.40s, Total: 88.60s
+[Test] Logged: numerical_test - probability - Q16
+Running question 17
+[Testing Mode] Question 17: Based on G, F2, what do we believe about Z?
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'F2': 'True', 'G': 'True'}, 'node': 'Z'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(Z | F2=True, G=True):\n  P(Z=False) = 0.5716\n  P(Z=True) = 0.4284\n\nOriginal distribution:\n  P(Z=False) = 0.4451\n  P(Z=True) = 0.5549\n\nConclusion:\n  Belief in 'False' increased by 0.1265\n  Belief in 'True' decreased by 0.1265\n  Largest overall per-state shift: 0.1265.\n\nEvidence impact (leave-one-out):\n  - G: L1=0.2452, max_abs=0.1226\n  - F2: L1=0.0207, max_abs=0.0103\n  => Most influential evidence: G (by L1 contribution).", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(Z | F2=True, G=True):\n  P(Z=False) = 0.5716\n  P(Z=True) = 0.4284\n\nOriginal distribution:\n  P(Z=False) = 0.4451\n  P(Z=True) = 0.5549\n\nConclusion:\n  Belief in 'False' increased by 0.1265\n  Belief in 'True' decreased by 0.1265\n  Largest overall per-state shift: 0.1265.\n\nEvidence impact (leave-one-out):\n  - G: L1=0.2452, max_abs=0.1226\n  - F2: L1=0.0207, max_abs=0.0103\n  => Most influential evidence: G (by L1 contribution).", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(Z | F2=True, G=True):\n  P(Z=False) = 0.5716\n  P(Z=True) = 0.4284\n\nOriginal distribution:\n  P(Z=False) = 0.4451\n  P(Z=True) = 0.5549\n\nConclusion:\n  Belief in 'False' increased by 0.1265\n  Belief in 'True' decreased by 0.1265\n  Largest overall per-state shift: 0.1265.\n\nEvidence impact (leave-one-out):\n  - G: L1=0.2452, max_abs=0.1226\n  - F2: L1=0.0207, max_abs=0.0103\n  => Most influential evidence: G (by L1 contribution).", 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value=P(Z | F2=True, G=True):
+  P(Z=False) = 0.5716
+  P(Z=True) = 0.4284
+
+Original distribution:
+  P(Z=False) = 0.4451
+  P(Z=True) = 0.5549
+
+Conclusion:
+  Belief in 'False' increased by 0.1265
+  Belief in 'True' decreased by 0.1265
+  Largest overall per-state shift: 0.1265.
+
+Evidence impact (leave-one-out):
+  - G: L1=0.2452, max_abs=0.1226
+  - F2: L1=0.0207, max_abs=0.0103
+  => Most influential evidence: G (by L1 contribution).
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[ERROR] extract_text JSON decode failed: Expecting value: line 1 column 1 (char 0), answer: P(Z | F2=True, G=True):
+  P(Z=False) = 0.5716
+  P(Z=True) = 0.4284
+
+Original distribution:
+  P(Z=False) = 0.4451
+  P(Z=True) = 0.5549
+
+Conclusion:
+  Belief in 'False' increased by 0.1265
+  Belief in 'True' decreased by 0.1265
+  Largest overall per-state shift: 0.1265.
+
+Evidence impact (leave-one-out):
+  - G: L1=0.2452, max_abs=0.1226
+  - F2: L1=0.0207, max_abs=0.0103
+  => Most influential evidence: G (by L1 contribution).
+[BayMin Testing] Response time: 91.31s, Quiz time: 16.37s, Total: 107.68s
+[Test] Logged: numerical_test - probability - Q17
+Running question 18
+[Testing Mode] Question 18: Given U, M, A, J1, H1, B2, X1, B1, Q1, W, D1, C2, G, V, A1, H, T, P, O, I, what are the probabilitie...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {}, 'node': 'G2'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': 'P(G2 | ∅):\n  P(G2=False) = 0.4810\n  P(G2=True) = 0.5190\n\nOriginal distribution:\n  P(G2=False) = 0.4810\n  P(G2=True) = 0.5190\n\nConclusion:\nNo change detected — the updated beliefs are identical to the original.', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A': 'True', 'A1': 'True', 'B1': 'True', 'B2': 'True', 'C2': 'True', 'D1': 'True', 'G': 'True', 'H': 'True', 'H1': 'True', 'I': 'True', 'J1': 'True', 'M': 'True', 'O': 'True', 'P': 'True', 'Q1': 'True', 'T': 'True', 'U': 'True', 'V': 'True', 'W': 'True', 'X1': 'True'}, 'node': 'G2'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': 'P(G2 | A=True, A1=True, B1=True, B2=True, C2=True, D1=True, G=True, H=True, H1=True, I=True, J1=True, M=True, O=True, P=True, Q1=True, T=True, U=True, V=True, W=True, X1=True):\n  P(G2=False) = 0.5276\n  P(G2=True) = 0.4724\n\nOriginal distribution:\n  P(G2=False) = 0.4810\n  P(G2=True) = 0.5190\n\nConclusion:\n  Overall, the update is minimal (all changes ≤ threshold).', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': 'P(G2 | A=True, A1=True, B1=True, B2=True, C2=True, D1=True, G=True, H=True, H1=True, I=True, J1=True, M=True, O=True, P=True, Q1=True, T=True, U=True, V=True, W=True, X1=True):\n  P(G2=False) = 0.5276\n  P(G2=True) = 0.4724\n\nOriginal distribution:\n  P(G2=False) = 0.4810\n  P(G2=True) = 0.5190\n\nConclusion:\n  Overall, the update is minimal (all changes ≤ threshold).', 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value=P(G2 | A=True, A1=True, B1=True, B2=True, C2=True, D1=True, G=True, H=True, H1=True, I=True, J1=True, M=True, O=True, P=True, Q1=True, T=True, U=True, V=True, W=True, X1=True):
+  P(G2=False) = 0.5276
+  P(G2=True) = 0.4724
+
+Original distribution:
+  P(G2=False) = 0.4810
+  P(G2=True) = 0.5190
+
+Conclusion:
+  Overall, the update is minimal (all changes ≤ threshold).
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[ERROR] extract_text JSON decode failed: Expecting value: line 1 column 1 (char 0), answer: P(G2 | A=True, A1=True, B1=True, B2=True, C2=True, D1=True, G=True, H=True, H1=True, I=True, J1=True, M=True, O=True, P=True, Q1=True, T=True, U=True, V=True, W=True, X1=True):
+  P(G2=False) = 0.5276
+  P(G2=True) = 0.4724
+
+Original distribution:
+  P(G2=False) = 0.4810
+  P(G2=True) = 0.5190
+
+Conclusion:
+  Overall, the update is minimal (all changes ≤ threshold).
+[BayMin Testing] Response time: 174.30s, Quiz time: 24.11s, Total: 198.41s
+[Test] Logged: numerical_test - probability - Q18
+Running question 19
+[Testing Mode] Question 19: What is the belief value of E2 conditioned on W1, Y, G2, T, Z, Y1, X, M, E1, J, C1, N, U1, L, B2, K,...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A': 'True', 'A2': 'True', 'B': 'True', 'B2': 'True', 'C1': 'True', 'C2': 'True', 'E1': 'True', 'F1': 'True', 'F2': 'True', 'G2': 'True', 'H1': 'True', 'I': 'True', 'J': 'True', 'J1': 'True', 'K': 'True', 'L': 'True', 'M': 'True', 'N': 'True', 'S1': 'True', 'T': 'True', 'U1': 'True', 'W1': 'True', 'X': 'True', 'Y': 'True', 'Y1': 'True', 'Z': 'True'}, 'node': 'E2'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(E2 | A=True, A2=True, B=True, B2=True, C1=True, C2=True, E1=True, F1=True, F2=True, G2=True, H1=True, I=True, J=True, J1=True, K=True, L=True, M=True, N=True, S1=True, T=True, U1=True, W1=True, X=True, Y=True, Y1=True, Z=True):\n  P(E2=False) = 0.3177\n  P(E2=True) = 0.6823\n\nOriginal distribution:\n  P(E2=False) = 0.5700\n  P(E2(True)) = 0.4300\n\nConclusion:\n  Belief in 'False' decreased by 0.2524\n  Belief in 'True' increased by 0.2524\n  Largest overall per-state shift: 0.2524.\nEvidence impact (leave-one-out):\n  - C2: L1=0.3065, max_abs=0.1532\n  - S1: L1=0.1896, max_abs=0.0948\n  - U1: L1=0.1799, max_abs=0.0900\n  - K: L1=0.1550, max_abs=0.0775\n  - A: L1=0.1326, max_abs=0.0663\n  - F1: L1=0.1161, max_abs=0.0580\n  - C1: L1=0.0883, max_abs=0.0442\n  - Y1: L1=0.0847, max_abs=0.0423\n  - L: L1=0.0777, max_abs=0.0388\n  - E1: L1=0.0746, max_abs=0.0373\n  - F2: L1=0.0702, max_abs=0.0351\n  - Z: L1=0.0637, max_abs=0.0319\n  - M: L1=0.0591, max_abs=0.0295\n  - Y: L1=0.0325, max_abs=0.0163\n  - J: L1=0.0250, max_abs=0.0125\n  - W1: L1=0.0200, max_abs=0.0100\n  - I: L1=0.0188, max_abs=0.0094\n  - B2: L1=0.0086, max_abs=0.0043\n  - J1: L1=0.0085, max_abs=0.0043\n  - A2: L1=0.0078, max_abs=0.0039\n  - H1: L1=0.0068, max_abs=0.0034\n  - T: L1=0.0036, max_abs=0.0018\n  - B: L1=0.0029, max_abs=0.0014\n  - G2: L1=0.0015, max_abs=0.0008\n  - N: L1=0.0003, max_abs=0.0001\n  - X: L1=0.0001, max_abs=0.0000\n  => Most influential evidence: C2 (by L1 contribution).", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(E2 | A=True, A2=True, B=True, B2=True, C1=True, C2=True, E1=True, F1=True, F2=True, G2=True, H1=True, I=True, J=True, J1=True, K=True, L=True, M=True, N=True, S1=True, T=True, U1=True, W1=True, X=True, Y=True, Y1=True, Z=True):\n  P(E2=False) = 0.3177\n  P(E2=True) = 0.6823\n\nOriginal distribution:\n  P(E2=False) = 0.5700\n  P(E2=True) = 0.4300\n\nConclusion:\n  Belief in 'False' decreased by 0.2524\n  Belief in 'True' increased by 0.2524\n  Largest overall per-state shift: 0.2524.\n\nEvidence impact (leave‑one‑out):\n  - C2: L1=0.3065, max_abs=0.1532\n  - S1: L1=0.1896, max_abs=0.0948\n  - U1: L1=0.1799, max_abs=0.0900\n  - K: L1=0.1550, max_abs=0.0775\n  - A: L1=0.1326, max_abs=0.0663\n  - F1: L1=0.1161, max_abs=0.0580\n  - C1: L1=0.0883, max_abs=0.0442\n  - Y1: L1=0.0847, max_abs=0.0423\n  - L: L1=0.0777, max_abs=0.0388\n  - E1: L1=0.0746, max_abs=0.0373\n  - F2: L1=0.0702, max_abs=0.0351\n  - Z: L1=0.0637, max_abs=0.0319\n  - M: L1=0.0591, max_abs=0.0295\n  - Y: L1=0.0325, max_abs=0.0163\n  - J: L1=0.0250, max_abs=0.0125\n  - W1: L1=0.0200, max_abs=0.0100\n  - I: L1=0.0188, max_abs=0.0094\n  - B2: L1=0.0086, max_abs=0.0043\n  - J1: L1=0.0085, max_abs=0.0043\n  - A2: L1=0.0078, max_abs=0.0039\n  - H1: L1=0.0068, max_abs=0.0034\n  - T: L1=0.0036, max_abs=0.0018\n  - B: L1=0.0029, max_abs=0.0014\n  - G2: L1=0.0015, max_abs=0.0008\n  - N: L1=0.0003, max_abs=0.0001\n  - X: L1=0.0001, max_abs=0.0000\n\n=> Most influential evidence: C2 (by L1 contribution).", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node', 'arguments': {'node': 'E2'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(E2 | A=True, A2=True, B=True, B2=True, C1=True, C2=True, E1=True, F1=True, F2=True, G2=True, H1=True, I=True, J=True, J1=True, K=True, L=True, M=True, N=True, S1=True, T=True, U1=True, W1=True, X=True, Y=True, Y1=True, Z=True):\n  P(E2=False) = 0.3177\n  P(E2=True) = 0.6823\n\nOriginal distribution:\n  P(E2=False) = 0.5700\n  P(E2=True) = 0.4300\n\nConclusion:\n  Belief in 'False' decreased by 0.2524\n  Belief in 'True' increased by 0.2524\n  Largest overall per-state shift: 0.2524.\n\nEvidence impact (leave‑one‑out):\n  - C2: L1=0.3065, max_abs=0.1532\n  - S1: L1=0.1896, max_abs=0.0948\n  - U1: L1=0.1799, max_abs=0.0900\n  - K: L1=0.1550, max_abs=0.0775\n  - A: L1=0.1326, max_abs=0.0663\n  - F1: L1=0.1161, max_abs=0.0580\n  - C1: L1=0.0883, max_abs=0.0442\n  - Y1: L1=0.0847, max_abs=0.0423\n  - L: L1=0.0777, max_abs=0.0388\n  - E1: L1=0.0746, max_abs=0.0373\n  - F2: L1=0.0702, max_abs=0.0351\n  - Z: L1=0.0637, max_abs=0.0319\n  - M: L1=0.0591, max_abs=0.0295\n  - Y: L1=0.0325, max_abs=0.0163\n  - J: L1=0.0250, max_abs=0.0125\n  - W1: L1=0.0200, max_abs=0.0100\n  - I: L1=0.0188, max_abs=0.0094\n  - B2: L1=0.0086, max_abs=0.0043\n  - J1: L1=0.0085, max_abs=0.0043\n  - A2: L1=0.0078, max_abs=0.0039\n  - H1: L1=0.0068, max_abs=0.0034\n  - T: L1=0.0036, max_abs=0.0018\n  - B: L1=0.0029, max_abs=0.0014\n  - G2: L1=0.0015, max_abs=0.0008\n  - N: L1=0.0003, max_abs=0.0001\n  - X: L1=0.0001, max_abs=0.0000\n\n=> Most influential evidence: C2 (by L1 contribution).", 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value=P(E2 | A=True, A2=True, B=True, B2=True, C1=True, C2=True, E1=True, F1=True, F2=True, G2=True, H1=True, I=True, J=True, J1=True, K=True, L=True, M=True, N=True, S1=True, T=True, U1=True, W1=True, X=True, Y=True, Y1=True, Z=True):
+  P(E2=False) = 0.3177
+  P(E2=True) = 0.6823
+
+Original distribution:
+  P(E2=False) = 0.5700
+  P(E2=True) = 0.4300
+
+Conclusion:
+  Belief in 'False' decreased by 0.2524
+  Belief in 'True' increased by 0.2524
+  Largest overall per-state shift: 0.2524.
+
+Evidence impact (leave‑one‑out):
+  - C2: L1=0.3065, max_abs=0.1532
+  - S1: L1=0.1896, max_abs=0.0948
+  - U1: L1=0.1799, max_abs=0.0900
+  - K: L1=0.1550, max_abs=0.0775
+  - A: L1=0.1326, max_abs=0.0663
+  - F1: L1=0.1161, max_abs=0.0580
+  - C1: L1=0.0883, max_abs=0.0442
+  - Y1: L1=0.0847, max_abs=0.0423
+  - L: L1=0.0777, max_abs=0.0388
+  - E1: L1=0.0746, max_abs=0.0373
+  - F2: L1=0.0702, max_abs=0.0351
+  - Z: L1=0.0637, max_abs=0.0319
+  - M: L1=0.0591, max_abs=0.0295
+  - Y: L1=0.0325, max_abs=0.0163
+  - J: L1=0.0250, max_abs=0.0125
+  - W1: L1=0.0200, max_abs=0.0100
+  - I: L1=0.0188, max_abs=0.0094
+  - B2: L1=0.0086, max_abs=0.0043
+  - J1: L1=0.0085, max_abs=0.0043
+  - A2: L1=0.0078, max_abs=0.0039
+  - H1: L1=0.0068, max_abs=0.0034
+  - T: L1=0.0036, max_abs=0.0018
+  - B: L1=0.0029, max_abs=0.0014
+  - G2: L1=0.0015, max_abs=0.0008
+  - N: L1=0.0003, max_abs=0.0001
+  - X: L1=0.0001, max_abs=0.0000
+
+=> Most influential evidence: C2 (by L1 contribution).
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[ERROR] extract_text JSON decode failed: Expecting value: line 1 column 1 (char 0), answer: P(E2 | A=True, A2=True, B=True, B2=True, C1=True, C2=True, E1=True, F1=True, F2=True, G2=True, H1=True, I=True, J=True, J1=True, K=True, L=True, M=True, N=True, S1=True, T=True, U1=True, W1=True, X=True, Y=True, Y1=True, Z=True):
+  P(E2=False) = 0.3177
+  P(E2=True) = 0.6823
+
+Original distribution:
+  P(E2=False) = 0.5700
+  P(E2=True) = 0.4300
+
+Conclusion:
+  Belief in 'False' decreased by 0.2524
+  Belief in 'True' increased by 0.2524
+  Largest overall per-state shift: 0.2524.
+
+Evidence impact (leave‑one‑out):
+  - C2: L1=0.3065, max_abs=0.1532
+  - S1: L1=0.1896, max_abs=0.0948
+  - U1: L1=0.1799, max_abs=0.0900
+  - K: L1=0.1550, max_abs=0.0775
+  - A: L1=0.1326, max_abs=0.0663
+  - F1: L1=0.1161, max_abs=0.0580
+  - C1: L1=0.0883, max_abs=0.0442
+  - Y1: L1=0.0847, max_abs=0.0423
+  - L: L1=0.0777, max_abs=0.0388
+  - E1: L1=0.0746, max_abs=0.0373
+  - F2: L1=0.0702, max_abs=0.0351
+  - Z: L1=0.0637, max_abs=0.0319
+  - M: L1=0.0591, max_abs=0.0295
+  - Y: L1=0.0325, max_abs=0.0163
+  - J: L1=0.0250, max_abs=0.0125
+  - W1: L1=0.0200, max_abs=0.0100
+  - I: L1=0.0188, max_abs=0.0094
+  - B2: L1=0.0086, max_abs=0.0043
+  - J1: L1=0.0085, max_abs=0.0043
+  - A2: L1=0.0078, max_abs=0.0039
+  - H1: L1=0.0068, max_abs=0.0034
+  - T: L1=0.0036, max_abs=0.0018
+  - B: L1=0.0029, max_abs=0.0014
+  - G2: L1=0.0015, max_abs=0.0008
+  - N: L1=0.0003, max_abs=0.0001
+  - X: L1=0.0001, max_abs=0.0000
+
+=> Most influential evidence: C2 (by L1 contribution).
+[BayMin Testing] Response time: 199.05s, Quiz time: 28.20s, Total: 227.25s
+[Test] Logged: numerical_test - probability - Q19
+Running question 20
+[Testing Mode] Question 20: How much does B2, Y1, A2, X1, D2, C, E, Z, K, A1, W, W1, L1, D1, F, I1, N1, Q, R1, Q1, O, B1, I, Z1,...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A': 'True', 'A1': 'True', 'A2': 'True', 'B1': 'True', 'B2': 'True', 'C': 'True', 'C1': 'True', 'C2': 'True', 'D1': 'True', 'D2': 'True', 'E': 'True', 'E1': 'True', 'F': 'True', 'F2': 'True', 'G': 'True', 'I': 'True', 'I1': 'True', 'J1': 'True', 'K': 'True', 'L1': 'True', 'N': 'True', 'N1': 'True', 'O': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R1': 'True', 'U': 'True', 'U1': 'True', 'W': 'True', 'W1': 'True', 'X1': 'True', 'Y': 'True', 'Y1': 'True', 'Z': 'True', 'Z1': 'True'}, 'node': 'S1'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': 'When all of the listed nodes are set to **True**, the posterior probability of **S1** changes dramatically:\n\n| Node | Effect on \\(P(S1=\\text{True})\\) | Effect on \\(P(S1=\\text{False})\\) |\n|------|---------------------------------|----------------------------------|\n| **All evidence** | **↓\u202f0.4953** (from 0.5082 to 0.0129) | **↑\u202f0.4953** (from 0.4918 to 0.9871) |\n\nThe most influential single piece of evidence is **D1**, whose removal changes the likelihood of \\(S1\\) by the largest amount (L1\u202f=\u202f0.1072).  \nThe leave‑one‑out contributions for the remaining evidence are:\n\n| Evidence | L1 contribution | Max absolute change |\n|----------|-----------------|---------------------|\n| D1 | 0.2144 | 0.1072 |\n| I | 0.1239 | 0.0620 |\n| O | 0.1109 | 0.0555 |\n| X1 | 0.0406 | 0.0203 |\n| I1 | 0.0306 | 0.0153 |\n| W | 0.0238 | 0.0119 |\n| F2 | 0.0175 | 0.0087 |\n| A | 0.0174 | 0.0087 |\n| W1 | 0.0137 | 0.0069 |\n| C2 | 0.0123 | 0.0061 |\n| Q | 0.0111 | 0.0056 |\n| Q1 | 0.0081 | 0.0041 |\n| B1 | 0.0067 | 0.0033 |\n| Y | 0.0060 | 0.0030 |\n| P1 | 0.0050 | 0.0025 |\n| N1 | 0.0047 | 0.0024 |\n| C1 | 0.0037 | 0.0018 |\n| F | 0.0037 | 0.0018 |\n| Y1 | 0.0036 | 0.0018 |\n| J1 | 0.0028 | 0.0014 |\n| R1 | 0.0014 | 0.0007 |\n| D2 | 0.0013 | 0.0007 |\n| E1 | 0.0012 | 0.0006 |\n| B2 | 0.0009 | 0.0005 |\n| U1 | 0.0009 | 0.0005 |\n| K | 0.0004 | 0.0002 |\n| U | 0.0003 | 0.0002 |\n| L1 | 0.0002 | 0.0001 |\n| G | 0.0002 | 0.0001 |\n| N | 0.0002 | 0.0001 |\n| A1 | 0.0001 | 0.0001 |\n| Z | 0.0001 | 0.0000 |\n| C | 0.0000 | 0.0000 |\n| Z1 | 0.0000 | 0.0000 |\n| A2 | 0.0000 | 0.0000 |\n| E | 0.0000 | 0.0000 |\n\nThus, setting all the listed nodes to **True** almost guarantees that **S1** will be **False** (probability 0.9871), and the evidence that most strongly drives this shift is **D1**.', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_highest_impact_evidence_contribute_to_node', 'arguments': {'evidence': {'A': 'True', 'A1': 'True', 'A2': 'True', 'B1': 'True', 'B2': 'True', 'C': 'True', 'C1': 'True', 'C2': 'True', 'D1': 'True', 'D2': 'True', 'E': 'True', 'E1': 'True', 'F': 'True', 'F2': 'True', 'G': 'True', 'I': 'True', 'I1': 'True', 'J1': 'True', 'K': 'True', 'L1': 'True', 'N': 'True', 'N1': 'True', 'O': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R1': 'True', 'U': 'True', 'U1': 'True', 'W': 'True', 'W1': 'True', 'X1': 'True', 'Y': 'True', 'Y1': 'True', 'Z': 'True', 'Z1': 'True'}, 'node': 'S1'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': 'Setting all of the listed nodes to **True** changes the probability of **S1** as follows:\n\n- **\\(P(S1 = \\text{True})\\)** drops from 0.5082 to **0.0129** (a decrease of 0.4953).\n- **\\(P(S1 = \\text{False})\\)** rises from 0.4918 to **0.9871** (an increase of 0.4953).\n\nThe evidence that has the greatest influence on this shift is **W** (the node “W” set to True). Removing W from the evidence set reduces the impact on \\(S1\\) by the largest amount (L1\u202f=\u202f0.0238). All other evidence contributes less to the change in \\(S1\\)’s probability.', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '**Effect of each evidence on the probability of\u202fS1**\n\n| Evidence | Δ\u202fP(S1\u202f=\u202fTrue) | Δ\u202fP(S1\u202f=\u202fFalse) | Comment |\n|----------|----------------|-----------------|---------|\n| **B2** | –0.0009 | +0.0009 | Small influence |\n| **Y1** | –0.0036 | +0.0036 | Small influence |\n| **A2** | –0.0000 | +0.0000 | No influence (already in the evidence set) |\n| **X1** | –0.0406 | +0.0406 | Moderate influence |\n| **D2** | –0.0013 | +0.0013 | Small influence |\n| **C** | –0.0000 | +0.0000 | No influence |\n| **E** | –0.0000 | +0.0000 | No influence |\n| **Z** | –0.0001 | +0.0001 | Very small |\n| **K** | –0.0004 | +0.0004 | Very small |\n| **A1** | –0.0001 | +0.0001 | Very small |\n| **W** | –0.0238 | +0.0238 | **Largest single influence** |\n| **W1** | –0.0137 | +0.0137 | Small |\n| **L1** | –0.0002 | +0.0002 | Very small |\n| **D1** | –0.2144 | +0.2144 | Very large |\n| **F** | –0.0037 | +0.0037 | Small |\n| **I1** | –0.0306 | +0.0306 | Small |\n| **N1** | –0.0047 | +0.0047 | Small |\n| **Q** | –0.0111 | +0.0111 | Small |\n| **R1** | –0.0014 | +0.0014 | Very small |\n| **Q1** | –0.0081 | +0.0081 | Small |\n| **O** | –0.1109 | +0.1109 | Moderate |\n| **B1** | –0.0067 | +0.0067 | Small |\n| **I** | –0.1239 | +0.1239 | Moderate |\n| **Z1** | –0.0000 | +0.0000 | No influence |\n| **U** | –0.0003 | +0.0003 | Very small |\n| **F2** | –0.0175 | +0.0175 | Small |\n| **G** | –0.0002 | +0.0002 | Very small |\n| **E1** | –0.0012 | +0.0012 | Very small |\n| **P1** | –0.0050 | +0.0050 | Small |\n| **N** | –0.0002 | +0.0002 | Very small |\n| **Y** | –0.0060 | +0.0060 | Small |\n| **C2** | –0.0123 | +0.0123 | Small |\n| **J1** | –0.0028 | +0.0028 | Very small |\n| **A** | –0.0174 | +0.0174 | Small |\n| **U1** | –0.0009 | +0.0009 | Very small |\n| **C1** | –0.0037 | +0.0037 | Small |\n\n**Summary**\n\n* The overall shift when all listed nodes are set to **True** is a decrease of **0.4953** in \\(P(S1=\\text{True})\\) (from 0.5082 to 0.0129) and a corresponding increase of **0.4953** in \\(P(S1=\\text{False})\\) (from 0.4918 to 0.9871).\n* The most influential evidence is **D1** (Δ\u202fP\u202f≈\u202f±0.2144), followed by **W** (Δ\u202f≈\u202f±0.0238) and **I** (Δ\u202f≈\u202f±0.124). All other evidence has a comparatively minor effect.', 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value=**Effect of each evidence on the probability of S1**
+
+| Evidence | Δ P(S1 = True) | Δ P(S1 = False) | Comment |
+|----------|----------------|-----------------|---------|
+| **B2** | –0.0009 | +0.0009 | Small influence |
+| **Y1** | –0.0036 | +0.0036 | Small influence |
+| **A2** | –0.0000 | +0.0000 | No influence (already in the evidence set) |
+| **X1** | –0.0406 | +0.0406 | Moderate influence |
+| **D2** | –0.0013 | +0.0013 | Small influence |
+| **C** | –0.0000 | +0.0000 | No influence |
+| **E** | –0.0000 | +0.0000 | No influence |
+| **Z** | –0.0001 | +0.0001 | Very small |
+| **K** | –0.0004 | +0.0004 | Very small |
+| **A1** | –0.0001 | +0.0001 | Very small |
+| **W** | –0.0238 | +0.0238 | **Largest single influence** |
+| **W1** | –0.0137 | +0.0137 | Small |
+| **L1** | –0.0002 | +0.0002 | Very small |
+| **D1** | –0.2144 | +0.2144 | Very large |
+| **F** | –0.0037 | +0.0037 | Small |
+| **I1** | –0.0306 | +0.0306 | Small |
+| **N1** | –0.0047 | +0.0047 | Small |
+| **Q** | –0.0111 | +0.0111 | Small |
+| **R1** | –0.0014 | +0.0014 | Very small |
+| **Q1** | –0.0081 | +0.0081 | Small |
+| **O** | –0.1109 | +0.1109 | Moderate |
+| **B1** | –0.0067 | +0.0067 | Small |
+| **I** | –0.1239 | +0.1239 | Moderate |
+| **Z1** | –0.0000 | +0.0000 | No influence |
+| **U** | –0.0003 | +0.0003 | Very small |
+| **F2** | –0.0175 | +0.0175 | Small |
+| **G** | –0.0002 | +0.0002 | Very small |
+| **E1** | –0.0012 | +0.0012 | Very small |
+| **P1** | –0.0050 | +0.0050 | Small |
+| **N** | –0.0002 | +0.0002 | Very small |
+| **Y** | –0.0060 | +0.0060 | Small |
+| **C2** | –0.0123 | +0.0123 | Small |
+| **J1** | –0.0028 | +0.0028 | Very small |
+| **A** | –0.0174 | +0.0174 | Small |
+| **U1** | –0.0009 | +0.0009 | Very small |
+| **C1** | –0.0037 | +0.0037 | Small |
+
+**Summary**
+
+* The overall shift when all listed nodes are set to **True** is a decrease of **0.4953** in \(P(S1=\text{True})\) (from 0.5082 to 0.0129) and a corresponding increase of **0.4953** in \(P(S1=\text{False})\) (from 0.4918 to 0.9871).
+* The most influential evidence is **D1** (Δ P ≈ ±0.2144), followed by **W** (Δ ≈ ±0.0238) and **I** (Δ ≈ ±0.124). All other evidence has a comparatively minor effect.
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[ERROR] extract_text JSON decode failed: Expecting value: line 1 column 1 (char 0), answer: **Effect of each evidence on the probability of S1**
+
+| Evidence | Δ P(S1 = True) | Δ P(S1 = False) | Comment |
+|----------|----------------|-----------------|---------|
+| **B2** | –0.0009 | +0.0009 | Small influence |
+| **Y1** | –0.0036 | +0.0036 | Small influence |
+| **A2** | –0.0000 | +0.0000 | No influence (already in the evidence set) |
+| **X1** | –0.0406 | +0.0406 | Moderate influence |
+| **D2** | –0.0013 | +0.0013 | Small influence |
+| **C** | –0.0000 | +0.0000 | No influence |
+| **E** | –0.0000 | +0.0000 | No influence |
+| **Z** | –0.0001 | +0.0001 | Very small |
+| **K** | –0.0004 | +0.0004 | Very small |
+| **A1** | –0.0001 | +0.0001 | Very small |
+| **W** | –0.0238 | +0.0238 | **Largest single influence** |
+| **W1** | –0.0137 | +0.0137 | Small |
+| **L1** | –0.0002 | +0.0002 | Very small |
+| **D1** | –0.2144 | +0.2144 | Very large |
+| **F** | –0.0037 | +0.0037 | Small |
+| **I1** | –0.0306 | +0.0306 | Small |
+| **N1** | –0.0047 | +0.0047 | Small |
+| **Q** | –0.0111 | +0.0111 | Small |
+| **R1** | –0.0014 | +0.0014 | Very small |
+| **Q1** | –0.0081 | +0.0081 | Small |
+| **O** | –0.1109 | +0.1109 | Moderate |
+| **B1** | –0.0067 | +0.0067 | Small |
+| **I** | –0.1239 | +0.1239 | Moderate |
+| **Z1** | –0.0000 | +0.0000 | No influence |
+| **U** | –0.0003 | +0.0003 | Very small |
+| **F2** | –0.0175 | +0.0175 | Small |
+| **G** | –0.0002 | +0.0002 | Very small |
+| **E1** | –0.0012 | +0.0012 | Very small |
+| **P1** | –0.0050 | +0.0050 | Small |
+| **N** | –0.0002 | +0.0002 | Very small |
+| **Y** | –0.0060 | +0.0060 | Small |
+| **C2** | –0.0123 | +0.0123 | Small |
+| **J1** | –0.0028 | +0.0028 | Very small |
+| **A** | –0.0174 | +0.0174 | Small |
+| **U1** | –0.0009 | +0.0009 | Very small |
+| **C1** | –0.0037 | +0.0037 | Small |
+
+**Summary**
+
+* The overall shift when all listed nodes are set to **True** is a decrease of **0.4953** in \(P(S1=\text{True})\) (from 0.5082 to 0.0129) and a corresponding increase of **0.4953** in \(P(S1=\text{False})\) (from 0.4918 to 0.9871).
+* The most influential evidence is **D1** (Δ P ≈ ±0.2144), followed by **W** (Δ ≈ ±0.0238) and **I** (Δ ≈ ±0.124). All other evidence has a comparatively minor effect.
+[BayMin Testing] Response time: 897.67s, Quiz time: 32.58s, Total: 930.25s
+[Test] Logged: numerical_test - probability - Q20
+Running question 21
+[Testing Mode] Question 21: Given Q1, G, A2, O, Y, Z1, V1, B, Q, Y1, O1, E1, H2, P1, N1, F, A1, F1, M, D1, B2, I1, S, C2, S1, M1...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A1': 'True', 'A2': 'True', 'B': 'True', 'B1': 'True', 'B2': 'True', 'C': 'True', 'C2': 'True', 'D': 'True', 'D1': 'True', 'D2': 'True', 'E': 'True', 'E1': 'True', 'F': 'True', 'F1': 'True', 'G': 'True', 'H2': 'True', 'I1': 'True', 'J': 'True', 'K': 'True', 'K1': 'True', 'L': 'True', 'M': 'True', 'M1': 'True', 'N1': 'True', 'O': 'True', 'O1': 'True', 'P': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'S': 'True', 'S1': 'True', 'U': 'True', 'V1': 'True', 'X': 'True', 'Y': 'True', 'Y1': 'True', 'Z': 'True', 'Z1': 'True'}, 'node': 'W'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(W | A1=True, A2=True, B=True, B1=True, B2=True, C=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, F=True, F1=True, G=True, H2=True, I1=True, J=True, K=True, K1=True, L=True, M=True, M1=True, N1=True, O=True, O1=True, P=True, P1=True, Q=True, Q1=True, S=True, S1=True, U=True, V1=True, X=True, Y=True, Y1=True, Z=True, Z1=True):\n  P(W=False) = 0.5948\n  P(W=True) = 0.4052\n\nOriginal distribution:\n  P(W=False) = 0.4089\n  P(W=True) = 0.5911\n\nConclusion:\n  Belief in 'False' increased by 0.1859\n  Belief in 'True' decreased by 0.1859\n  Largest overall per-state shift: 0.1859.\nEvidence impact (leave-one-out):\n  - V1: L1=0.6169, max_abs=0.3085\n  - F1: L1=0.3790, max_abs=0.1895\n  - O: L1=0.3284, max_abs=0.1642\n  - C2: L1=0.2422, max_abs=0.1211\n  - B1: L1=0.2279, max_abs=0.1139\n  - D1: L1=0.2210, max_abs=0.1105\n  - Y1: L1=0.2099, max_abs=0.1049\n  - S1: L1=0.1067, max_abs=0.0533\n  - D: L1=0.1043, max_abs=0.0522\n  - C: L1=0.0597, max_abs=0.0298\n  - Z1: L1=0.0561, max_abs=0.0281\n  - K1: L1=0.0560, max_abs=0.0280\n  - M: L1=0.0492, max_abs=0.0246\n  - G: L1=0.0457, max_abs=0.0228\n  - Z: L1=0.0443, max_abs=0.0221\n  - P: L1=0.0368, max_abs=0.0184\n  - E1: L1=0.0336, max_abs=0.0168\n  - I1: L1=0.0287, max_abs=0.0143\n  - K: L1=0.0269, max_abs=0.0134\n  - E: L1=0.0196, max_abs=0.0098\n  - S: L1=0.0191, max_abs=0.0095\n  - L: L1=0.0178, max_abs=0.0089\n  - B2: L1=0.0156, max_abs=0.0078\n  - U: L1=0.0140, max_abs=0.0070\n  - J: L1=0.0112, max_abs=0.0056\n  - M1: L1=0.0044, max_abs=0.0022\n  - N1: L1=0.0041, max_abs=0.0020\n  - P1: L1=0.0032, max_abs=0.0016\n  - H2: L1=0.0021, max_abs=0.0011\n  - Q1: L1=0.0017, max_abs=0.0009\n  - Q: L1=0.0017, max_abs=0.0008\n  - D2: L1=0.0016, max_abs=0.0008\n  - B: L1=0.0013, max_abs=0.0007\n  - A2: L1=0.0004, max_abs=0.0002\n  - O1: L1=0.0004, max_abs=0.0002\n  - Y: L1=0.0001, max_abs=0.0001\n  - F: L1=0.0001, max_abs=0.0000\n  - A1: L1=0.0000, max_abs=0.0000\n  - X: L1=0.0000, max_abs=0.0000\n  => Most influential evidence: V1 (by L1 contribution).", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(W | A1=True, A2=True, B=True, B1=True, B2=True, C=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, F=True, F1=True, G=True, H2=True, I1=True, J=True, K=True, K1=True, L=True, M=True, M1=True, N1=True, O=True, O1=True, P=True, P1=True, Q=True, Q1=True, S=True, S1=True, U=True, V1=True, X=True, Y=True, Y1=True, Z=True, Z1=True):\n  P(W=False) = 0.5948\n  P(W=True) = 0.4052\n\nOriginal distribution:\n  P(W=False) = 0.4089\n  P(W=True) = 0.5911\n\nConclusion:\n  Belief in 'False' increased by 0.1859\n  Belief in 'True' decreased by 0.1859\n  Largest overall per-state shift: 0.1859.\nEvidence impact (leave-one-out):\n  - V1: L1=0.6169, max_abs=0.3085\n  - F1: L1=0.3790, max_abs=0.1895\n  - O: L1=0.3284, max_abs=0.1642\n  - C2: L1=0.2422, max_abs=0.1211\n  - B1: L1=0.2279, max_abs=0.1139\n  - D1: L1=0.2210, max_abs=0.1105\n  - Y1: L1=0.2099, max_abs=0.1049\n  - S1: L1=0.1067, max_abs=0.0533\n  - D: L1=0.1043, max_abs=0.0522\n  - C: L1=0.0597, max_abs=0.0298\n  - Z1: L1=0.0561, max_abs=0.0281\n  - K1: L1=0.0560, max_abs=0.0280\n  - M: L1=0.0492, max_abs=0.0246\n  - G: L1=0.0457, max_abs=0.0228\n  - Z: L1=0.0443, max_abs=0.0221\n  - P: L1=0.0368, max_abs=0.0184\n  - E1: L1=0.0336, max_abs=0.0168\n  - I1: L1=0.0287, max_abs=0.0143\n  - K: L1=0.0269, max_abs=0.0134\n  - E: L1=0.0196, max_abs=0.0098\n  - S: L1=0.0191, max_abs=0.0095\n  - L: L1=0.0178, max_abs=0.0089\n  - B2: L1=0.0156, max_abs=0.0078\n  - U: L1=0.0140, max_abs=0.0070\n  - J: L1=0.0112, max_abs=0.0056\n  - M1: L1=0.0044, max_abs=0.0022\n  - N1: L1=0.0041, max_abs=0.0020\n  - P1: L1=0.0032, max_abs=0.0016\n  - H2: L1=0.0021, max_abs=0.0011\n  - Q1: L1=0.0017, max_abs=0.0009\n  - Q: L1=0.0017, max_abs=0.0008\n  - D2: L1=0.0016, max_abs=0.0008\n  - B: L1=0.0013, max_abs=0.0007\n  - A2: L1=0.0004, max_abs=0.0002\n  - O1: L1=0.0004, max_abs=0.0002\n  - Y: L1=0.0001, max_abs=0.0001\n  - F: L1=0.0001, max_abs=0.0000\n  - A1: L1=0.0000, max_abs=0.0000\n  - X: L1=0.0000, max_abs=0.0000\n  => Most influential evidence: V1 (by L1 contribution).", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A1': 'True', 'A2': 'True', 'B': 'True', 'B1': 'True', 'B2': 'True', 'C': 'True', 'C2': 'True', 'D': 'True', 'D1': 'True', 'D2': 'True', 'E': 'True', 'E1': 'True', 'F': 'True', 'F1': 'True', 'G': 'True', 'H2': 'True', 'I1': 'True', 'J': 'True', 'K': 'True', 'K1': 'True', 'L': 'True', 'M': 'True', 'M1': 'True', 'N1': 'True', 'O': 'True', 'O1': 'True', 'P': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'S': 'True', 'S1': 'True', 'U': 'True', 'V1': 'True', 'X': 'True', 'Y': 'True', 'Y1': 'True', 'Z': 'True', 'Z1': 'True'}, 'node': 'W'}}}]}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value=P(W | A1=True, A2=True, B=True, B1=True, B2=True, C=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, F=True, F1=True, G=True, H2=True, I1=True, J=True, K=True, K1=True, L=True, M=True, M1=True, N1=True, O=True, O1=True, P=True, P1=True, Q=True, Q1=True, S=True, S1=True, U=True, V1=True, X=True, Y=True, Y1=True, Z=True, Z1=True):
+  P(W=False) = 0.5948
+  P(W=True) = 0.4052
+
+Original distribution:
+  P(W=False) = 0.4089
+  P(W=True) = 0.5911
+
+Conclusion:
+  Belief in 'False' increased by 0.1859
+  Belief in 'True' decreased by 0.1859
+  Largest overall per-state shift: 0.1859.
+Evidence impact (leave-one-out):
+  - V1: L1=0.6169, max_abs=0.3085
+  - F1: L1=0.3790, max_abs=0.1895
+  - O: L1=0.3284, max_abs=0.1642
+  - C2: L1=0.2422, max_abs=0.1211
+  - B1: L1=0.2279, max_abs=0.1139
+  - D1: L1=0.2210, max_abs=0.1105
+  - Y1: L1=0.2099, max_abs=0.1049
+  - S1: L1=0.1067, max_abs=0.0533
+  - D: L1=0.1043, max_abs=0.0522
+  - C: L1=0.0597, max_abs=0.0298
+  - Z1: L1=0.0561, max_abs=0.0281
+  - K1: L1=0.0560, max_abs=0.0280
+  - M: L1=0.0492, max_abs=0.0246
+  - G: L1=0.0457, max_abs=0.0228
+  - Z: L1=0.0443, max_abs=0.0221
+  - P: L1=0.0368, max_abs=0.0184
+  - E1: L1=0.0336, max_abs=0.0168
+  - I1: L1=0.0287, max_abs=0.0143
+  - K: L1=0.0269, max_abs=0.0134
+  - E: L1=0.0196, max_abs=0.0098
+  - S: L1=0.0191, max_abs=0.0095
+  - L: L1=0.0178, max_abs=0.0089
+  - B2: L1=0.0156, max_abs=0.0078
+  - U: L1=0.0140, max_abs=0.0070
+  - J: L1=0.0112, max_abs=0.0056
+  - M1: L1=0.0044, max_abs=0.0022
+  - N1: L1=0.0041, max_abs=0.0020
+  - P1: L1=0.0032, max_abs=0.0016
+  - H2: L1=0.0021, max_abs=0.0011
+  - Q1: L1=0.0017, max_abs=0.0009
+  - Q: L1=0.0017, max_abs=0.0008
+  - D2: L1=0.0016, max_abs=0.0008
+  - B: L1=0.0013, max_abs=0.0007
+  - A2: L1=0.0004, max_abs=0.0002
+  - O1: L1=0.0004, max_abs=0.0002
+  - Y: L1=0.0001, max_abs=0.0001
+  - F: L1=0.0001, max_abs=0.0000
+  - A1: L1=0.0000, max_abs=0.0000
+  - X: L1=0.0000, max_abs=0.0000
+  => Most influential evidence: V1 (by L1 contribution).
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[ERROR] extract_text JSON decode failed: Expecting value: line 1 column 1 (char 0), answer: P(W | A1=True, A2=True, B=True, B1=True, B2=True, C=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, F=True, F1=True, G=True, H2=True, I1=True, J=True, K=True, K1=True, L=True, M=True, M1=True, N1=True, O=True, O1=True, P=True, P1=True, Q=True, Q1=True, S=True, S1=True, U=True, V1=True, X=True, Y=True, Y1=True, Z=True, Z1=True):
+  P(W=False) = 0.5948
+  P(W=True) = 0.4052
+
+Original distribution:
+  P(W=False) = 0.4089
+  P(W=True) = 0.5911
+
+Conclusion:
+  Belief in 'False' increased by 0.1859
+  Belief in 'True' decreased by 0.1859
+  Largest overall per-state shift: 0.1859.
+Evidence impact (leave-one-out):
+  - V1: L1=0.6169, max_abs=0.3085
+  - F1: L1=0.3790, max_abs=0.1895
+  - O: L1=0.3284, max_abs=0.1642
+  - C2: L1=0.2422, max_abs=0.1211
+  - B1: L1=0.2279, max_abs=0.1139
+  - D1: L1=0.2210, max_abs=0.1105
+  - Y1: L1=0.2099, max_abs=0.1049
+  - S1: L1=0.1067, max_abs=0.0533
+  - D: L1=0.1043, max_abs=0.0522
+  - C: L1=0.0597, max_abs=0.0298
+  - Z1: L1=0.0561, max_abs=0.0281
+  - K1: L1=0.0560, max_abs=0.0280
+  - M: L1=0.0492, max_abs=0.0246
+  - G: L1=0.0457, max_abs=0.0228
+  - Z: L1=0.0443, max_abs=0.0221
+  - P: L1=0.0368, max_abs=0.0184
+  - E1: L1=0.0336, max_abs=0.0168
+  - I1: L1=0.0287, max_abs=0.0143
+  - K: L1=0.0269, max_abs=0.0134
+  - E: L1=0.0196, max_abs=0.0098
+  - S: L1=0.0191, max_abs=0.0095
+  - L: L1=0.0178, max_abs=0.0089
+  - B2: L1=0.0156, max_abs=0.0078
+  - U: L1=0.0140, max_abs=0.0070
+  - J: L1=0.0112, max_abs=0.0056
+  - M1: L1=0.0044, max_abs=0.0022
+  - N1: L1=0.0041, max_abs=0.0020
+  - P1: L1=0.0032, max_abs=0.0016
+  - H2: L1=0.0021, max_abs=0.0011
+  - Q1: L1=0.0017, max_abs=0.0009
+  - Q: L1=0.0017, max_abs=0.0008
+  - D2: L1=0.0016, max_abs=0.0008
+  - B: L1=0.0013, max_abs=0.0007
+  - A2: L1=0.0004, max_abs=0.0002
+  - O1: L1=0.0004, max_abs=0.0002
+  - Y: L1=0.0001, max_abs=0.0001
+  - F: L1=0.0001, max_abs=0.0000
+  - A1: L1=0.0000, max_abs=0.0000
+  - X: L1=0.0000, max_abs=0.0000
+  => Most influential evidence: V1 (by L1 contribution).
+[BayMin Testing] Response time: 461.08s, Quiz time: 63.54s, Total: 524.62s
+[Test] Logged: numerical_test - probability - Q21
+Running question 22
+[Testing Mode] Question 22: If G1, M, F, M1, C, W, Q1, K, F1, C2, Q, I1, Y1, X, F2, L1, H1, L, A2, A1, T, B1, O, Z1, D, P1, E, B...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A': 'True', 'A1': 'True', 'A2': 'True', 'B1': 'True', 'B2': 'True', 'C': 'True', 'C2': 'True', 'D': 'True', 'D2': 'True', 'E': 'True', 'E1': 'True', 'E2': 'True', 'F': 'True', 'F1': 'True', 'F2': 'True', 'G1': 'True', 'H': 'True', 'H1': 'True', 'H2': 'True', 'I': 'True', 'I1': 'True', 'J': 'True', 'J1': 'True', 'K': 'True', 'L': 'True', 'L1': 'True', 'M': 'True', 'M1': 'True', 'N': 'True', 'O': 'True', 'P': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R1': 'True', 'S': 'True', 'S1': 'True', 'T': 'True', 'U1': 'True', 'V': 'True', 'V1': 'True', 'W': 'True', 'W1': 'True', 'X': 'True', 'Y': 'True', 'Y1': 'True', 'Z1': 'True'}, 'node': 'O1'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(O1 | A=True, A1=True, A2=True, B1=True, B2=True, C=True, C2=True, D=True, D2=True, E=True, E1=True, E2=True, F=True, F1=True, F2=True, G1=True, H=True, H1=True, H2=True, I=True, I1=True, J=True, J1=True, K=True, L=True, L1=True, M=True, M1=True, N=True, O=True, P=True, P1=True, Q=True, Q1=True, R1=True, S=True, S1=True, T=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, Y=True, Y1=True, Z1=True):\\n  P(O1=False) = 0.0737\\n  P(O1=True) = 0.9263\\n\\nOriginal distribution:\\n  P(O1=False) = 0.3665\\n  P(O1=True) = 0.6335\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.2927\\n  Belief in \'True\' increased by 0.2927\\n  Largest overall per-state shift: 0.2927.\\nEvidence impact (leave-one-out):\\n  - A1: L1=0.7155, max_abs=0.3578\\n  - P1: L1=0.6746, max_abs=0.3373\\n  - M1: L1=0', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(O1 | A=True, A1=True, A2=True, B1=True, B2=True, C=True, C2=True, D=True, D2=True, E=True, E1=True, E2=True, F=True, F1=True, F2=True, G1=True, H=True, H1=True, H2=True, I=True, I1=True, J=True, J1=True, K=True, L=True, L1=True, M=True, M1=True, N=True, O=True, P=True, P1=True, Q=True, Q1=True, R1=True, S=True, S1=True, T=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, Y=True, Y1=True, Z1=True):\\n  P(O1=False) = 0.0737\\n  P(O1=True) = 0.9263\\n\\nOriginal distribution:\\n  P(O1=False) = 0.3665\\n  P(O1=True) = 0.6335\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.2927\\n  Belief in \'True\' increased by 0.2927\\n  Largest overall per-state shift: 0.2927.\\nEvidence impact (leave-one-out):\\n  - A1: L1=0.7155, max_abs=0.3578\\n  - P1: L1=0.6746, max_abs=0.3373\\n  - M1: L1=0.4585, max_abs=0.2293\\n  - E2: L1=0.0982, max_abs=0.0491\\n  - S1: L1=0.0953, max_abs=0.0476\\n  - V1: L1=0.0824, max_abs=0.0412\\n  - M: L1=0.0709, max_abs=0.0355\\n  - U1: L1=0.0588, max_abs=0.0294\\n  - S: L1=0.0584, max_abs=0.0292\\n  - J1: L1=0.0463, max_abs=0.0231\\n  - I: L1=0.0413, max_abs=0.0207\\n  - P: L1=0.0380, max_abs=0.0190\\n  - E: L1=0.0303, max_abs=0.0151\\n  - O: L1=0.0291, max_abs=0.0145\\n  - Y1: L1=0.0273, max_abs=0.0137\\n  - W1: L1=0.0271, max_abs=0.0135\\n  - G1: L1=0.0221, max_abs=0.0110\\n  - F: L1=0.0214, max_abs=0.0107\\n  - T: L1=0.0190, max_abs=0.0095\\n  - K: L1=0.0179, max_abs=0.0089\\n  - H: L1=0.0174, max_abs=0.0087\\n  - D: L1=0.0137, max_abs=0.0069\\n  - N: L1=0.0133, max_abs=0.0066\\n  - V: L1=0.0131, max_abs=0.0065\\n  - D2: L1=0.0122, max_abs=0.0061\\n  - H1: L1=0.0114, max_abs=0.0057\\n  - A: L1=0.0097, max_abs=0.0048\\n  - R1: L1=0.0071, max_abs=0.0036\\n  - Q1: L1=0.0064, max_abs=0.0032\\n  - L: L1=0.0050, max_abs=0.0025\\n  - H2: L1=0.0044, max_abs=0.0022\\n  - B2: L1=0.0041, max_abs=0.0020\\n  - E1: L1=0.0039, max_abs=0.0019\\n  - Q: L1=0.0038, max_abs=0.0019\\n  - L1: L1=0.0038, max_abs=0.0019\\n  - F1: L1=0.0029, max_abs=0.0015\\n  - C2: L1=0.0019, max_abs=0.0010\\n  - A2: L1=0.0019, max_abs=0.0009\\n  - C: L1=0.0017, max_abs=0.0008\\n  - Y: L1=0.0014, max_abs=0.0007\\n  - W: L1=0.0012, max_abs=0.0006\\n  - Z1: L1=0.0002, max_abs=0', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A': 'True', 'A1': 'True', 'A2': 'True', 'B1': 'True', 'B2': 'True', 'C': 'True', 'C2': 'True', 'D': 'True', 'D2': 'True', 'E': 'True', 'E1': 'True', 'E2': 'True', 'F': 'True', 'F1': 'True', 'F2': 'True', 'G1': 'True', 'H': 'True', 'H1': 'True', 'H2': 'True', 'I': 'True', 'I1': 'True', 'J': 'True', 'J1': 'True', 'K': 'True', 'L': 'True', 'L1': 'True', 'M': 'True', 'M1': 'True', 'N': 'True', 'O': 'True', 'P': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R1': 'True', 'S': 'True', 'S1': 'True', 'T': 'True', 'U1': 'True', 'V': 'True', 'V1': 'True', 'W': 'True', 'W1': 'True', 'X': 'True', 'Y': 'True', 'Y1': 'True', 'Z1': 'True'}, 'node': 'O1'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(O1 | A=True, A1=True, A2=True, B1=True, B2=True, C=True, C2=True, D=True, D2=True, E=True, E1=True, E2=True, F=True, F1=True, F2=True, G1=True, H=True, H1=True, H2=True, I=True, I1=True, J=True, J1=True, K=True, L=True, L1=True, M=True, M1=True, N=True, O=True, P=True, P1=True, Q=True, Q1=True, R1=True, S=True, S1=True, T=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, Y=True, Y1=True, Z1=True):\\n  P(O1=False) = 0.0737\\n  P(O1=True) = 0.9263\\n\\nOriginal distribution:\\n  P(O1=False) = 0.3665\\n  P(O1=True) = 0.6335\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.2927\\n  Belief in \'True\' increased by 0.2927\\n  Largest overall per-state shift: 0.2927.\\nEvidence impact (leave-one-out):\\n  - A1: L1=0.7155, max_abs=0.3578\\n  - P1: L1=0.6746, max_abs=0.3373\\n  - M1: L1=0.4585, max_abs=0.2293\\n  - E2: L1=0.0982, max_abs=0.0491\\n  - S1: L1=0.0953, max_abs=0.0476\\n  - V1: L1=0.0824, max_abs=0.0412\\n  - M: L1=0.0709, max_abs=0.0355\\n  - U1: L1=0.0588, max_abs=0.0294\\n  - S: L1=0.0584, max_abs=0.0292\\n  - J1: L1=0.0463, max_abs=0.0231\\n  - I: L1=0.0413, max_abs=0.0207\\n  - P: L1=0.0380, max_abs=0.0190\\n  - E: L1=0.0303, max_abs=0.0151\\n  - O: L1=0.0291, max_abs=0.0145\\n  - Y1: L1=0.0273, max_abs=0.0137\\n  - W1: L1=0.0271, max_abs=0.0135\\n  - G1: L1=0.0221, max_abs=0.0110\\n  - F: L1=0.0214, max_abs=0.0107\\n  - T: L1=0.0190, max_abs=0.0095\\n  - K: L1=0.0179, max_abs=0.0089\\n  - H: L1=0.0174, max_abs=0.0087\\n  - D: L1=0.0137, max_abs=0.0069\\n  - N: L1=0.0133, max_abs=0.0066\\n  - V: L1=0.0131, max_abs=0.0065\\n  - D2: L1=0.0122, max_abs=0.0061\\n  - H1: L1=0.0114, max_abs=0.0057\\n  - A: L1=0.0097, max_abs=0.0048\\n  - R1: L1=0.0071, max_abs=0.0036\\n  - Q1: L1=0.0064, max_abs=0.0032\\n  - L: L1=0.0050, max_abs=0.0025\\n  - H2: L1=0.0044, max_abs=0.0022\\n  - B2: L1=0.0041, max_abs=0.0020\\n  - E1: L1=0.0039, max_abs=0.0019\\n  - Q: L1=0.0038, max_abs=0.0019\\n  - L1: L1=0.0038, max_abs=0.0019\\n  - F1: L1=0.0029, max_abs=0.0015\\n  - C2: L1=0.0019, max_abs=0.0010\\n  - A2: L1=0.0019, max_abs=0.0009\\n  - C: L1=0.0017, max_abs=0.0008\\n  - Y: L1=0.0014, max_abs=0.0007\\n  - W: L1=0.0012, max_abs=0.0006\\n  - Z1: L1=0.0002, max_abs=0.0001\\n  - X: L1=0.0000, max_abs=0.0000\\n  - F2: L1=0.0000, max_abs=0.0000\\n  - B1: L1=0.0000, max_abs=0.0000\\n  - I1: L1=0.0000, max_abs=0.0000\\n  - J: L1=0.0000, max_abs=0.0000"}', 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value={"result":"P(O1 | A=True, A1=True, A2=True, B1=True, B2=True, C=True, C2=True, D=True, D2=True, E=True, E1=True, E2=True, F=True, F1=True, F2=True, G1=True, H=True, H1=True, H2=True, I=True, I1=True, J=True, J1=True, K=True, L=True, L1=True, M=True, M1=True, N=True, O=True, P=True, P1=True, Q=True, Q1=True, R1=True, S=True, S1=True, T=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, Y=True, Y1=True, Z1=True):\n  P(O1=False) = 0.0737\n  P(O1=True) = 0.9263\n\nOriginal distribution:\n  P(O1=False) = 0.3665\n  P(O1=True) = 0.6335\n\nConclusion:\n  Belief in 'False' decreased by 0.2927\n  Belief in 'True' increased by 0.2927\n  Largest overall per-state shift: 0.2927.\nEvidence impact (leave-one-out):\n  - A1: L1=0.7155, max_abs=0.3578\n  - P1: L1=0.6746, max_abs=0.3373\n  - M1: L1=0.4585, max_abs=0.2293\n  - E2: L1=0.0982, max_abs=0.0491\n  - S1: L1=0.0953, max_abs=0.0476\n  - V1: L1=0.0824, max_abs=0.0412\n  - M: L1=0.0709, max_abs=0.0355\n  - U1: L1=0.0588, max_abs=0.0294\n  - S: L1=0.0584, max_abs=0.0292\n  - J1: L1=0.0463, max_abs=0.0231\n  - I: L1=0.0413, max_abs=0.0207\n  - P: L1=0.0380, max_abs=0.0190\n  - E: L1=0.0303, max_abs=0.0151\n  - O: L1=0.0291, max_abs=0.0145\n  - Y1: L1=0.0273, max_abs=0.0137\n  - W1: L1=0.0271, max_abs=0.0135\n  - G1: L1=0.0221, max_abs=0.0110\n  - F: L1=0.0214, max_abs=0.0107\n  - T: L1=0.0190, max_abs=0.0095\n  - K: L1=0.0179, max_abs=0.0089\n  - H: L1=0.0174, max_abs=0.0087\n  - D: L1=0.0137, max_abs=0.0069\n  - N: L1=0.0133, max_abs=0.0066\n  - V: L1=0.0131, max_abs=0.0065\n  - D2: L1=0.0122, max_abs=0.0061\n  - H1: L1=0.0114, max_abs=0.0057\n  - A: L1=0.0097, max_abs=0.0048\n  - R1: L1=0.0071, max_abs=0.0036\n  - Q1: L1=0.0064, max_abs=0.0032\n  - L: L1=0.0050, max_abs=0.0025\n  - H2: L1=0.0044, max_abs=0.0022\n  - B2: L1=0.0041, max_abs=0.0020\n  - E1: L1=0.0039, max_abs=0.0019\n  - Q: L1=0.0038, max_abs=0.0019\n  - L1: L1=0.0038, max_abs=0.0019\n  - F1: L1=0.0029, max_abs=0.0015\n  - C2: L1=0.0019, max_abs=0.0010\n  - A2: L1=0.0019, max_abs=0.0009\n  - C: L1=0.0017, max_abs=0.0008\n  - Y: L1=0.0014, max_abs=0.0007\n  - W: L1=0.0012, max_abs=0.0006\n  - Z1: L1=0.0002, max_abs=0.0001\n  - X: L1=0.0000, max_abs=0.0000\n  - F2: L1=0.0000, max_abs=0.0000\n  - B1: L1=0.0000, max_abs=0.0000\n  - I1: L1=0.0000, max_abs=0.0000\n  - J: L1=0.0000, max_abs=0.0000"}
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[BayMin Testing] Response time: 417.66s, Quiz time: 82.19s, Total: 499.85s
+[Test] Logged: numerical_test - probability - Q22
+Running question 23
+[Testing Mode] Question 23: What is the probability of E conditional on O1, M1, K1, Z, L1 being observed?
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'K1': 'True', 'L1': 'True', 'M1': 'True', 'O1': 'True', 'Z': 'True'}, 'node': 'E'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(E | K1=True, L1=True, M1=True, O1=True, Z=True):\n  P(E=False) = 0.3444\n  P(E=True) = 0.6556\n\nOriginal distribution:\n  P(E=False) = 0.4109\n  P(E=True) = 0.5891\n\nConclusion:\n  Belief in 'False' decreased by 0.0664\n  Belief in 'True' increased by 0.0664\n  Largest overall per-state shift: 0.0664.\nEvidence impact (leave-one-out):\n  - K1: L1=0.1271, max_abs=0.0636\n  - Z: L1=0.0946, max_abs=0.0473\n  - O1: L1=0.0676, max_abs=0.0338\n  - M1: L1=0.0060, max_abs=0.0030\n  - L1: L1=0.0002, max_abs=0.0001", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(E | K1=True, L1=True, M1=True, O1=True, Z=True):\n  P(E=False) = 0.3444\n  P(E=True) = 0.6556\n\nOriginal distribution:\n  P(E=False) = 0.4109\n  P(E=True) = 0.5891\n\nConclusion:\n  Belief in 'False' decreased by 0.0664\n  Belief in 'True' increased by 0.0664\n  Largest overall per-state shift: 0.0664.\nEvidence impact (leave-one-out):\n  - K1: L1=0.1271, max_abs=0.0636\n  - Z: L1=0.0946, max_abs=0.0473\n  - O1: L1=0.0676, max_abs=0.0338\n  - M1: L1=0.0060, max_abs=0.0030\n  - L1: L1=0.0002, max_abs=0.0001", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(E | K1=True, L1=True, M1=True, O1=True, Z=True):\n  P(E=False) = 0.3444\n  P(E=True) = 0.6556\n\nOriginal distribution:\n  P(E=False) = 0.4109\n  P(E=True) = 0.5891\n\nConclusion:\n  Belief in 'False' decreased by 0.0664\n  Belief in 'True' increased by 0.0664\n  Largest overall per-state shift: 0.0664.\nEvidence impact (leave-one-out):\n  - K1: L1=0.1271, max_abs=0.0636\n  - Z: L1=0.0946, max_abs=0.0473\n  - O1: L1=0.0676, max_abs=0.0338\n  - M1: L1=0.0060, max_abs=0.0030\n  - L1: L1=0.0002, max_abs=0.0001", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node', 'arguments': {'node': 'E'}}}]}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value=P(E | K1=True, L1=True, M1=True, O1=True, Z=True):
+  P(E=False) = 0.3444
+  P(E=True) = 0.6556
+
+Original distribution:
+  P(E=False) = 0.4109
+  P(E=True) = 0.5891
+
+Conclusion:
+  Belief in 'False' decreased by 0.0664
+  Belief in 'True' increased by 0.0664
+  Largest overall per-state shift: 0.0664.
+Evidence impact (leave-one-out):
+  - K1: L1=0.1271, max_abs=0.0636
+  - Z: L1=0.0946, max_abs=0.0473
+  - O1: L1=0.0676, max_abs=0.0338
+  - M1: L1=0.0060, max_abs=0.0030
+  - L1: L1=0.0002, max_abs=0.0001
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[ERROR] extract_text JSON decode failed: Expecting value: line 1 column 1 (char 0), answer: P(E | K1=True, L1=True, M1=True, O1=True, Z=True):
+  P(E=False) = 0.3444
+  P(E=True) = 0.6556
+
+Original distribution:
+  P(E=False) = 0.4109
+  P(E=True) = 0.5891
+
+Conclusion:
+  Belief in 'False' decreased by 0.0664
+  Belief in 'True' increased by 0.0664
+  Largest overall per-state shift: 0.0664.
+Evidence impact (leave-one-out):
+  - K1: L1=0.1271, max_abs=0.0636
+  - Z: L1=0.0946, max_abs=0.0473
+  - O1: L1=0.0676, max_abs=0.0338
+  - M1: L1=0.0060, max_abs=0.0030
+  - L1: L1=0.0002, max_abs=0.0001
+[BayMin Testing] Response time: 74.55s, Quiz time: 17.67s, Total: 92.22s
+[Test] Logged: numerical_test - probability - Q23
+Running question 24
+[Testing Mode] Question 24: How does G1, N, R1, F, K, K1, O, Z1, V1, S, A2, L1, Y, F1, J1, A1, X1, R, U, C, P1, G, S1, C2, Q1, Y...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_highest_impact_evidence_contribute_to_node', 'arguments': {'evidence': {'A': 'True', 'A1': 'True', 'A2': 'True', 'B1': 'True', 'C': 'True', 'C1': 'True', 'C2': 'True', 'D': 'True', 'D1': 'True', 'D2': 'True', 'E': 'True', 'E2': 'True', 'F': 'True', 'F1': 'True', 'F2': 'True', 'G': 'True', 'G1': 'True', 'G2': 'True', 'H': 'True', 'H2': 'True', 'I': 'True', 'J1': 'True', 'K': 'True', 'K1': 'True', 'L': 'True', 'L1': 'True', 'M': 'True', 'M1': 'True', 'N': 'True', 'N1': 'True', 'O': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R': 'True', 'R1': 'True', 'S': 'True', 'S1': 'True', 'T1': 'True', 'U': 'True', 'U1': 'True', 'V': 'True', 'V1': 'True', 'W': 'True', 'W1': 'True', 'X': 'True', 'X1': 'True', 'Y': 'True', 'Y1': 'True', 'Z1': 'True'}, 'node': 'B'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(B | A=True, A1=True, A2=True, B1=True, C=True, C1=True, C2=True, D=True, D1=True, D2=True, E=True, E2=True, F=True, F1=True, F2=True, G=True, G1=True, G2=True, H=True, H2=True, I=True, J1=True, K=True, K1=True, L=True, L1=True, M=True, M1=True, N=True, N1=True, O=True, P1=True, Q=True, Q1=True, R=True, R1=True, S=True, S1=True, T1=True, U=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, X1=True, Y=True, Y1=True, Z1=True):\n  P(B=False) = 0.0087\n  P(B=True) = 0.9913\n\nOriginal distribution:\n  P(B=False) = 0.2652\n  P(B=True) = 0.7348\n\nConclusion:\n  Belief in 'False' decreased by 0.2565\n  Belief in 'True' increased by 0.2565\n  Largest overall per-state shift: 0.2565.\n\nEvidence impact (sequential add/remove):\n  - J1: ADD  L1=0.2632, max_abs=0.1316 | REMOVE L1=0.0069, max_abs=0.0034 | score=0.2632\n  - Q: ADD  L1=0.0470, max_abs=0.0235 | REMOVE L1=0.2588, max_abs=0.1294 | score=0.2588\n  - S1: ADD  L1=0.1225, max_abs=0.0613 | REMOVE L1=0.1142, max_abs=0.0571 | score=0.1225\n  - G: ADD  L1=0.0987, max_abs=0.0493 | REMOVE L1=0.0003, max_abs=0.0002 | score=0.0987\n  - E: ADD  L1=0.0888, max_abs=0.0444 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0888\n  - E2: ADD  L1=0.0811, max_abs=0.0406 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0811\n  - A: ADD  L1=0.0082, max_abs=0.0041 | REMOVE L1=0.0486, max_abs=0.0243 | score=0.0486\n  - D1: ADD  L1=0.0322, max_abs=0.0161 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0322\n  - C2: ADD  L1=0.0276, max_abs=0.0138 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0276\n  - N: ADD  L1=0.0233, max_abs=0.0116 | REMOVE L1=0.0001, max_abs=0.0000 | score=0.0233\n  - I: ADD  L1=0.0183, max_abs=0.0091 | REMOVE L1=0.0001, max_abs=0.0000 | score=0.0183\n  - F: ADD  L1=0.0153, max_abs=0.0076 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0153\n  - M1: ADD  L1=0.0138, max_abs=0.0069 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0138\n  - H2: ADD  L1=0.0135, max_abs=0.0067 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0135\n  - M: ADD  L1=0.0124, max_abs=0.0062 | REMOVE L1=0.0017, max_abs=0.0009 | score=0.0124\n  - D2: ADD  L1=0.0090, max_abs=0.0045 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0090\n  - L: ADD  L1=0.0070, max_abs=0.0035 | REMOVE L1=0.0007, max_abs=0.0003 | score=0.0070\n  - D: ADD  L1=0.0063, max_abs=0.0032 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0063\n  - O: ADD  L1=0.0057, max_abs=0.0029 | REMOVE L1=0.0001, max_abs=0.0000 | score=0.0057\n  - F2: ADD  L1=0.0057, max_abs=0.0029 | REMOVE L1=0.0011, max_abs=0.0006 | score=0.0057\n  - P1: ADD  L1=0.0057, max_abs=0.0028 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0057\n  - K: ADD  L1=0.0053, max_abs=0.0026 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0053\n  - G1: ADD  L1=0.0049, max_abs=0.0025 | REMOVE L1=0.0002, max_abs=0.0001 | score=0.0049\n  - R1: ADD  L1=0.0048, max_abs=0.0024 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0048\n  - F1: ADD  L1=0.0045, max_abs=0.0023 | REMOVE L1=0.0001, max_abs=0.0000 | score=0.0045\n  - U: ADD  L1=0.0040, max_abs=0.0020 | REMOVE L1=0.0011, max_abs=0.0006 | score=0.0040\n  - K1: ADD  L1=0.0033, max_abs=0.0016 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0033\n  - H: ADD  L1=0.0026, max_abs=0.0013 | REMOVE L1=0.0002, max_abs=0.0001 | score=0.0026\n  - G2: ADD  L1=0.0025, max_abs=0.0013 | REMOVE L1=0.0000, max_abs=0.0000 | score=0.0025\n  - C1: ADD  L1=0.0024, max_abs=0.0012 | REMOVE L1", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_highest_impact_evidence_contribute_to_node', 'arguments': {'evidence': {'A': 'True', 'A1': 'True', 'A2': 'True', 'B1': 'True', 'C': 'True', 'C1': 'True', 'C2': 'True', 'D': 'True', 'D1': 'True', 'D2': 'True', 'E': 'True', 'E2': 'True', 'F': 'True', 'F1': 'True', 'F2': 'True', 'G': 'True', 'G1': 'True', 'G2': 'True', 'H': 'True', 'H2': 'True', 'I': 'True', 'J1': 'True', 'K': 'True', 'K1': 'True', 'L': 'True', 'L1': 'True', 'M': 'True', 'M1': 'True', 'N': 'True', 'N1': 'True', 'O': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R': 'True', 'R1': 'True', 'S': 'True', 'S1': 'True', 'T1': 'True', 'U': 'True', 'U1': 'True', 'V': 'True', 'V1': 'True', 'W': 'True', 'W1': 'True', 'X': 'True', 'X1': 'True', 'Y': 'True', 'Y1': 'True', 'Z1': 'True'}, 'node': 'B'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': 'The evidence set that was examined is:\n\n```\nA=True, A1=True, A2=True, B1=True, C=True, C1=True, C2=True,\nD=True, D1=True, D2=True, E=True, E2=True, F=True, F1=True, F2=True,\nG=True, G1=True, G2=True, H=True, H2=True, I=True, J1=True, K=True,\nK1=True, L=True, L1=True, M=True, M1=True, N=True, N1=True, O=True,\nP1=True, Q=True, Q1=True, R=True, R1=True, S=True, S1=True, T1=True,\nU=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, X1=True,\nY=True, Y1=True, Z1=True\n```\n\nWith this evidence the posterior probability of node **B** is:\n\n```\nP(B = False) = 0.0087\nP(B = True)  = 0.9913\n```\n\nThe original (prior) distribution was:\n\n```\nP(B = False) = 0.2652\nP(B = True)  = 0.7348\n```\n\n**Effect on belief in B**\n\n* The belief that B is **False** decreased by 0.2565.\n* The belief that B is **True** increased by 0.2565.\n* The largest overall shift in a single state is 0.2565.\n\n**Highest‑impact evidence**\n\nThe evidence that contributed the most to changing the belief in B is **J1** (tied closely with Q). Adding J1 increased the probability of B being True by 0.2632, while removing it would reduce that probability by 0.0069. Thus, J1 is the most influential single piece of evidence in this analysis.', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A': 'True', 'A1': 'True', 'A2': 'True', 'B1': 'True', 'C': 'True', 'C1': 'True', 'C2': 'True', 'D': 'True', 'D1': 'True', 'D2': 'True', 'E': 'True', 'E2': 'True', 'F': 'True', 'F1': 'True', 'F2': 'True', 'G': 'True', 'G1': 'True', 'G2': 'True', 'H': 'True', 'H2': 'True', 'I': 'True', 'J1': 'True', 'K': 'True', 'K1': 'True', 'L': 'True', 'L1': 'True', 'M': 'True', 'M1': 'True', 'N': 'True', 'N1': 'True', 'O': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R': 'True', 'R1': 'True', 'S': 'True', 'S1': 'True', 'T1': 'True', 'U': 'True', 'U1': 'True', 'V': 'True', 'V1': 'True', 'W': 'True', 'W1': 'True', 'X': 'True', 'X1': 'True', 'Y': 'True', 'Y1': 'True', 'Z1': 'True'}, 'node': 'B'}}}]}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value=The evidence set that was examined is:
+
+```
+A=True, A1=True, A2=True, B1=True, C=True, C1=True, C2=True,
+D=True, D1=True, D2=True, E=True, E2=True, F=True, F1=True, F2=True,
+G=True, G1=True, G2=True, H=True, H2=True, I=True, J1=True, K=True,
+K1=True, L=True, L1=True, M=True, M1=True, N=True, N1=True, O=True,
+P1=True, Q=True, Q1=True, R=True, R1=True, S=True, S1=True, T1=True,
+U=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, X1=True,
+Y=True, Y1=True, Z1=True
+```
+
+With this evidence the posterior probability of node **B** is:
+
+```
+P(B = False) = 0.0087
+P(B = True)  = 0.9913
+```
+
+The original (prior) distribution was:
+
+```
+P(B = False) = 0.2652
+P(B = True)  = 0.7348
+```
+
+**Effect on belief in B**
+
+* The belief that B is **False** decreased by 0.2565.
+* The belief that B is **True** increased by 0.2565.
+* The largest overall shift in a single state is 0.2565.
+
+**Highest‑impact evidence**
+
+The evidence that contributed the most to changing the belief in B is **J1** (tied closely with Q). Adding J1 increased the probability of B being True by 0.2632, while removing it would reduce that probability by 0.0069. Thus, J1 is the most influential single piece of evidence in this analysis.
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[ERROR] extract_text JSON decode failed: Expecting value: line 1 column 1 (char 0), answer: The evidence set that was examined is:
+
+```
+A=True, A1=True, A2=True, B1=True, C=True, C1=True, C2=True,
+D=True, D1=True, D2=True, E=True, E2=True, F=True, F1=True, F2=True,
+G=True, G1=True, G2=True, H=True, H2=True, I=True, J1=True, K=True,
+K1=True, L=True, L1=True, M=True, M1=True, N=True, N1=True, O=True,
+P1=True, Q=True, Q1=True, R=True, R1=True, S=True, S1=True, T1=True,
+U=True, U1=True, V=True, V1=True, W=True, W1=True, X=True, X1=True,
+Y=True, Y1=True, Z1=True
+```
+
+With this evidence the posterior probability of node **B** is:
+
+```
+P(B = False) = 0.0087
+P(B = True)  = 0.9913
+```
+
+The original (prior) distribution was:
+
+```
+P(B = False) = 0.2652
+P(B = True)  = 0.7348
+```
+
+**Effect on belief in B**
+
+* The belief that B is **False** decreased by 0.2565.
+* The belief that B is **True** increased by 0.2565.
+* The largest overall shift in a single state is 0.2565.
+
+**Highest‑impact evidence**
+
+The evidence that contributed the most to changing the belief in B is **J1** (tied closely with Q). Adding J1 increased the probability of B being True by 0.2632, while removing it would reduce that probability by 0.0069. Thus, J1 is the most influential single piece of evidence in this analysis.
+[BayMin Testing] Response time: 1136.61s, Quiz time: 82.80s, Total: 1219.41s
+[Test] Logged: numerical_test - probability - Q24
+Running question 25
+[Testing Mode] Question 25: Given we have observed S1, G1, what’s the belief in B1?
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'G1': 'True', 'S1': 'True'}, 'node': 'B1'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(B1 | G1=True, S1=True):\n  P(B1=False) = 0.4460\n  P(B1=True) = 0.5540\n\nOriginal distribution:\n  P(B1=False) = 0.5048\n  P(B1=True) = 0.4952\n\nConclusion:\n  Belief in 'False' decreased by 0.0589\n  Belief in 'True' increased by 0.0589\n  Largest overall per-state shift: 0.0589.\nEvidence impact (leave-one-out):\n  - S1: L1=0.1161, max_abs=0.0580\n  - G1: L1=0.0011, max_abs=0.0005\n  => Most influential evidence: S1 (by L1 contribution).", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(B1 | G1=True, S1=True):\n  P(B1=False) = 0.4460\n  P(B1=True) = 0.5540\n\nOriginal distribution:\n  P(B1=False) = 0.5048\n  P(B1=True) = 0.4952\n\nConclusion:\n  Belief in 'False' decreased by 0.0589\n  Belief in 'True' increased by 0.0589\n  Largest overall per-state shift: 0.0589.\nEvidence impact (leave-one-out):\n  - S1: L1=0.1161, max_abs=0.0580\n  - G1: L1=0.0011, max_abs=0.0005\n  => Most influential evidence: S1 (by L1 contribution).", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(B1 | G1=True, S1=True):\n  P(B1=False) = 0.4460\n  P(B1=True) = 0.5540\n\nOriginal distribution:\n  P(B1=False) = 0.5048\n  P(B1=True) = 0.4952\n\nConclusion:\n  Belief in 'False' decreased by 0.0589\n  Belief in 'True' increased by 0.0589\n  Largest overall per-state shift: 0.0589.\nEvidence impact (leave-one-out):\n  - S1: L1=0.1161, max_abs=0.0580\n  - G1: L1=0.0011, max_abs=0.0005\n  => Most influential evidence: S1 (by L1 contribution).", 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': "P(B1 | G1=True, S1=True):\n  P(B1=False) = 0.4460\n  P(B1=True) = 0.5540\n\nOriginal distribution:\n  P(B1=False) = 0.5048\n  P(B1=True) = 0.4952\n\nConclusion:\n  Belief in 'False' decreased by 0.0589\n  Belief in 'True' increased by 0.0589\n  Largest overall per-state shift: 0.0589.\nEvidence impact (leave-one-out):\n  - S1: L1=0.1161, max_abs=0.0580\n  - G1: L1=0.0011, max_abs=0.0005\n  => Most influential evidence: S1 (by L1 contribution).", 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value=P(B1 | G1=True, S1=True):
+  P(B1=False) = 0.4460
+  P(B1=True) = 0.5540
+
+Original distribution:
+  P(B1=False) = 0.5048
+  P(B1=True) = 0.4952
+
+Conclusion:
+  Belief in 'False' decreased by 0.0589
+  Belief in 'True' increased by 0.0589
+  Largest overall per-state shift: 0.0589.
+Evidence impact (leave-one-out):
+  - S1: L1=0.1161, max_abs=0.0580
+  - G1: L1=0.0011, max_abs=0.0005
+  => Most influential evidence: S1 (by L1 contribution).
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[ERROR] extract_text JSON decode failed: Expecting value: line 1 column 1 (char 0), answer: P(B1 | G1=True, S1=True):
+  P(B1=False) = 0.4460
+  P(B1=True) = 0.5540
+
+Original distribution:
+  P(B1=False) = 0.5048
+  P(B1=True) = 0.4952
+
+Conclusion:
+  Belief in 'False' decreased by 0.0589
+  Belief in 'True' increased by 0.0589
+  Largest overall per-state shift: 0.0589.
+Evidence impact (leave-one-out):
+  - S1: L1=0.1161, max_abs=0.0580
+  - G1: L1=0.0011, max_abs=0.0005
+  => Most influential evidence: S1 (by L1 contribution).
+[BayMin Testing] Response time: 54.90s, Quiz time: 17.14s, Total: 72.04s
+[Test] Logged: numerical_test - probability - Q25
+Running question 26
+[Testing Mode] Question 26: What is the computed probability distribution for L given H1, E1, D1, C, G2, E, P1, F2, F, X1, R, Q,...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A1': 'True', 'B': 'True', 'C': 'True', 'C2': 'True', 'D1': 'True', 'E': 'True', 'E1': 'True', 'E2': 'True', 'F': 'True', 'F2': 'True', 'G1': 'True', 'G2': 'True', 'H': 'True', 'H1': 'True', 'H2': 'True', 'I': 'True', 'I1': 'True', 'J1': 'True', 'K1': 'True', 'L1': 'True', 'M': 'True', 'N': 'True', 'O1': 'True', 'P': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R': 'True', 'S1': 'True', 'U': 'True', 'U1': 'True', 'V': 'True', 'X': 'True', 'X1': 'True', 'Y': 'True', 'Y1': 'True'}, 'node': 'L'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(L | A1=True, B=True, C=True, C2=True, D1=True, E=True, E1=True, E2=True, F=True, F2=True, G1=True, G2=True, H=True, H1=True, H2=True, I=True, I1=True, J1=True, K1=True, L1=True, M=True, N=True, O1=True, P=True, P1=True, Q=True, Q1=True, R=True, S1=True, U=True, U1=True, V=True, X=True, X1=True, Y=True, Y1=True):\\n  P(L=False) = 0.5801\\n  P(L=True) = 0.4199\\n\\nOriginal distribution:\\n  P(L=False) = 0.3753\\n  P(L=True) = 0.6247\\n\\nConclusion:\\n  Belief in \'False\' increased by 0.2048\\n  Belief in \'True\' decreased by 0.2048\\n  Largest overall per-state shift: 0.2048.\\nEvidence impact (leave-one-out):\\n  - H1: L1=0.5394, max_abs=0.2697\\n  - P: L1=0.2995, max_abs=0.1497\\n  - E2: L1=0.2545, max_abs=0.1272\\n  - N: L1=0.2542, max_abs=0.1271\\n  - K1: L1=0.2390, max_abs=0.1195\\n  - J1: L1=0.1964, max_abs=0.0982\\n  - S1: L1=0.1754, max_abs=0.0877\\n  - C2: L1=0.1558, max_abs=0.0779\\n  - H: L1=0.1326, max_abs=0.0663\\n  - Y: L1=0.1297, max_abs=0.0649\\n  - H2: L1=0.1213, max_abs=0.0607\\n  - D1: L1=0.1115, max_abs=0.0557\\n  - U1: L1=0.0964, max_abs=0.0482\\n  - C: L1=0.0864, max_abs=0.0432\\n  - Q: L1=0.0809, max_abs=0.0405\\n  - F2: L1=0.0788, max_abs=0.0394\\n  - R: L1=0.0641, max_abs=0.0320\\n  - G2: L1=0.0637, max_abs=0.0319\\n  - M: L1=0.0555, max_abs=0.0277\\n  - G1: L1=0.0510, max_abs=0.0255\\n  - V: L1=0.0503, max_abs=0.0252\\n  - A1: L1=0.0459, max_abs=0.0229\\n  - O1: L1=0.0418, max_abs=0.0209\\n  - Y1: L1=0.0384, max_abs=0.0192\\n  - E1: L1=0.0357', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(L | A1=True, B=True, C=True, C2=True, D1=True, E=True, E1=True, E2=True, F=True, F2=True, G1=True, G2=True, H=True, H1=True, H2=True, I=True, I1=True, J1=True, K1=True, L1=True, M=True, N=True, O1=True, P=True, P1=True, Q=True, Q1=True, R=True, S1=True, U=True, U1=True, V=True, X=True, X1=True, Y=True, Y1=True):\\n  P(L=False) = 0.5801\\n  P(L=True) = 0.4199\\n\\nOriginal distribution:\\n  P(L=False) = 0.3753\\n  P(L=True) = 0.6247\\n\\nConclusion:\\n  Belief in \'False\' increased by 0.2048\\n  Belief in \'True\' decreased by 0.2048\\n  Largest overall per-state shift: 0.2048.\\nEvidence impact (leave-one-out):\\n  - H1: L1=0.5394, max_abs=0.2697\\n  - P: L1=0.2995, max_abs=0.1497\\n  - E2: L1=0.2545, max_abs=0.1272\\n  - N: L1=0.2542, max_abs=0.1271\\n  - K1: L1=0.2390, max_abs=0.1195\\n  - J1: L1=0.1964, max_abs=0.0982\\n  - S1: L1=0.1754, max_abs=0.0877\\n  - C2: L1=0.1558, max_abs=0.0779\\n  - H: L1=0.1326, max_abs=0.0663\\n  - Y: L1=0.1297, max_abs=0.0649\\n  - H2: L1=0.1213, max_abs=0.0607\\n  - D1: L1=0.1115, max_abs=0.0557\\n  - U1: L1=0.0964, max_abs=0.0482\\n  - C: L1=0.0864, max_abs=0.0432\\n  - Q: L1=0.0809, max_abs=0.0405\\n  - F2: L1=0.0788, max_abs=0.0394\\n  - R: L1=0.0641, max_abs=0.0320\\n  - G2: L1=0.0637, max_abs=0.0319\\n  - M: L1=0.0555, max_abs=0.0277\\n  - G1: L1=0.0510, max_abs=0.0255\\n  - V: L1=0.0503, max_abs=0.0252\\n  - A1: L1=0.0459, max_abs=0.0229\\n  - O1: L1=0.0418, max_abs=0.0209\\n  - Y1: L1=0.0384, max_abs=0.0192\\n  - E1: L1=0.0357"}', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(L | A1=True, B=True, C=True, C2=True, D1=True, E=True, E1=True, E2=True, F=True, F2=True, G1=True, G2=True, H=True, H1=True, H2=True, I=True, I1=True, J1=True, K1=True, L1=True, M=True, N=True, O1=True, P=True, P1=True, Q=True, Q1=True, R=True, S1=True, U=True, U1=True, V=True, X=True, X1=True, Y=True, Y1=True):\\n  P(L=False) = 0.5801\\n  P(L=True) = 0.4199\\n\\nOriginal distribution:\\n  P(L=False) = 0.3753\\n ', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A1': 'True', 'B': 'True', 'C': 'True', 'C2': 'True', 'D1': 'True', 'E': 'True', 'E1': 'True', 'E2': 'True', 'F': 'True', 'F2': 'True', 'G1': 'True', 'G2': 'True', 'H': 'True', 'H1': 'True', 'H2': 'True', 'I': 'True', 'I1': 'True', 'J1': 'True', 'K1': 'True', 'L1': 'True', 'M': 'True', 'N': 'True', 'O1': 'True', 'P': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R': 'True', 'S1': 'True', 'U': 'True', 'U1': 'True', 'V': 'True', 'X': 'True', 'X1': 'True', 'Y': 'True', 'Y1': 'True'}, 'node': 'L'}}}]}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value={"result":"P(L | A1=True, B=True, C=True, C2=True, D1=True, E=True, E1=True, E2=True, F=True, F2=True, G1=True, G2=True, H=True, H1=True, H2=True, I=True, I1=True, J1=True, K1=True, L1=True, M=True, N=True, O1=True, P=True, P1=True, Q=True, Q1=True, R=True, S1=True, U=True, U1=True, V=True, X=True, X1=True, Y=True, Y1=True):\n  P(L=False) = 0.5801\n  P(L=True) = 0.4199\n\nOriginal distribution:\n  P(L=False) = 0.3753\n
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[ERROR] extract_text JSON decode failed: Unterminated string starting at: line 1 column 11 (char 10), answer: {"result":"P(L | A1=True, B=True, C=True, C2=True, D1=True, E=True, E1=True, E2=True, F=True, F2=True, G1=True, G2=True, H=True, H1=True, H2=True, I=True, I1=True, J1=True, K1=True, L1=True, M=True, N=True, O1=True, P=True, P1=True, Q=True, Q1=True, R=True, S1=True, U=True, U1=True, V=True, X=True, X1=True, Y=True, Y1=True):\n  P(L=False) = 0.5801\n  P(L=True) = 0.4199\n\nOriginal distribution:\n  P(L=False) = 0.3753\n
+[BayMin Testing] Response time: 436.67s, Quiz time: 25.10s, Total: 461.77s
+[Test] Logged: numerical_test - probability - Q26
+Running question 27
+[Testing Mode] Question 27: If Z, D1, H2, C, Z1, R, M, G2, X1, Y, T1, U, D, A, V1, M1, J1, N1 is observed, what is the updated l...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A': 'True', 'C': 'True', 'D': 'True', 'D1': 'True', 'G2': 'True', 'H2': 'True', 'J1': 'True', 'M': 'True', 'M1': 'True', 'N1': 'True', 'R': 'True', 'T1': 'True', 'U': 'True', 'V1': 'True', 'X1': 'True', 'Y': 'True', 'Z': 'True', 'Z1': 'True'}, 'node': 'D2'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(D2 | A=True, C=True, D=True, D1=True, G2=True, H2=True, J1=True, M=True, M1=True, N1=True, R=True, T1=True, U=True, V1=True, X1=True, Y=True, Z=True, Z1=True):\\n  P(D2=False) = 0.4055\\n  P(D2=True) = 0.5945\\n\\nOriginal distribution:\\n  P(D2=False) = 0.5076\\n  P(D2=True) = 0.4924\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.1021\\n  Belief in \'True\' increased by 0.1021\\n  Largest overall per-state shift: 0.1021.\\nEvidence impact (leave-one-out):\\n  - D: L1=0.1421, max_abs=0.0710\\n  - T1: L1=0.1101, max_abs=0.0550\\n  - X1: L1=0.0501, max_abs=0.0251\\n  - Y: L1=0.0410, max_abs=0.0205\\n  - N1: L1=0.0278, max_abs=0.0139\\n  - V1: L1=0.0198, max_abs=0.0099\\n  - U: L1=0.0158, max_abs=0.0079\\n  - C: L1=0.0103, max_abs=0.0052\\n  - A: L1=0.0095, max_abs=0.0048\\n  - M: L1=0.0090, max_abs=0.0045\\n  - H2: L1=0.0076, max_abs=0.0038\\n  - D1: L1=0.0068, max_abs=0.0034\\n  - M1: L1=0.0041, max_abs=0.0020\\n  - R: L1=0.0036, max_abs=0.0018\\n  - J1: L1=0.0034, max_abs=0.0017\\n  - Z: L1=0.0024, max_abs=0.0012\\n  - Z1: L1=0.0022, max_abs=0.0011\\n  - G2: L1=0.0015, max_abs=0.0007"}', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(D2 | A=True, C=True, D=True, D1=True, G2=True, H2=True, J1=True, M=True, M1=True, N1=True, R=True, T1=True, U=True, V1=True, X1=True, Y=True, Z=True, Z1=True):\\n  P(D2=False) = 0.4055\\n  P(D2=True) = 0.5945\\n\\nOriginal distribution:\\n  P(D2=False) = 0.5076\\n  P(D2=True) = 0.4924\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.1021\\n  Belief in \'True\' increased by 0.1021\\n  Largest overall per-state shift: 0.1021.\\nEvidence impact (leave-one-out):\\n  - D: L1=0.1421, max_abs=0.0710\\n  - T1: L1=0.1101, max_abs=0.0550\\n  - X1: L1=0.0501, max_abs=0.0251\\n  - Y: L1=0.0410, max_abs=0.0205\\n  - N1: L1=0.0278, max_abs=0.0139\\n  - V1: L1=0.0198, max_abs=0.0099\\n  - U: L1=0.0158, max_abs=0.0079\\n  - C: L1=0.0103, max_abs=0.0052\\n  - A: L1=0.0095, max_abs=0.0048\\n  - M: L1=0.0090, max_abs=0.0045\\n  - H2: L1=0.0076, max_abs=0.0038\\n  - D1: L1=0.0068, max_abs=0.0034\\n  - M1: L1=0.0041, max_abs=0.0020\\n  - R: L1=0.0036, max_abs=0.0018\\n  - J1: L1=0.0034, max_abs=0.0017\\n  - Z: L1=0.0024, max_abs=0.0012\\n  - Z1: L1=0.0022, max_abs=0.0011\\n  - G2: L1=0.0015, max_abs=0.0007"}', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node', 'arguments': {'node': 'D2'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(D2 | A=True, C=True, D=True, D1=True, G2=True, H2=True, J1=True, M=True, M1=True, N1=True, R=True, T1=True, U=True, V1=True, X1=True, Y=True, Z=True, Z1=True):\\n  P(D2=False) = 0.4055\\n  P(D2=True) = 0.5945\\n\\nOriginal distribution:\\n  P(D2=False) = 0.5076\\n  P(D2=True) = 0.4924\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.1021\\n  Belief in \'True\' increased by 0.1021\\n  Largest overall per-state shift: 0.1021.\\nEvidence impact (leave-one-out):\\n  - D: L1=0.1421, max_abs=0.0710\\n  - T1: L1=0.1101, max_abs=0.0550\\n  - X1: L1=0.0501, max_abs=0.0251\\n  - Y: L1=0.0410, max_abs=0.0205\\n  - N1: L1=0.0278, max_abs=0.0139\\n  - V1: L1=0.0198, max_abs=0.0099\\n  - U: L1=0.0158, max_abs=0.0079\\n  - C: L1=0.0103, max_abs=0.0052\\n  - A: L1=0.0095, max_abs=0.0048\\n  - M: L1=0.0090, max_abs=0.0045\\n  - H2: L1=0.0076, max_abs=0.0038\\n  - D1: L1=0.0068, max_abs=0.0034\\n  - M1: L1=0.0041, max_abs=0.0020\\n  - R: L1=0.0036, max_abs=0.0018\\n  - J1: L1=0.0034, max_abs=0.0017\\n  - Z: L1=0.0024, max_abs=0.0012\\n  - Z1: L1=0.0022, max_abs=0.0011\\n  - G2: L1=0.0015, max_abs=0.0007"}', 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value={"result":"P(D2 | A=True, C=True, D=True, D1=True, G2=True, H2=True, J1=True, M=True, M1=True, N1=True, R=True, T1=True, U=True, V1=True, X1=True, Y=True, Z=True, Z1=True):\n  P(D2=False) = 0.4055\n  P(D2=True) = 0.5945\n\nOriginal distribution:\n  P(D2=False) = 0.5076\n  P(D2=True) = 0.4924\n\nConclusion:\n  Belief in 'False' decreased by 0.1021\n  Belief in 'True' increased by 0.1021\n  Largest overall per-state shift: 0.1021.\nEvidence impact (leave-one-out):\n  - D: L1=0.1421, max_abs=0.0710\n  - T1: L1=0.1101, max_abs=0.0550\n  - X1: L1=0.0501, max_abs=0.0251\n  - Y: L1=0.0410, max_abs=0.0205\n  - N1: L1=0.0278, max_abs=0.0139\n  - V1: L1=0.0198, max_abs=0.0099\n  - U: L1=0.0158, max_abs=0.0079\n  - C: L1=0.0103, max_abs=0.0052\n  - A: L1=0.0095, max_abs=0.0048\n  - M: L1=0.0090, max_abs=0.0045\n  - H2: L1=0.0076, max_abs=0.0038\n  - D1: L1=0.0068, max_abs=0.0034\n  - M1: L1=0.0041, max_abs=0.0020\n  - R: L1=0.0036, max_abs=0.0018\n  - J1: L1=0.0034, max_abs=0.0017\n  - Z: L1=0.0024, max_abs=0.0012\n  - Z1: L1=0.0022, max_abs=0.0011\n  - G2: L1=0.0015, max_abs=0.0007"}
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[BayMin Testing] Response time: 166.52s, Quiz time: 27.11s, Total: 193.63s
+[Test] Logged: numerical_test - probability - Q27
+Running question 28
+[Testing Mode] Question 28: Can you tell me the probability of U1 after seeing G, G1, I1, B1, E, O1, B, F, K, V1, V, E2, A1, R1,...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A1': 'True', 'A2': 'True', 'B': 'True', 'B1': 'True', 'C': 'True', 'C2': 'True', 'D': 'True', 'E': 'True', 'E2': 'True', 'F': 'True', 'F1': 'True', 'G': 'True', 'G1': 'True', 'G2': 'True', 'H': 'True', 'H2': 'True', 'I1': 'True', 'J': 'True', 'J1': 'True', 'K': 'True', 'K1': 'True', 'M': 'True', 'N': 'True', 'N1': 'True', 'O1': 'True', 'P': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R': 'True', 'R1': 'True', 'T1': 'True', 'U': 'True', 'V': 'True', 'V1': 'True', 'W1': 'True', 'X1': 'True', 'Y': 'True'}, 'node': 'U1'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result": "P(U1 | A1=True, A2=True, B=True, B1=True, C=True, C2=True, D=True, E=True, E2=True, F=True, F1=True, G=True, G1=True, G2=True, H=True, H2=True, I1=True, J=True, J1=True, K=True, K1=True, M=True, N=True, N1=True, O1=True, P=True, P1=True, Q=True, Q1=True, R=True, R1=True, T1=True, U=True, V=True, V1=True, W1=True, X1=True, Y=True):\\n  P(U1=False) = 0.8804\\n  P(U1=True) = 0.1196\\n\\nOriginal distribution:\\n  P(U1=False) = 0.7874\\n  P(U1=True) = 0.2126\\n\\nConclusion:\\n  Belief in \'False\' increased by 0.0930\\n  Belief in \'True\' decreased by 0.0930\\n  Largest overall per-state shift: 0.0930.\\nEvidence impact (leave-one-out):\\n  - N1: L1=0.1852, max_abs=0.0926\\n  - K1: L1=0.1849, max_abs=0.0924\\n  - T1: L1=0.0768, max_abs=0.0384\\n  - A1: L1=0.0750, max_abs=0.0375\\n  - G1: L1=0.0631, max_abs=0.0316\\n  - N: L1=0.0507, max_abs=0.0253\\n  - R1: L1=0.0389, max_abs=0.0195\\n  - J1: L1=0.0186, max_abs=0.0093\\n  - F1: L1=0.0107, max_abs=0.0054\\n  - P1: L1=0.0104, max_abs=0.0052\\n  - O1: L1=0.0100, max_abs=0.0050\\n  - Y: L1=0.0065, max_abs=0.0032\\n  - G: L1=0.0049, max_abs=0.0025\\n  - C2: L1=0.0048, max_abs=0.0024\\n  - V1: L1=0.0048, max_abs=0.0024\\n  - B1: L1=0.0044, max_abs=0.0022\\n  - X1: L1=', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(U1 | A1=True, A2=True, B=True, B1=True, C=True, C2=True, D=True, E=True, E2=True, F=True, F1=True, G=True, G1=True, G2=True, H=True, H2=True, I1=True, J=True, J1=True, K=True, K1=True, M=True, N=True, N1=True, O1=True, P=True, P1=True, Q=True, Q1=True, R=True, R1=True, T1=True, U=True, V=True, V1=True, W1=True, X1=True, Y=True):\\n  P(U1=False) = 0.8804\\n  P(U1=True) = 0.1196\\n\\nOriginal distribution:\\n  P(U1=False) = 0.7874\\n  P(U1=True) = 0.2126\\n\\nConclusion:\\n  Belief in \'False\' increased by 0.0930\\n  Belief in \'True\' decreased by 0.0930\\n  Largest overall per-state shift: 0.0930.\\nEvidence impact (leave-one-out):\\n  - N1: L1=0.1852, max_abs=0.0926\\n  - K1: L1=0.1849, max_abs=0.0924\\n  - T1: L1=0.0768, max_abs=0.0384\\n  - A1: L1=0.0750, max_abs=0.0375\\n  - G1: L1=0.0631, max_abs=0.0316\\n  - N: L1=0.0507, max_abs=0.0253\\n  - R1: L1=0.0389, max_abs=0.0195\\n  - J1: L1=0.0186, max_abs=0.0093\\n  - F1: L1=0.0107, max_abs=0.0054\\n  - P1: L1=0.0104, max_abs=0.0052\\n  - O1: L1=0.0100, max_abs=0.0050\\n  - Y: L1=0.0065, max_abs=0.0032\\n  - G: L1=0.0049, max_abs=0.0025\\n  - C2: L1=0.0048, max_abs=0.0024\\n  - V1: L1=0.0048, max_abs=0.0024\\n  - B1: L1=0.0044, max_abs=0.0022\\n  - X1: L1=0.0039, max_abs=0.0020\\n  - V: L1=0.0026, max_abs=0.0013\\n  - W1: L1=0.0018, max_abs=0.0009\\n  - E2: L1=0.0018, max_abs=0.0009\\n  - P: L1=0.0013, max_abs=0.0007\\n  - U: L1=0.0011, max_abs=0.0005\\n  - H: L1=0.0011, max_abs=0.0005\\n  - M: L1=0.0010, max_abs=0.0005\\n  - D: L1=0.0008, max_abs=0.0004\\n  - Q1: L1=0.0007, max_abs=0.0004\\n  - C: L1=0.0006, max_abs=0.0003\\n  - H2: L1=0.0006, max_abs=0.0003\\n  - Q: L1=0.0006, max_abs=0.0003\\n  - F: L1=0.0005, max_abs=0.0002\\n  - E: L1=0.0004, max_abs=0.0002\\n  - R: L1=0.0003, max_abs=0.0002\\n  - I1: L1=0.0002, max_abs=0.0001\\n  - A2: L1=0.0001, max_abs=0.0001\\n  - G2: L1=0.0000, max_abs=0.0000\\n  - K: L1=0.0000, max_abs=0.0000\\n  - B: L1=0.0000, max_abs=0.0000"}', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(U1 | A1=True, A2=True, B=True, B1=True, C=True, C2=True, D=True, E=True, E2=True, F=True, F1=True, G=True, G1=True, G2=True, H=True, H2=True, I1=True, J=True, J1=True, K=True, K1=True, M=True, N=True, N1=True, O1=True, P=True, P1=True, Q=True, Q1=True, R=True, R1=True, T1=True, U=True, V=True, V1=True, W1=True, X1=True, Y=True):\\n  P(U1=False) = 0.8804\\n  P(U1=True) = 0.1196\\n\\nOriginal distribution:\\n  P(U1=False) = 0.7874\\n  P(U1=True) = 0.2126\\n\\nConclusion:\\n  Belief in \'False\' increased by 0.0930\\n  Belief in \'True\' decreased by 0.0930\\n  Largest overall per-state shift: 0.0930.\\nEvidence impact (leave-one-out):\\n  - N1: L1=0.1852, max_abs=0.0926\\n  - K1: L1=0.1849, max_abs=0.0924\\n  - T1: L1=0.0768, max_abs=0.0384\\n  - A1: L1=0.0750, max_abs=0.0375\\n  - G1: L1=0.0631, max_abs=0.0316\\n  - N: L1=0.0507, max_abs=0.0253\\n  - R1: L1=0.0389, max_abs=0.0195\\n  - J1: L1=0.0186, max_abs=0.0093\\n  - F1: L1=0.0107, max_abs=0.0054\\n  - P1: L1=0.0104, max_abs=0.0052\\n  - O1: L1=0.0100, max_abs=0.0050\\n  - Y: L1=0.0065, max_abs=0.0032\\n  - G: L1=0.0049, max_abs=0.0025\\n  - C2: L1=0.0048, max_abs=0.0024\\n  - V1: L1=0.0048, max_abs=0.0024\\n  - B1: L1=0.0044, max_abs=0.0022\\n  - X1: L1=0.0039, max_abs=0.0020\\n  - V: L1=0.0026, max_abs=0.0013\\n  - W1: L1=0.0018, max_abs=0.0009\\n  - E2: L1=0.0018, max_abs=0.0009\\n  - P: L1=0.0013, max_abs=0.0007\\n  - U: L1=0.0011, max_abs=0.0005\\n  - H: L1=0.0011, max_abs=0.0005\\n  - M: L1=0.0010, max_abs=0.0005\\n  - D: L1=0.0008, max_abs=0.0004\\n  - Q1: L1=0.0007, max_abs=0.0004\\n  - C: L1=0.0006, max_abs=0.0003\\n  - H2: L1=0.0006, max_abs=0.0003\\n  - Q: L1=0.0006, max_abs=0.0003\\n  - F: L1=0.0005, max_abs=0.0002\\n  - E: L1=0.0004, max_abs=0.0002\\n  - R: L1=0.0003, max_abs=0.0002\\n  - I1: L1=0.0002, max_abs=0.0001\\n  - A2: L1=0.0001, max_abs=0.0001\\n  - G2: L1=0.0000, max_abs=0.0000\\n  - K: L1=0.0000, max_abs=0.0000\\n  - B: L1=0.0000, max_abs=0.0000"}', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(U1 | A1=True, A2=True, B=True, B1=True, C=True, C2=True, D=True, E=True, E2=True, F=True, F1=True, G=True, G1=True, G2=True, H=True, H2=True, I1=True, J=True, J1=True, K=True, K1=True, M=True, N=True, N1=True, O1=True, P=True, P1=True, Q=True, Q1=True, R=True, R1=True, T1=True, U=True, V=True, V1=True, W1=True, X1=True, Y=True):\\n  P(U1=False) = 0.8804\\n  P(U1=True) = 0.1196\\n\\nOriginal distribution:\\n  P(U1=False) = 0.7874\\n  P(U1=True) = 0.2126\\n\\nConclusion:\\n  Belief in \'False\' increased by 0.0930\\n  Belief in \'True\' decreased by 0.0930\\n  Largest overall per-state shift: 0.0930.\\nEvidence impact (leave-one-out):\\n  - N1: L1=0.1852, max_abs=0.0926\\n  - K1: L1=0.1849, max_abs=0.0924\\n  - T1: L1=0.0768, max_abs=0.0384\\n  - A1: L1=0.0750, max_abs=0.0375\\n  - G1: L1=0.0631, max_abs=0.0316\\n  - N: L1=0.0507, max_abs=0.0253\\n  - R1: L1=0.0389, max_abs=0.0195\\n  - J1: L1=0.0186, max_abs=0.0093\\n  - F1: L1=0.0107, max_abs=0.0054\\n  - P1: L1=0.0104, max_abs=0.0052\\n  - O1: L1=0.0100, max_abs=0.0050\\n  - Y: L1=0.0065, max_abs=0.0032\\n  - G: L1=0.0049, max_abs=0.0025\\n  - C2: L1=0.0048, max_abs=0.0024\\n  - V1: L1=0.0048, max_abs=0.0024\\n  - B1: L1=0.0044, max_abs=0.0022\\n  - X1: L1=0.0039, max_abs=0.0020\\n  - V: L1=0.0026, max_abs=0.0013\\n  - W1: L1=0.0018, max_abs=0.0009\\n  - E2: L1=0.0018, max_abs=0.0009\\n  - P: L1=0.0013, max_abs=0.0007\\n  - U: L1=0.0011, max_abs=0.0005\\n  - H: L1=0.0011, max_abs=0.0005\\n  - M: L1=0.0010, max_abs=0.0005\\n  - D: L1=0.0008, max_abs=0.0004\\n  - Q1: L1=0.0007, max_abs=0.0004\\n  - C: L1=0.0006, max_abs=0.0003\\n  - H2: L1=0.0006, max_abs=0.0003\\n  - Q: L1=0.0006, max_abs=0.0003\\n  - F: L1=0.0005, max_abs=0.0002\\n  - E: L1=0.0004, max_abs=0.0002\\n  - R: L1=0.0003, max_abs=0.0002\\n  - I1: L1=0.0002, max_abs=0.0001\\n  - A2: L1=0.0001, max_abs=0.0001\\n  - G2: L1=0.0000, max_abs=0.0000\\n  - K: L1=0.0000, max_abs=0.0000\\n  - B: L1=0.0000, max_abs=0.0000"}', 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value={"result":"P(U1 | A1=True, A2=True, B=True, B1=True, C=True, C2=True, D=True, E=True, E2=True, F=True, F1=True, G=True, G1=True, G2=True, H=True, H2=True, I1=True, J=True, J1=True, K=True, K1=True, M=True, N=True, N1=True, O1=True, P=True, P1=True, Q=True, Q1=True, R=True, R1=True, T1=True, U=True, V=True, V1=True, W1=True, X1=True, Y=True):\n  P(U1=False) = 0.8804\n  P(U1=True) = 0.1196\n\nOriginal distribution:\n  P(U1=False) = 0.7874\n  P(U1=True) = 0.2126\n\nConclusion:\n  Belief in 'False' increased by 0.0930\n  Belief in 'True' decreased by 0.0930\n  Largest overall per-state shift: 0.0930.\nEvidence impact (leave-one-out):\n  - N1: L1=0.1852, max_abs=0.0926\n  - K1: L1=0.1849, max_abs=0.0924\n  - T1: L1=0.0768, max_abs=0.0384\n  - A1: L1=0.0750, max_abs=0.0375\n  - G1: L1=0.0631, max_abs=0.0316\n  - N: L1=0.0507, max_abs=0.0253\n  - R1: L1=0.0389, max_abs=0.0195\n  - J1: L1=0.0186, max_abs=0.0093\n  - F1: L1=0.0107, max_abs=0.0054\n  - P1: L1=0.0104, max_abs=0.0052\n  - O1: L1=0.0100, max_abs=0.0050\n  - Y: L1=0.0065, max_abs=0.0032\n  - G: L1=0.0049, max_abs=0.0025\n  - C2: L1=0.0048, max_abs=0.0024\n  - V1: L1=0.0048, max_abs=0.0024\n  - B1: L1=0.0044, max_abs=0.0022\n  - X1: L1=0.0039, max_abs=0.0020\n  - V: L1=0.0026, max_abs=0.0013\n  - W1: L1=0.0018, max_abs=0.0009\n  - E2: L1=0.0018, max_abs=0.0009\n  - P: L1=0.0013, max_abs=0.0007\n  - U: L1=0.0011, max_abs=0.0005\n  - H: L1=0.0011, max_abs=0.0005\n  - M: L1=0.0010, max_abs=0.0005\n  - D: L1=0.0008, max_abs=0.0004\n  - Q1: L1=0.0007, max_abs=0.0004\n  - C: L1=0.0006, max_abs=0.0003\n  - H2: L1=0.0006, max_abs=0.0003\n  - Q: L1=0.0006, max_abs=0.0003\n  - F: L1=0.0005, max_abs=0.0002\n  - E: L1=0.0004, max_abs=0.0002\n  - R: L1=0.0003, max_abs=0.0002\n  - I1: L1=0.0002, max_abs=0.0001\n  - A2: L1=0.0001, max_abs=0.0001\n  - G2: L1=0.0000, max_abs=0.0000\n  - K: L1=0.0000, max_abs=0.0000\n  - B: L1=0.0000, max_abs=0.0000"}
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[BayMin Testing] Response time: 446.80s, Quiz time: 47.27s, Total: 494.07s
+[Test] Logged: numerical_test - probability - Q28
+Running question 29
+[Testing Mode] Question 29: Given N, A1, I, P1, Q, K, M1, F1, Z, Y1, L1, W, H1, N1, C2, A, S, G, H2, B2, J1, B, M, H, U, C, B1, ...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {}, 'node': 'E1'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': 'The most likely value of **E1** is **True**.', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node', 'arguments': {'node': 'E1'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': 'The most likely value of **E1** is **True**.', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': 'According to the tool’s output, the probability distribution for **E1** is:\n\n- P(E1\u202f=\u202fFalse)\u202f=\u202f0.2776  \n- P(E1\u202f=\u202fTrue)\u202f=\u202f0.7224  \n\nSince the probability of **E1\u202f=\u202fTrue** is higher, the most likely value of **E1** is **True**.', 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value=According to the tool’s output, the probability distribution for **E1** is:
+
+- P(E1 = False) = 0.2776  
+- P(E1 = True) = 0.7224  
+
+Since the probability of **E1 = True** is higher, the most likely value of **E1** is **True**.
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[ERROR] extract_text JSON decode failed: Expecting value: line 1 column 1 (char 0), answer: According to the tool’s output, the probability distribution for **E1** is:
+
+- P(E1 = False) = 0.2776  
+- P(E1 = True) = 0.7224  
+
+Since the probability of **E1 = True** is higher, the most likely value of **E1** is **True**.
+[BayMin Testing] Response time: 32.14s, Quiz time: 37.85s, Total: 69.99s
+quiz:
+ Given N, A1, I, P1, Q, K, M1, F1, Z, Y1, L1, W, H1, N1, C2, A, S, G, H2, B2, J1, B, M, H, U, C, B1, D2, X, I1, K1, D, L, F, S1, O, G2, Z1, U1, T1, Q1, F2, V, A2, what’s the most likely value of E1?
+--------------------------------
+A. P(E1 | N=True, A1=True, I=True, P1=True, Q=True, K=True, M1=True, F1=True, Z=True, Y1=True, L1=True, W=True, H1=True, N1=True, C2=True, A=True, S=True, G=True, H2=True, B2=True, J1=True, B=True, M=True, H=True, U=True, C=True, B1=True, D2=True, X=True, I1=True, K1=True, D=True, L=True, F=True, S1=True, O=True, G2=True, Z1=True, U1=True, T1=True, Q1=True, F2=True, V=True, A2=True):
+  P(E1=False) = 0.6204
+  P(E1=True) = 0.3796
+
+Original distribution:
+  P(E1=False) = 0.2776
+  P(E1=True) = 0.7224
+
+Conclusion:
+  Belief in 'False' increased by 0.3427
+  Belief in 'True' decreased by 0.3427
+  Largest overall per-state shift: 0.3427.
+Evidence impact (leave-one-out):
+  - C2: L1=0.6184, max_abs=0.3092
+  - N1: L1=0.4517, max_abs=0.2258
+  - F1: L1=0.3660, max_abs=0.1830
+  - Q1: L1=0.3480, max_abs=0.1740
+  - X: L1=0.3215, max_abs=0.1607
+  - F2: L1=0.3008, max_abs=0.1504
+  - H2: L1=0.2768, max_abs=0.1384
+  - S1: L1=0.2590, max_abs=0.1295
+  - G: L1=0.2532, max_abs=0.1266
+  - G2: L1=0.2402, max_abs=0.1201
+  - A1: L1=0.2090, max_abs=0.1045
+  - W: L1=0.1530, max_abs=0.0765
+  - C: L1=0.1507, max_abs=0.0753
+  - I1: L1=0.1326, max_abs=0.0663
+  - B1: L1=0.1075, max_abs=0.0538
+  - K1: L1=0.0864, max_abs=0.0432
+  - P1: L1=0.0825, max_abs=0.0412
+  - O: L1=0.0798, max_abs=0.0399
+  - Y1: L1=0.0724, max_abs=0.0362
+  - K: L1=0.0718, max_abs=0.0359
+  - H: L1=0.0667, max_abs=0.0333
+  - Q: L1=0.0636, max_abs=0.0318
+  - I: L1=0.0584, max_abs=0.0292
+  - U: L1=0.0573, max_abs=0.0287
+  - J1: L1=0.0564, max_abs=0.0282
+  - S: L1=0.0537, max_abs=0.0268
+  - A: L1=0.0427, max_abs=0.0213
+  - D: L1=0.0270, max_abs=0.0135
+  - T1: L1=0.0225, max_abs=0.0112
+  - M: L1=0.0220, max_abs=0.0110
+  - V: L1=0.0205, max_abs=0.0102
+  - N: L1=0.0158, max_abs=0.0079
+  - Z1: L1=0.0123, max_abs=0.0061
+  - M1: L1=0.0092, max_abs=0.0046
+  - D2: L1=0.0063, max_abs=0.0032
+  - L: L1=0.0060, max_abs=0.0030
+  - L1: L1=0.0059, max_abs=0.0030
+  - A2: L1=0.0048, max_abs=0.0024
+  - Z: L1=0.0026, max_abs=0.0013
+  - F: L1=0.0013, max_abs=0.0007
+  - B2: L1=0.0011, max_abs=0.0006
+  - B: L1=0.0001, max_abs=0.0000
+  - H1: L1=0.0000, max_abs=0.0000
+  - U1: L1=0.0000, max_abs=0.0000
+--------------------------------
+B. P(E1 | N=True, A1=True, I=True, P1=True, Q=True, K=True, M1=True, F1=True, Z=True, Y1=True, L1=True, W=True, H1=True, N1=True, C2=True, A=True, S=True, G=True, H2=True, B2=True, J1=True, B=True, M=True, H=True, U=True, C=True, B1=True, D2=True, X=True, I1=True, K1=True, D=True, L=True, F=True, S1=True, O=True, G2=True, Z1=True, U1=True, T1=True, Q1=True, F2=True, V=True, A2=True):
+  P(E1=False) = 0.6269
+  P(E1=True) = 0.3731
+
+Original distribution:
+  P(E1=False) = 0.2776
+  P(E1=True) = 0.7224
+
+Conclusion:
+  Belief in 'False' increased by 0.3492
+  Belief in 'True' decreased by 0.3492
+  Largest overall per-state shift: 0.3492.
+Evidence impact (leave-one-out):
+  - C2: L1=0.6184, max_abs=0.3092
+  - N1: L1=0.4517, max_abs=0.2258
+  - F1: L1=0.3660, max_abs=0.1830
+  - Q1: L1=0.3480, max_abs=0.1740
+  - X: L1=0.3215, max_abs=0.1607
+  - F2: L1=0.3008, max_abs=0.1504
+  - H2: L1=0.2768, max_abs=0.1384
+  - S1: L1=0.2590, max_abs=0.1295
+  - G: L1=0.2532, max_abs=0.1266
+  - G2: L1=0.2402, max_abs=0.1201
+  - A1: L1=0.2090, max_abs=0.1045
+  - W: L1=0.1530, max_abs=0.0765
+  - C: L1=0.1507, max_abs=0.0753
+  - I1: L1=0.1326, max_abs=0.0663
+  - B1: L1=0.1075, max_abs=0.0538
+  - K1: L1=0.0864, max_abs=0.0432
+  - P1: L1=0.0825, max_abs=0.0412
+  - O: L1=0.0798, max_abs=0.0399
+  - Y1: L1=0.0724, max_abs=0.0362
+  - K: L1=0.0718, max_abs=0.0359
+  - H: L1=0.0667, max_abs=0.0333
+  - Q: L1=0.0636, max_abs=0.0318
+  - I: L1=0.0584, max_abs=0.0292
+  - U: L1=0.0573, max_abs=0.0287
+  - J1: L1=0.0564, max_abs=0.0282
+  - S: L1=0.0537, max_abs=0.0268
+  - A: L1=0.0427, max_abs=0.0213
+  - D: L1=0.0270, max_abs=0.0135
+  - T1: L1=0.0225, max_abs=0.0112
+  - M: L1=0.0220, max_abs=0.0110
+  - V: L1=0.0205, max_abs=0.0102
+  - N: L1=0.0158, max_abs=0.0079
+  - Z1: L1=0.0123, max_abs=0.0061
+  - M1: L1=0.0092, max_abs=0.0046
+  - D2: L1=0.0063, max_abs=0.0032
+  - L: L1=0.0060, max_abs=0.0030
+  - L1: L1=0.0059, max_abs=0.0030
+  - A2: L1=0.0048, max_abs=0.0024
+  - Z: L1=0.0026, max_abs=0.0013
+  - F: L1=0.0013, max_abs=0.0007
+  - B2: L1=0.0011, max_abs=0.0006
+  - B: L1=0.0001, max_abs=0.0000
+  - H1: L1=0.0000, max_abs=0.0000
+  - U1: L1=0.0000, max_abs=0.0000
+--------------------------------
+C. P(E1 | N=True, A1=True, I=True, P1=True, Q=True, K=True, M1=True, F1=True, Z=True, Y1=True, L1=True, W=True, H1=True, N1=True, C2=True, A=True, S=True, G=True, H2=True, B2=True, J1=True, B=True, M=True, H=True, U=True, C=True, B1=True, D2=True, X=True, I1=True, K1=True, D=True, L=True, F=True, S1=True, O=True, G2=True, Z1=True, U1=True, T1=True, Q1=True, F2=True, V=True, A2=True):
+  P(E1=False) = 0.6368
+  P(E1=True) = 0.3632
+
+Original distribution:
+  P(E1=False) = 0.2776
+  P(E1=True) = 0.7224
+
+Conclusion:
+  Belief in 'False' increased by 0.3591
+  Belief in 'True' decreased by 0.3591
+  Largest overall per-state shift: 0.3591.
+Evidence impact (leave-one-out):
+  - C2: L1=0.6184, max_abs=0.3092
+  - N1: L1=0.4517, max_abs=0.2258
+  - F1: L1=0.3660, max_abs=0.1830
+  - Q1: L1=0.3480, max_abs=0.1740
+  - X: L1=0.3215, max_abs=0.1607
+  - F2: L1=0.3008, max_abs=0.1504
+  - H2: L1=0.2768, max_abs=0.1384
+  - S1: L1=0.2590, max_abs=0.1295
+  - G: L1=0.2532, max_abs=0.1266
+  - G2: L1=0.2402, max_abs=0.1201
+  - A1: L1=0.2090, max_abs=0.1045
+  - W: L1=0.1530, max_abs=0.0765
+  - C: L1=0.1507, max_abs=0.0753
+  - I1: L1=0.1326, max_abs=0.0663
+  - B1: L1=0.1075, max_abs=0.0538
+  - K1: L1=0.0864, max_abs=0.0432
+  - P1: L1=0.0825, max_abs=0.0412
+  - O: L1=0.0798, max_abs=0.0399
+  - Y1: L1=0.0724, max_abs=0.0362
+  - K: L1=0.0718, max_abs=0.0359
+  - H: L1=0.0667, max_abs=0.0333
+  - Q: L1=0.0636, max_abs=0.0318
+  - I: L1=0.0584, max_abs=0.0292
+  - U: L1=0.0573, max_abs=0.0287
+  - J1: L1=0.0564, max_abs=0.0282
+  - S: L1=0.0537, max_abs=0.0268
+  - A: L1=0.0427, max_abs=0.0213
+  - D: L1=0.0270, max_abs=0.0135
+  - T1: L1=0.0225, max_abs=0.0112
+  - M: L1=0.0220, max_abs=0.0110
+  - V: L1=0.0205, max_abs=0.0102
+  - N: L1=0.0158, max_abs=0.0079
+  - Z1: L1=0.0123, max_abs=0.0061
+  - M1: L1=0.0092, max_abs=0.0046
+  - D2: L1=0.0063, max_abs=0.0032
+  - L: L1=0.0060, max_abs=0.0030
+  - L1: L1=0.0059, max_abs=0.0030
+  - A2: L1=0.0048, max_abs=0.0024
+  - Z: L1=0.0026, max_abs=0.0013
+  - F: L1=0.0013, max_abs=0.0007
+  - B2: L1=0.0011, max_abs=0.0006
+  - B: L1=0.0001, max_abs=0.0000
+  - H1: L1=0.0000, max_abs=0.0000
+  - U1: L1=0.0000, max_abs=0.0000
+--------------------------------
+D. None of the above
+y:
+ A
+y_hat:
+ D
+---------------------------------------------
+Baymin Model:
+ans:
+ According to the tool’s output, the probability distribution for E1 is:
+
+- P(E1 = False) = 0.2776  
+- P(E1 = True) = 0.7224  
+
+Since the probability of E1 = True is higher, the most likely value of E1 is True.
+y:
+ A
+y_hat:
+ D
+---------------------------------------------
+[BayMin] Logged wrong answer to CSV
+[Test] Logged: numerical_test - probability - Q29
+Running question 30
+[Testing Mode] Question 30: After observing Y, F1, D, C1, Z, W1, L, P, L1, J1, N1, Y1, D2, D1, E2, Q1, I1, I, E1, G1, H1, E, R1,...
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A': 'True', 'A1': 'True', 'A2': 'True', 'B': 'True', 'B1': 'True', 'B2': 'True', 'C': 'True', 'C1': 'True', 'C2': 'True', 'D': 'True', 'D1': 'True', 'D2': 'True', 'E': 'True', 'E1': 'True', 'E2': 'True', 'F': 'True', 'F1': 'True', 'F2': 'True', 'G': 'True', 'G1': 'True', 'G2': 'True', 'H1': 'True', 'H2': 'True', 'I': 'True', 'I1': 'True', 'J': 'True', 'J1': 'True', 'K': 'True', 'K1': 'True', 'L': 'True', 'L1': 'True', 'M': 'True', 'M1': 'True', 'N': 'True', 'N1': 'True', 'O': 'True', 'O1': 'True', 'P': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R1': 'True', 'S': 'True', 'S1': 'True', 'T': 'True', 'T1': 'True', 'U1': 'True', 'V': 'True', 'V1': 'True', 'W': 'True', 'W1': 'True', 'Y': 'True', 'Y1': 'True', 'Z': 'True', 'Z1': 'True'}, 'node': 'R'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result": "P(R | A=True, A1=True, A2=True, B=True, B1=True, B2=True, C=True, C1=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, E2=True, F=True, F1=True, F2=True, G=True, G1=True, G2=True, H1=True, H2=True, I=True, I1=True, J=True, J1=True, K=True, K1=True, L=True, L1=True, M=True, M1=True, N=True, N1=True, O=True, O1=True, P=True, P1=True, Q=True, Q1=True, R1=True, S=True, S1=True, T=True, T1=True, U1=True, V=True, V1=True, W=True, W1=True, Y=True, Y1=True, Z=True, Z1=True):\\n  P(R=False) = 0.3053\\n  P(R=True) = 0.6947\\n\\nOriginal distribution:\\n  P(R=False) = 0.4951\\n  P(R=True) = 0.5049\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.1897\\n  Belief in \'True\' increased by 0.1897\\n  Largest overall per-state shift: 0.1897.\\nEvidence impact (leave-one-out):\\n  - Q: L1=1.0275, max_abs=0.5137\\n  - S1: L1=0.5562, max_abs=0.2781\\n  - F2: L1=0.5526, max_abs=0.2763\\n  - I1: L1=0.5422, max_abs=0.2711\\n  - O: L1=0.5082, max_abs=0.2541\\n  - E2: L1=0.2870, max_abs=0.1435\\n  - W: L1=0.2434, max_abs=0.1217\\n  - N1: L1=0.1478, max_abs=0.0739\\n  - T: L1=0.1036, max_abs=0.0518\\n  - C: L1=0.0997, max_abs=0.0499\\n  - V1: L1=0.0728, max_abs=0.0364\\n  - Q1: L1=0.0579, max_abs=0.0289\\n  - G1: L1=0.0534, max_abs=0.0267\\n  - P1: L1=0.0490, max_abs=0.0245\\n  - L: L1=0.0481, max_abs=0.0241\\n  - E1: L1=0.0224, max_abs=0.0112\\n  - P: L1=0.0207, max_abs=0.0103\\n  - D1: L1=0.0096, max_abs=0.0048\\n  - Z: L1=0.0069, max_abs=0.0035\\n  - Y1: L1=0.0061, max_abs=0.0031\\n  - E: L1=0.0031, max_abs=0.0016\\n  - C1: L1=0.0026, max_abs=0.0013\\n  - O1: L1=0.0023, max_abs=0.0011\\n  - Z1: L1=0.0017, max_abs=0.0008\\n  - G: L1=0.0016, max_abs=0.0008\\n  - D: L1=0.0012, max_abs=0.0006\\n  - W1: L1=0.0004, max_abs=0.0002\\n  - T1: L1=0.0002, max_abs=0.0001\\n  - H2: L1=0.0002, max_abs=0.0001\\n  - J1: L1=0.0002, max_abs=0.0001\\n  - H1: L1=0.0001, max_abs=0.0001\\n  - N: L1=0.0001, max_abs=0.0000\\n  - C2: L1=0.0000, max_abs=0.0000\\n  - I: L1=0.0000, max_abs=0.0000\\n  - D2: L1=0.0000, max_abs=0.0000\\n  - B: L1=0.0000, max_abs=0.0000\\n  - A: L1=0.0000, max_abs=0.0000\\n  - A2: L1=0.0000, max_abs=0.0000\\n  - K: L1=0.0000, max_abs=0.0000\\n  - B1: L1=0.0000, max_abs=0.0000\\n  - F1: L1=0.0000, max_abs=0.0000\\n  - G2: L1=0.0000, max_abs=0.0000\\n  - L1: L1=0.0000, max_abs=0.0000\\n  - M1: L1=0.0000, max_abs=0.0000\\n  - K1: L1=0.0000, max_abs=0.0000\\n  - M: L1=0.0000, max_abs=0.0000\\n  - S: L1=0.0000, max_abs=0.0000\\n  - U1: L1=0.0000, max_abs=0.0000\\n  - R1: L1=0.0000, max_abs=0.0000\\n  - A1: L1=0.0000, max_abs=0.0000\\n  - B2: L1=0.0000, max_abs=0.0000\\n  - F: L1=0.0000, max_abs=0.0000\\n  - J: L1=0.0000, max_abs=0.0000\\n  - V: L1=0.0000, max_abs=0.0000\\n  - Y: L1=0.0000, max_abs=0.0000\\n  => Most influential evidence: Q (by L1 contribution)."}', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result": "P(R | A=True, A1=True, A2=True, B=True, B1=True, B2=True, C=True, C1=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, E2=True, F=True, F1=True, F2=True, G=True, G1=True, G2=True, H1=True, H2=True, I=True, I1=True, J=True, J1=True, K=True, K1=True, L=True, L1=True, M=True, M1=True, N=True, N1=True, O=True, O1=True, P=True, P1=True, Q=True, Q1=True, R1=True, S=True, S1=True, T=True, T1=True, U1=True, V=True, V1=True, W=True, W1=True, Y=True, Y1=True, Z=True, Z1=True):\\n  P(R=False) = 0.3053\\n  P(R=True) = 0.6947\\n\\nOriginal distribution:\\n  P(R=False) = 0.4951\\n  P(R=True) = 0.5049\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.1897\\n  Belief in \'True\' increased by 0.1897\\n  Largest overall per-state shift: 0.1897.\\nEvidence impact (leave-one-out):\\n  - Q: L1=1.0275, max_abs=0.5137\\n  - S1: L1=0.5562, max_abs=0.2781\\n  - F2: L1=0.5526, max_abs=0.2763\\n  - I1: L1=0.5422, max_abs=0.2711\\n  - O: L1=0.5082, max_abs=0.2541\\n  - E2: L1=0.2870, max_abs=0.1435\\n  - W: L1=0.2434, max_abs=0.1217\\n  - N1: L1=0.1478, max_abs=0.0739\\n  - T: L1=0.1036, max_abs=0.0518\\n  - C: L1=0.0997, max_abs=0.0499\\n  - V1: L1=0.0728, max_abs=0.0364\\n  - Q1: L1=0.0579, max_abs=0.0289\\n  - G1: L1=0.0534, max_abs=0.0267\\n  - P1: L1=0.0490, max_abs=0.0245\\n  - L: L1=0.0481, max_abs=0.0241\\n  - E1: L1=0.0224, max_abs=0.0112\\n  - P: L1=0.0207, max_abs=0.0103\\n  - D1: L1=0.0096, max_abs=0.0048\\n  - Z: L1=0.0069, max_abs=0.0035\\n  - Y1: L1=0.0061, max_abs=0.0031\\n  - E: L1=0.0031, max_abs=0.0016\\n  - C1: L1=0.0026, max_abs=0.0013\\n  - O1: L1=0.0023, max_abs=0.0011\\n  - Z1: L1=0.0017, max_abs=0.0008\\n  - G: L1=0.0016, max_abs=0.0008\\n  - D: L1=0.0012, max_abs=0.0006\\n  - W1: L1=0.0004, max_abs=0.0002\\n  - T1: L1=0.0002, max_abs=0.0001\\n  - H2: L1=0.0002, max_abs=0.0001\\n  - J1: L1=0.0002, max_abs=0.0001\\n  - H1: L1=0.0001, max_abs=0.0001\\n  - N: L1=0.0001, max_abs=0.0000\\n  - C2: L1=0.0000, max_abs=0.0000\\n  - I: L1=0.0000, max_abs=0.0000\\n  - D2: L1=0.0000, max_abs=0.0000\\n  - B: L1=0.0000, max_abs=0.0000\\n  - A: L1=0.0000, max_abs=0.0000\\n  - A2: L1=0.0000, max_abs=0.0000\\n  - K: L1=0.0000, max_abs=0.0000\\n  - B1: L1=0.0000, max_abs=0.0000\\n  - F1: L1=0.0000, max_abs=0.0000\\n  - G2: L1=0.0000, max_abs=0.0000\\n  - L1: L1=0.0000, max_abs=0.0000\\n  - M1: L1=0.0000, max_abs=0.0000\\n  - K1: L1=0.0000, max_abs=0.0000\\n  - M: L1=0.0000, max_abs=0.0000\\n  - S: L1=0.0000, max_abs=0.0000\\n  - U1: L1=0.0000, max_abs=0.0000\\n  - R1: L1=0.0000, max_abs=0.0000\\n  - A1: L1=0.0000, max_abs=0.0000\\n  - B2: L1=0.0000, max_abs=0.0000\\n  - F: L1=0.0000, max_abs=0.0000\\n  - J: L1=0.0000, max_abs=0.0000\\n  - V: L1=0.0000, max_abs=0.0000\\n  - Y: L1=0.0000, max_abs=0.0000\\n  => Most influential evidence: Q (by L1 contribution)."}', 'tool_calls': []}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '', 'tool_calls': [{'function': {'name': 'get_prob_node_given_any_evidence', 'arguments': {'evidence': {'A': 'True', 'A1': 'True', 'A2': 'True', 'B': 'True', 'B1': 'True', 'B2': 'True', 'C': 'True', 'C1': 'True', 'C2': 'True', 'D': 'True', 'D1': 'True', 'D2': 'True', 'E': 'True', 'E1': 'True', 'E2': 'True', 'F': 'True', 'F1': 'True', 'F2': 'True', 'G': 'True', 'G1': 'True', 'G2': 'True', 'H1': 'True', 'H2': 'True', 'I': 'True', 'I1': 'True', 'J': 'True', 'J1': 'True', 'K': 'True', 'K1': 'True', 'L': 'True', 'L1': 'True', 'M': 'True', 'M1': 'True', 'N': 'True', 'N1': 'True', 'O': 'True', 'O1': 'True', 'P': 'True', 'P1': 'True', 'Q': 'True', 'Q1': 'True', 'R1': 'True', 'S': 'True', 'S1': 'True', 'T': 'True', 'T1': 'True', 'U1': 'True', 'V': 'True', 'V1': 'True', 'W': 'True', 'W1': 'True', 'Y': 'True', 'Y1': 'True', 'Z': 'True', 'Z1': 'True'}, 'node': 'R'}}}]}
+[DEBUG] Final assistant_msg: {'role': 'assistant', 'content': '{"result":"P(R | A=True, A1=True, A2=True, B=True, B1=True, B2=True, C=True, C1=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, E2=True, F=True, F1=True, F2=True, G=True, G1=True, G2=True, H1=True, H2=True, I=True, I1=True, J=True, J1=True, K=True, K1=True, L=True, L1=True, M=True, M1=True, N=True, N1=True, O=True, O1=True, P=True, P1=True, Q=True, Q1=True, R1=True, S=True, S1=True, T=True, T1=True, U1=True, V=True, V1=True, W=True, W1=True, Y=True, Y1=True, Z=True, Z1=True):\\n  P(R=False)=0.3053\\n  P(R=True)=0.6947\\n\\nOriginal distribution:\\n  P(R=False)=0.4951\\n  P(R=True)=0.5049\\n\\nConclusion:\\n  Belief in \'False\' decreased by 0.1897\\n  Belief in \'True\' increased by 0.1897\\n  Largest overall per-state shift: 0.1897.\\nEvidence impact (leave-one-out):\\n  - Q: L1=1.0275, max_abs=0.5137\\n  - S1: L1=0.5562, max_abs=0.2781\\n  - F2: L1=0.5526, max_abs=0.2763\\n  - I1: L1=0.5422, max_abs=0.2711\\n  - O: L1=0.5082, max_abs=0.2541\\n  - E2: L1=0.2870, max_abs=0.1435\\n  - W: L1=0.2434, max_abs=0.1217\\n  - N1: L1=0.1478, max_abs=0.0739\\n  - T: L1=0.1036, max_abs=0.0518\\n  - C: L1=0.0997, max_abs=0.0499\\n  - V1: L1=0.0728, max_abs=0.0364\\n  - Q1: L1=0.0579, max_abs=0.0289\\n  - G1: L1=0.0534, max_abs=0.0267\\n  - P1: L1=0.0490, max_abs=0.0245\\n  - L: L1=0.0481, max_abs=0.0241\\n  - E1: L1=0.0224, max_abs=0.0112\\n  - P: L1=0.0207, max_abs=0.0103\\n  - D1: L1=0.0096, max_abs=0.0048\\n  - Z: L1=0.0069, max_abs=0.0035\\n  - Y1: L1=0.0061, max_abs=0.0031\\n  - E: L1=0.0031, max_abs=0.0016\\n  - C1: L1=0.0026, max_abs=0.0013\\n  - O1: L1=0.0023, max_abs=0.0011\\n  - Z1: L1=0.0017, max_abs=0.0008\\n  - G: L1=0.0016, max_abs=0.0008\\n  - D: L1=0.0012, max_abs=0.0006\\n  - W1: L1=0.0004, max_abs=0.0002\\n  - T1: L1=0.0002, max_abs=0.0001\\n  - H2: L1=0.0002, max_abs=0.0001\\n  - J1: L1=0.0002, max_abs=0.0001\\n  - H1: L1=0.0001, max_abs=0.0001\\n  - N: L1=0.0001, max_abs=0.0000\\n  - C2: L1=0.0000, max_abs=0.0000\\n  - I: L1=0.0000, max_abs=0.0000\\n  - D2: L1=0.0000, max_abs=0.0000\\n  - B: L1=0.0000, max_abs=0.0000\\n  - A: L1=0.0000, max_abs=0.0000\\n  - A2: L1=0.0000, max_abs=0.0000\\n  - K: L1=0.0000, max_abs=0.0000\\n  - B1: L1=0.0000, max_abs=0.0000\\n  - F1: L1=0.0000, max_abs=0.0000\\n  - G2: L1=0.0000, max_abs=0.0000\\n  - L1: L1=0.0000, max_abs=0.0000\\n  - M1: L1=0.0000, max_abs=0.0000\\n  - K1: L1=0.0000, max_abs=0.0000\\n  - M: L1=0.0000, max_abs=0.0000\\n  - S: L1=0.0000, max_abs=0.0000\\n  - U1: L1=0.0000, max_abs=0.0000\\n  - R1: L1=0.0000, max_abs=0.0000\\n  - A1: L1=0.0000, max_abs=0.0000\\n  - B2: L1=0.0000, max_abs=0.0000\\n  - F: L1=0.0000, max_abs=0.0000\\n  - J: L1=0.0000, max_abs=0.0000\\n  - V: L1=0.0000, max_abs=0.0000\\n  - Y: L1=0.0000, max_abs=0.0000\\n  => Most influential evidence: Q (by L1 contribution)."}', 'tool_calls': []}
+[DEBUG] chat_with_tools final_answer: type=<class 'str'>, value={"result":"P(R | A=True, A1=True, A2=True, B=True, B1=True, B2=True, C=True, C1=True, C2=True, D=True, D1=True, D2=True, E=True, E1=True, E2=True, F=True, F1=True, F2=True, G=True, G1=True, G2=True, H1=True, H2=True, I=True, I1=True, J=True, J1=True, K=True, K1=True, L=True, L1=True, M=True, M1=True, N=True, N1=True, O=True, O1=True, P=True, P1=True, Q=True, Q1=True, R1=True, S=True, S1=True, T=True, T1=True, U1=True, V=True, V1=True, W=True, W1=True, Y=True, Y1=True, Z=True, Z1=True):\n  P(R=False)=0.3053\n  P(R=True)=0.6947\n\nOriginal distribution:\n  P(R=False)=0.4951\n  P(R=True)=0.5049\n\nConclusion:\n  Belief in 'False' decreased by 0.1897\n  Belief in 'True' increased by 0.1897\n  Largest overall per-state shift: 0.1897.\nEvidence impact (leave-one-out):\n  - Q: L1=1.0275, max_abs=0.5137\n  - S1: L1=0.5562, max_abs=0.2781\n  - F2: L1=0.5526, max_abs=0.2763\n  - I1: L1=0.5422, max_abs=0.2711\n  - O: L1=0.5082, max_abs=0.2541\n  - E2: L1=0.2870, max_abs=0.1435\n  - W: L1=0.2434, max_abs=0.1217\n  - N1: L1=0.1478, max_abs=0.0739\n  - T: L1=0.1036, max_abs=0.0518\n  - C: L1=0.0997, max_abs=0.0499\n  - V1: L1=0.0728, max_abs=0.0364\n  - Q1: L1=0.0579, max_abs=0.0289\n  - G1: L1=0.0534, max_abs=0.0267\n  - P1: L1=0.0490, max_abs=0.0245\n  - L: L1=0.0481, max_abs=0.0241\n  - E1: L1=0.0224, max_abs=0.0112\n  - P: L1=0.0207, max_abs=0.0103\n  - D1: L1=0.0096, max_abs=0.0048\n  - Z: L1=0.0069, max_abs=0.0035\n  - Y1: L1=0.0061, max_abs=0.0031\n  - E: L1=0.0031, max_abs=0.0016\n  - C1: L1=0.0026, max_abs=0.0013\n  - O1: L1=0.0023, max_abs=0.0011\n  - Z1: L1=0.0017, max_abs=0.0008\n  - G: L1=0.0016, max_abs=0.0008\n  - D: L1=0.0012, max_abs=0.0006\n  - W1: L1=0.0004, max_abs=0.0002\n  - T1: L1=0.0002, max_abs=0.0001\n  - H2: L1=0.0002, max_abs=0.0001\n  - J1: L1=0.0002, max_abs=0.0001\n  - H1: L1=0.0001, max_abs=0.0001\n  - N: L1=0.0001, max_abs=0.0000\n  - C2: L1=0.0000, max_abs=0.0000\n  - I: L1=0.0000, max_abs=0.0000\n  - D2: L1=0.0000, max_abs=0.0000\n  - B: L1=0.0000, max_abs=0.0000\n  - A: L1=0.0000, max_abs=0.0000\n  - A2: L1=0.0000, max_abs=0.0000\n  - K: L1=0.0000, max_abs=0.0000\n  - B1: L1=0.0000, max_abs=0.0000\n  - F1: L1=0.0000, max_abs=0.0000\n  - G2: L1=0.0000, max_abs=0.0000\n  - L1: L1=0.0000, max_abs=0.0000\n  - M1: L1=0.0000, max_abs=0.0000\n  - K1: L1=0.0000, max_abs=0.0000\n  - M: L1=0.0000, max_abs=0.0000\n  - S: L1=0.0000, max_abs=0.0000\n  - U1: L1=0.0000, max_abs=0.0000\n  - R1: L1=0.0000, max_abs=0.0000\n  - A1: L1=0.0000, max_abs=0.0000\n  - B2: L1=0.0000, max_abs=0.0000\n  - F: L1=0.0000, max_abs=0.0000\n  - J: L1=0.0000, max_abs=0.0000\n  - V: L1=0.0000, max_abs=0.0000\n  - Y: L1=0.0000, max_abs=0.0000\n  => Most influential evidence: Q (by L1 contribution)."}
+[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)
+[BayMin Testing] Response time: 494.29s, Quiz time: 65.60s, Total: 559.88s
+[Test] Logged: numerical_test - probability - Q30
+Test completed: 16 new questions run, 14 skipped
+✅ probability_test completed successfully on attempt 1
+
+Completed all tests for Net_60
+Completed all tests!
+[INFO] Done at Sat Oct 18 01:36:45 AM AEDT 2025
+[INFO] Stopping ollama

@@ -1,0 +1,1148 @@
+time=2025-10-17T23:08:10.938+11:00 level=INFO source=routes.go:1304 msg="server config" env="map[CUDA_VISIBLE_DEVICES:0 GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://127.0.0.1:11434 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/mvo1/lb64_scratch/ollama-models OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-10-17T23:08:11.760+11:00 level=INFO source=images.go:477 msg="total blobs: 31"
+time=2025-10-17T23:08:11.766+11:00 level=INFO source=images.go:484 msg="total unused blobs removed: 0"
+time=2025-10-17T23:08:11.771+11:00 level=INFO source=routes.go:1357 msg="Listening on 127.0.0.1:11434 (version 0.11.4)"
+time=2025-10-17T23:08:11.771+11:00 level=INFO source=gpu.go:217 msg="looking for compatible GPUs"
+time=2025-10-17T23:08:12.679+11:00 level=INFO source=types.go:130 msg="inference compute" id=GPU-fe588970-990d-b182-9775-97402c5d79a1 library=cuda variant=v12 compute=8.6 driver=12.2 name="NVIDIA A40" total="44.4 GiB" available="44.1 GiB"
+[GIN] 2025/10/17 - 23:08:14 | 200 |  123.684343ms |       127.0.0.1 | GET      "/api/tags"
+time=2025-10-17T23:14:43.547+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340847104 required="21.3 GiB"
+time=2025-10-17T23:14:43.719+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="926.4 GiB" free_swap="0 B"
+time=2025-10-17T23:14:43.719+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-17T23:14:43.777+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 38199"
+time=2025-10-17T23:14:43.777+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:14:43.777+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:14:43.790+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:14:43.791+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:38199"
+time=2025-10-17T23:14:43.795+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:14:43.857+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+time=2025-10-17T23:14:44.046+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:14:53.415+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:14:54.140+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:14:54.141+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:14:54.141+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:14:54.141+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:14:54.141+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:14:54.149+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-17T23:14:54.149+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:15:08.887+11:00 level=INFO source=server.go:637 msg="llama runner started in 25.11 seconds"
+[GIN] 2025/10/17 - 23:15:27 | 200 | 44.652444554s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:20:01 | 200 | 32.383916437s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:20:10 | 200 |  9.369899455s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:20:20 | 200 |  9.462618967s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:20:29 | 200 |  8.884302245s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-17T23:20:41.491+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-17T23:20:41.801+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.4 GiB" free_swap="0 B"
+time=2025-10-17T23:20:41.801+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-17T23:20:41.865+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 44989"
+time=2025-10-17T23:20:41.865+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:20:41.865+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:20:41.877+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:20:41.876+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:20:41.876+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:44989"
+time=2025-10-17T23:20:41.941+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:20:42.006+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:20:42.114+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:20:42.114+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:20:42.114+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:20:42.114+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:20:42.114+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:20:42.121+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-17T23:20:42.121+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:20:42.138+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:20:45.672+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.81 seconds"
+[GIN] 2025/10/17 - 23:20:55 | 200 |  15.14958371s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:20:57 | 200 |  1.979943297s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:21:04 | 200 |   7.32890488s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:21:05 | 200 |  946.378543ms |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:21:16 | 200 | 10.570294282s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:21:17 | 200 |  1.146432726s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-17T23:21:38.866+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-17T23:21:39.028+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.4 GiB" free_swap="0 B"
+time=2025-10-17T23:21:39.028+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-17T23:21:39.096+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 41055"
+time=2025-10-17T23:21:39.096+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:21:39.096+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:21:39.108+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:21:39.108+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:41055"
+time=2025-10-17T23:21:39.110+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:21:39.174+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:21:39.251+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:21:39.357+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:21:39.357+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:21:39.357+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:21:39.357+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:21:39.357+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:21:39.360+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:21:39.368+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-17T23:21:39.368+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:21:42.929+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.83 seconds"
+[GIN] 2025/10/17 - 23:21:46 | 200 |  8.447616339s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:22:13 | 200 |  3.607023701s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:22:21 | 200 |  8.589266474s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:22:34 | 200 | 12.781067483s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:22:46 | 200 |   11.6399265s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-17T23:22:47.236+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-17T23:22:47.402+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.3 GiB" free_swap="0 B"
+time=2025-10-17T23:22:47.402+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-17T23:22:47.448+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 41295"
+time=2025-10-17T23:22:47.449+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:22:47.449+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:22:47.450+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:22:47.475+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:22:47.477+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:41295"
+time=2025-10-17T23:22:47.542+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:22:47.619+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:22:47.700+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:22:47.940+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:22:47.940+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:22:47.940+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:22:47.940+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:22:47.940+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:22:47.948+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-17T23:22:47.948+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:22:51.468+11:00 level=INFO source=server.go:637 msg="llama runner started in 4.02 seconds"
+[GIN] 2025/10/17 - 23:22:58 | 200 |  12.68233446s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:23:02 | 200 |  3.715523245s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:23:06 | 200 |  3.982587456s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-17T23:23:16.930+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-17T23:23:17.093+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.4 GiB" free_swap="0 B"
+time=2025-10-17T23:23:17.093+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-17T23:23:17.158+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 40937"
+time=2025-10-17T23:23:17.159+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:23:17.159+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:23:17.169+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:23:17.170+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:23:17.170+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:40937"
+time=2025-10-17T23:23:17.226+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:23:17.305+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:23:17.410+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:23:17.410+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:23:17.410+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:23:17.410+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:23:17.410+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:23:17.419+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-17T23:23:17.420+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:23:17.439+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:23:20.969+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.81 seconds"
+[GIN] 2025/10/17 - 23:23:26 | 200 | 10.973480344s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:23:45 | 200 |  8.952117728s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:23:53 | 200 |  8.284861911s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:24:24 | 200 | 30.663113692s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:24:47 | 200 | 22.664885353s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-17T23:24:48.270+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-17T23:24:48.433+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.3 GiB" free_swap="0 B"
+time=2025-10-17T23:24:48.433+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-17T23:24:48.498+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 46687"
+time=2025-10-17T23:24:48.498+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:24:48.498+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:24:48.509+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:24:48.509+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:24:48.510+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:46687"
+time=2025-10-17T23:24:48.575+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:24:48.641+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:24:48.752+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:24:48.752+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:24:48.752+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:24:48.752+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:24:48.752+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:24:48.759+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-17T23:24:48.760+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:24:48.760+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:24:52.293+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.79 seconds"
+[GIN] 2025/10/17 - 23:24:55 | 200 |  8.120341351s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:24:57 | 200 |  2.590537228s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:25:03 | 200 |   5.64138558s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-17T23:27:14.597+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-17T23:27:14.772+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.4 GiB" free_swap="0 B"
+time=2025-10-17T23:27:14.772+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-17T23:27:14.832+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 42265"
+time=2025-10-17T23:27:14.832+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:27:14.832+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:27:14.844+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:27:14.844+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:42265"
+time=2025-10-17T23:27:14.848+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:27:14.911+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:27:14.980+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:27:15.087+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:27:15.087+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:27:15.087+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:27:15.087+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:27:15.087+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:27:15.096+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-17T23:27:15.096+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:27:15.099+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:27:18.667+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.83 seconds"
+[GIN] 2025/10/17 - 23:27:30 | 200 | 17.425522854s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:27:38 | 200 |  7.661429897s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:27:51 | 200 | 13.279334716s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:30:00 | 200 |    3.7820809s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:30:07 | 200 |  7.338001106s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-17T23:30:08.828+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-17T23:30:08.999+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.3 GiB" free_swap="0 B"
+time=2025-10-17T23:30:09.000+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-17T23:30:09.062+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 39463"
+time=2025-10-17T23:30:09.062+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:30:09.062+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:30:09.074+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:30:09.075+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:39463"
+time=2025-10-17T23:30:09.080+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:30:09.143+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:30:09.222+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:30:09.331+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:30:09.474+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:30:09.474+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:30:09.474+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:30:09.474+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:30:09.474+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:30:09.482+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-17T23:30:09.482+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:30:13.107+11:00 level=INFO source=server.go:637 msg="llama runner started in 4.05 seconds"
+[GIN] 2025/10/17 - 23:30:19 | 200 | 11.633250085s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:30:20 | 200 |  1.327570274s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:30:26 | 200 |  5.433039747s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:30:27 | 200 |  1.464792318s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:30:31 | 200 |  4.233125948s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-17T23:33:40.281+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340847104 required="21.3 GiB"
+time=2025-10-17T23:33:40.582+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.2 GiB" free_swap="0 B"
+time=2025-10-17T23:33:40.583+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-17T23:33:40.646+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 37475"
+time=2025-10-17T23:33:40.647+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:33:40.647+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:33:40.659+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:33:40.659+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:33:40.659+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:37475"
+time=2025-10-17T23:33:40.722+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:33:40.788+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:33:40.895+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:33:40.895+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:33:40.895+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:33:40.895+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:33:40.895+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:33:40.904+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-17T23:33:40.904+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:33:40.919+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:33:44.476+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.83 seconds"
+[GIN] 2025/10/17 - 23:33:52 | 200 |  13.48745843s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:36:18 | 200 | 16.922584389s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:36:36 | 200 | 17.673407756s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:36:43 | 200 |  6.933816404s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:36:58 | 200 | 14.716242548s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-17T23:36:59.527+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-17T23:36:59.888+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-17T23:36:59.889+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-17T23:36:59.947+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 42755"
+time=2025-10-17T23:36:59.947+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:36:59.947+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:36:59.969+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:36:59.958+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:36:59.958+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:42755"
+time=2025-10-17T23:37:00.018+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:37:00.098+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:37:00.205+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:37:00.205+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:37:00.205+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:37:00.205+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:37:00.205+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:37:00.213+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-17T23:37:00.213+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:37:00.220+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:37:03.757+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.81 seconds"
+[GIN] 2025/10/17 - 23:37:12 | 200 | 14.423037441s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:37:13 | 200 |  1.084502249s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:37:20 | 200 |  6.524584505s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:37:21 | 200 |  951.287768ms |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:37:26 | 200 |   5.19669249s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-17T23:41:09.142+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-17T23:41:09.501+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-17T23:41:09.501+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-17T23:41:09.567+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 41789"
+time=2025-10-17T23:41:09.567+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:41:09.567+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:41:09.578+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:41:09.580+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:41:09.580+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:41789"
+time=2025-10-17T23:41:09.645+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:41:09.711+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:41:09.819+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:41:09.819+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:41:09.819+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:41:09.819+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:41:09.819+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:41:09.828+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-17T23:41:09.828+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:41:09.829+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:41:13.358+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.79 seconds"
+[GIN] 2025/10/17 - 23:41:23 | 200 |  15.59655047s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:45:11 | 200 | 19.787005024s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:45:24 | 200 | 12.682226582s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-17T23:55:25.657+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-17T23:55:25.819+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.1 GiB" free_swap="0 B"
+time=2025-10-17T23:55:25.820+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-17T23:55:25.891+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 45557"
+time=2025-10-17T23:55:25.891+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:55:25.891+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:55:25.906+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:55:25.906+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:55:25.907+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:45557"
+time=2025-10-17T23:55:25.962+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:55:26.039+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:55:26.156+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:55:26.347+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:55:26.347+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:55:26.347+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:55:26.347+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:55:26.347+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:55:26.370+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-17T23:55:26.370+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:55:29.960+11:00 level=INFO source=server.go:637 msg="llama runner started in 4.07 seconds"
+[GIN] 2025/10/17 - 23:55:41 | 200 | 15.897631161s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/17 - 23:56:05 | 200 | 24.404232252s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-17T23:56:06.963+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-17T23:56:07.265+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-17T23:56:07.265+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-17T23:56:07.316+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 46523"
+time=2025-10-17T23:56:07.317+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-17T23:56:07.317+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-17T23:56:07.328+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-17T23:56:07.328+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:46523"
+time=2025-10-17T23:56:07.337+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-17T23:56:07.401+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-17T23:56:07.468+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-17T23:56:07.575+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-17T23:56:07.575+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-17T23:56:07.575+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-17T23:56:07.575+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-17T23:56:07.575+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-17T23:56:07.583+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-17T23:56:07.583+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-17T23:56:07.588+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-17T23:56:11.127+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.81 seconds"
+[GIN] 2025/10/17 - 23:56:21 | 200 | 15.611870705s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:56:30 | 200 |  9.239075132s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/17 - 23:56:38 | 200 |  7.717216576s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-18T00:00:29.273+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T00:00:29.445+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T00:00:29.445+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T00:00:29.504+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 41689"
+time=2025-10-18T00:00:29.504+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:00:29.504+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:00:29.516+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:00:29.516+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:41689"
+time=2025-10-18T00:00:29.526+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:00:29.576+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:00:29.655+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:00:29.778+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T00:00:29.914+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:00:29.914+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:00:29.914+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:00:29.914+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:00:29.914+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:00:29.923+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T00:00:29.923+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:00:33.337+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.83 seconds"
+[GIN] 2025/10/18 - 00:01:04 | 200 | 36.722952503s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:01:20 | 200 | 15.554594378s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T00:07:02.248+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T00:07:02.416+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.1 GiB" free_swap="0 B"
+time=2025-10-18T00:07:02.416+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T00:07:02.483+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 45915"
+time=2025-10-18T00:07:02.483+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:07:02.483+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:07:02.503+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:07:02.496+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:07:02.497+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:45915"
+time=2025-10-18T00:07:02.554+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:07:02.630+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:07:02.739+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:07:02.739+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:07:02.739+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:07:02.739+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:07:02.739+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:07:02.748+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T00:07:02.748+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:07:02.754+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T00:07:06.300+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.82 seconds"
+[GIN] 2025/10/18 - 00:07:30 | 200 | 29.258231095s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:07:57 | 200 | 26.648525198s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:08:09 | 200 | 11.600742701s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T00:08:10.340+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-18T00:08:10.611+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T00:08:10.611+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-18T00:08:10.673+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 33367"
+time=2025-10-18T00:08:10.674+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:08:10.674+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:08:10.688+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:08:10.684+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:08:10.685+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:33367"
+time=2025-10-18T00:08:10.747+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:08:10.812+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:08:10.920+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:08:10.920+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:08:10.920+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:08:10.921+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:08:10.921+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:08:10.928+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-18T00:08:10.928+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:08:10.940+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T00:08:14.483+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.81 seconds"
+[GIN] 2025/10/18 - 00:08:47 | 200 | 38.106196187s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:08:56 | 200 |  9.523688024s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:08:58 | 200 |  1.136043037s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:09:05 | 200 |  7.610098574s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:09:12 | 200 |  7.141422731s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-18T00:13:58.586+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T00:13:58.892+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="925.9 GiB" free_swap="0 B"
+time=2025-10-18T00:13:58.892+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T00:13:58.958+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 44887"
+time=2025-10-18T00:13:58.958+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:13:58.958+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:13:58.969+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:13:58.970+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:13:58.970+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:44887"
+time=2025-10-18T00:13:59.025+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+time=2025-10-18T00:13:59.220+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:13:59.327+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:13:59.492+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:13:59.492+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:13:59.492+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:13:59.492+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:13:59.492+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:13:59.501+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T00:13:59.501+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:14:12.049+11:00 level=INFO source=server.go:637 msg="llama runner started in 13.09 seconds"
+[GIN] 2025/10/18 - 00:14:24 | 200 |   27.3620996s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:19:40 | 200 | 37.182023819s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:20:11 | 200 |  31.63774887s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:20:26 | 200 | 14.600662505s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:20:54 | 200 | 27.973010251s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T00:20:57.130+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-18T00:20:57.294+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="926.1 GiB" free_swap="0 B"
+time=2025-10-18T00:20:57.294+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-18T00:20:57.357+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 42805"
+time=2025-10-18T00:20:57.357+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:20:57.357+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:20:57.370+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:20:57.370+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:42805"
+time=2025-10-18T00:20:57.371+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:20:57.436+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+time=2025-10-18T00:20:57.623+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:21:09.787+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:21:10.088+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:21:10.088+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:21:10.088+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:21:10.088+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:21:10.088+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:21:10.095+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-18T00:21:10.095+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:21:26.956+11:00 level=INFO source=server.go:637 msg="llama runner started in 29.60 seconds"
+[GIN] 2025/10/18 - 00:21:46 | 200 | 50.396948155s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:21:48 | 200 |  1.675165916s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:22:06 | 200 | 17.861708696s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:22:08 | 200 |  1.751710786s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:22:16 | 200 |  8.205749768s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-18T00:22:45.617+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T00:22:45.778+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T00:22:45.778+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T00:22:45.834+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 43871"
+time=2025-10-18T00:22:45.834+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:22:45.834+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:22:45.860+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:22:45.847+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:22:45.847+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:43871"
+time=2025-10-18T00:22:45.915+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:22:45.994+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:22:46.111+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T00:22:46.245+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:22:46.246+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:22:46.246+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:22:46.246+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:22:46.246+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:22:46.254+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T00:22:46.254+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:22:49.908+11:00 level=INFO source=server.go:637 msg="llama runner started in 4.07 seconds"
+[GIN] 2025/10/18 - 00:22:53 | 200 |  9.255444808s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:23:36 | 200 | 10.244039559s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:23:42 | 200 |  6.551634781s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:23:55 | 200 | 12.384427073s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:23:58 | 200 |  3.830522813s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T00:24:00.303+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-18T00:24:00.765+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T00:24:00.766+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-18T00:24:00.815+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 40607"
+time=2025-10-18T00:24:00.816+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:24:00.816+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:24:00.826+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:24:00.827+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:40607"
+time=2025-10-18T00:24:00.838+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:24:00.901+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:24:00.969+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:24:01.085+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:24:01.085+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:24:01.085+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:24:01.085+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:24:01.085+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:24:01.092+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T00:24:01.093+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-18T00:24:01.093+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:24:04.618+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.80 seconds"
+[GIN] 2025/10/18 - 00:24:08 | 200 |  9.403720008s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:24:12 | 200 |  4.165752365s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:24:16 | 200 |  4.083648172s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-18T00:28:18.962+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T00:28:19.122+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T00:28:19.123+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T00:28:19.191+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 33543"
+time=2025-10-18T00:28:19.191+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:28:19.191+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:28:19.211+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:28:19.204+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:28:19.204+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:33543"
+time=2025-10-18T00:28:19.265+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+time=2025-10-18T00:28:19.462+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:28:19.644+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:28:19.951+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:28:19.951+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:28:19.951+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:28:19.951+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:28:19.951+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:28:19.960+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T00:28:19.960+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:28:23.513+11:00 level=INFO source=server.go:637 msg="llama runner started in 4.32 seconds"
+[GIN] 2025/10/18 - 00:28:41 | 200 | 23.971703823s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T00:41:31.764+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T00:41:31.928+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.1 GiB" free_swap="0 B"
+time=2025-10-18T00:41:31.928+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T00:41:31.994+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 42011"
+time=2025-10-18T00:41:31.994+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:41:31.994+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:41:32.008+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:41:32.008+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:42011"
+time=2025-10-18T00:41:32.009+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:41:32.074+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:41:32.141+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:41:32.251+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:41:32.251+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:41:32.251+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:41:32.251+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:41:32.251+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:41:32.260+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T00:41:32.260+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:41:32.261+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T00:41:35.811+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.82 seconds"
+[GIN] 2025/10/18 - 00:42:12 | 200 | 41.016598098s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:42:26 | 200 | 14.500563144s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:42:39 | 200 | 12.798410713s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:42:51 | 200 | 11.532568551s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T00:47:16.494+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-18T00:47:16.658+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T00:47:16.658+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-18T00:47:16.728+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 33869"
+time=2025-10-18T00:47:16.728+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:47:16.728+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:47:16.747+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:47:16.740+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:47:16.740+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:33869"
+time=2025-10-18T00:47:16.798+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:47:16.876+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:47:16.998+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T00:47:17.185+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:47:17.186+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:47:17.186+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:47:17.186+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:47:17.186+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:47:17.193+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-18T00:47:17.193+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:47:20.796+11:00 level=INFO source=server.go:637 msg="llama runner started in 4.07 seconds"
+[GIN] 2025/10/18 - 00:47:33 | 200 | 17.944706644s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:47:34 | 200 |  1.179799219s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:47:46 | 200 | 11.625660078s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:47:47 | 200 |  1.073490295s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:48:04 | 200 | 17.810740327s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:48:07 | 200 |  2.077405009s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:48:25 | 200 | 18.041455702s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:48:26 | 200 |  1.783174234s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:48:35 | 200 |  8.949168163s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:48:36 | 200 |  986.929712ms |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-18T00:48:47.009+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T00:48:47.278+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="922.9 GiB" free_swap="0 B"
+time=2025-10-18T00:48:47.279+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T00:48:47.341+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 38425"
+time=2025-10-18T00:48:47.341+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:48:47.341+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:48:47.358+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:48:47.353+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:48:47.353+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:38425"
+time=2025-10-18T00:48:47.417+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:48:47.483+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:48:47.590+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:48:47.590+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:48:47.590+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:48:47.590+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:48:47.590+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:48:47.599+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T00:48:47.599+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:48:47.609+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T00:48:51.182+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.84 seconds"
+[GIN] 2025/10/18 - 00:48:55 | 200 |   9.48701929s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:49:16 | 200 | 12.051692953s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:49:22 | 200 |  5.819785495s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:49:34 | 200 |  12.17495577s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 00:49:40 | 200 |  6.564766232s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T00:49:42.083+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-18T00:49:42.475+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="922.9 GiB" free_swap="0 B"
+time=2025-10-18T00:49:42.476+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-18T00:49:42.545+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 43899"
+time=2025-10-18T00:49:42.545+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:49:42.545+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:49:42.567+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:49:42.557+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:49:42.558+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:43899"
+time=2025-10-18T00:49:42.624+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:49:42.689+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:49:42.796+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:49:42.796+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:49:42.796+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:49:42.796+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:49:42.796+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:49:42.803+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-18T00:49:42.803+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:49:42.821+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T00:49:46.348+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.80 seconds"
+[GIN] 2025/10/18 - 00:49:51 | 200 | 10.720470631s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:49:53 | 200 |  1.537281594s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:49:55 | 200 |  2.460608695s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 00:49:58 | 200 |  2.340482871s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-18T00:53:48.919+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T00:53:49.081+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.1 GiB" free_swap="0 B"
+time=2025-10-18T00:53:49.081+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T00:53:49.146+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 36913"
+time=2025-10-18T00:53:49.146+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:53:49.146+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:53:49.158+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:53:49.159+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:53:49.159+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:36913"
+time=2025-10-18T00:53:49.222+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:53:49.300+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:53:49.406+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:53:49.406+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:53:49.406+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:53:49.406+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:53:49.406+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:53:49.409+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T00:53:49.416+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T00:53:49.416+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:53:52.952+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.81 seconds"
+[GIN] 2025/10/18 - 00:54:04 | 200 | 16.460430892s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T00:59:21.787+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T00:59:21.952+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T00:59:21.953+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T00:59:22.024+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 46231"
+time=2025-10-18T00:59:22.024+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T00:59:22.024+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T00:59:22.041+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T00:59:22.038+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T00:59:22.038+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:46231"
+time=2025-10-18T00:59:22.104+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T00:59:22.171+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T00:59:22.278+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T00:59:22.278+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T00:59:22.279+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T00:59:22.279+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T00:59:22.279+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T00:59:22.287+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T00:59:22.287+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T00:59:22.306+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T00:59:25.836+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.81 seconds"
+[GIN] 2025/10/18 - 00:59:59 | 200 | 38.225010405s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:00:18 | 200 | 19.336905161s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:00:51 | 200 | 32.567991903s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:01:04 | 200 | 12.973210019s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T01:01:05.725+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-18T01:01:05.885+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T01:01:05.886+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-18T01:01:05.939+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 44531"
+time=2025-10-18T01:01:05.939+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T01:01:05.939+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T01:01:05.951+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T01:01:05.951+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:44531"
+time=2025-10-18T01:01:05.958+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T01:01:06.024+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T01:01:06.103+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T01:01:06.209+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T01:01:06.209+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T01:01:06.209+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T01:01:06.209+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T01:01:06.209+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T01:01:06.210+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T01:01:06.217+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-18T01:01:06.217+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T01:01:09.752+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.81 seconds"
+[GIN] 2025/10/18 - 01:01:18 | 200 | 13.785332742s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:01:23 | 200 |  5.331443759s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:01:29 | 200 |  5.972503237s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-18T01:03:33.029+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T01:03:33.228+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T01:03:33.228+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T01:03:33.290+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 41287"
+time=2025-10-18T01:03:33.291+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T01:03:33.291+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T01:03:33.305+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T01:03:33.303+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T01:03:33.303+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:41287"
+time=2025-10-18T01:03:33.364+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T01:03:33.443+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T01:03:33.549+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T01:03:33.549+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T01:03:33.549+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T01:03:33.549+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T01:03:33.549+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T01:03:33.558+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T01:03:33.559+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T01:03:33.559+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T01:03:37.081+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.79 seconds"
+[GIN] 2025/10/18 - 01:03:42 | 200 | 10.929099632s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:05:45 | 200 | 24.360628512s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:05:57 | 200 | 12.205122168s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:06:05 | 200 |  7.468426722s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:06:18 | 200 | 12.932324882s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T01:06:19.632+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-18T01:06:19.939+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T01:06:19.939+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-18T01:06:19.999+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 39051"
+time=2025-10-18T01:06:19.999+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T01:06:19.999+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T01:06:20.021+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T01:06:20.010+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T01:06:20.010+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:39051"
+time=2025-10-18T01:06:20.075+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T01:06:20.143+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T01:06:20.251+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T01:06:20.251+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T01:06:20.251+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T01:06:20.251+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T01:06:20.251+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T01:06:20.258+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-18T01:06:20.258+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T01:06:20.272+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T01:06:23.810+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.81 seconds"
+[GIN] 2025/10/18 - 01:06:31 | 200 | 12.928105165s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:06:38 | 200 |  7.555155002s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:06:45 | 200 |  6.613877091s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-18T01:10:04.840+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T01:10:05.006+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T01:10:05.006+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T01:10:05.066+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 46341"
+time=2025-10-18T01:10:05.066+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T01:10:05.066+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T01:10:05.078+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T01:10:05.079+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:46341"
+time=2025-10-18T01:10:05.087+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T01:10:05.142+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T01:10:05.297+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T01:10:05.338+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T01:10:05.404+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T01:10:05.404+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T01:10:05.404+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T01:10:05.404+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T01:10:05.404+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T01:10:05.413+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T01:10:05.413+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T01:10:08.860+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.79 seconds"
+[GIN] 2025/10/18 - 01:10:17 | 200 | 13.651671858s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T01:15:32.167+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T01:15:32.332+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T01:15:32.332+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T01:15:32.399+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 36347"
+time=2025-10-18T01:15:32.400+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T01:15:32.400+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T01:15:32.400+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T01:15:32.412+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T01:15:32.412+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:36347"
+time=2025-10-18T01:15:32.475+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T01:15:32.552+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T01:15:32.651+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T01:15:32.821+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T01:15:32.821+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T01:15:32.821+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T01:15:32.821+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T01:15:32.822+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T01:15:32.830+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T01:15:32.831+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T01:15:36.424+11:00 level=INFO source=server.go:637 msg="llama runner started in 4.02 seconds"
+[GIN] 2025/10/18 - 01:16:10 | 200 | 38.544170471s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:16:41 | 200 | 31.360377106s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:17:03 | 200 | 21.855456609s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:17:30 | 200 | 26.905676201s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T01:17:31.604+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-18T01:17:31.915+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="922.9 GiB" free_swap="0 B"
+time=2025-10-18T01:17:31.915+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-18T01:17:31.975+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 34509"
+time=2025-10-18T01:17:31.975+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T01:17:31.975+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T01:17:31.991+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T01:17:31.987+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T01:17:31.987+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:34509"
+time=2025-10-18T01:17:32.050+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T01:17:32.116+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T01:17:32.224+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T01:17:32.224+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T01:17:32.224+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T01:17:32.224+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T01:17:32.224+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T01:17:32.232+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-18T01:17:32.232+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T01:17:32.250+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T01:17:35.782+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.81 seconds"
+[GIN] 2025/10/18 - 01:17:51 | 200 | 21.448728899s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:17:53 | 200 |  1.831655798s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:18:03 | 200 |  9.799104326s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:18:04 | 200 |  1.084768138s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:18:16 | 200 | 11.862630784s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:18:17 | 200 |  1.217317837s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-18T01:21:38.639+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T01:21:38.946+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T01:21:38.946+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T01:21:39.013+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 43847"
+time=2025-10-18T01:21:39.013+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T01:21:39.013+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T01:21:39.033+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T01:21:39.025+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T01:21:39.025+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:43847"
+time=2025-10-18T01:21:39.088+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T01:21:39.174+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T01:21:39.280+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T01:21:39.280+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T01:21:39.280+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T01:21:39.280+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T01:21:39.280+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T01:21:39.285+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T01:21:39.290+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T01:21:39.290+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T01:21:42.839+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.83 seconds"
+[GIN] 2025/10/18 - 01:21:54 | 200 | 17.375218401s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:21:56 | 200 |  2.045704654s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:22:02 | 200 |   5.51394746s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:22:04 | 200 |  1.875815392s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:22:09 | 200 |  5.302238605s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T01:22:10.939+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-18T01:22:11.104+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T01:22:11.105+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-18T01:22:11.167+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 39331"
+time=2025-10-18T01:22:11.168+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T01:22:11.168+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T01:22:11.179+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T01:22:11.179+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:39331"
+time=2025-10-18T01:22:11.189+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T01:22:11.247+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T01:22:11.312+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T01:22:11.420+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T01:22:11.420+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T01:22:11.420+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T01:22:11.420+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T01:22:11.420+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T01:22:11.428+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-18T01:22:11.428+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T01:22:11.440+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T01:22:14.963+11:00 level=INFO source=server.go:637 msg="llama runner started in 3.80 seconds"
+[GIN] 2025/10/18 - 01:22:31 | 200 | 21.384600005s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:22:38 | 200 |  7.376990481s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:22:47 | 200 |  9.074590075s |       127.0.0.1 | POST     "/v1/chat/completions"
+time=2025-10-18T01:27:15.242+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T01:27:15.561+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.3 GiB" free_swap="0 B"
+time=2025-10-18T01:27:15.561+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T01:27:15.621+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 43191"
+time=2025-10-18T01:27:15.622+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T01:27:15.622+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T01:27:15.633+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T01:27:15.634+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:43191"
+time=2025-10-18T01:27:15.642+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T01:27:15.697+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T01:27:15.778+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T01:27:15.893+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T01:27:16.029+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T01:27:16.029+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T01:27:16.029+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T01:27:16.029+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T01:27:16.029+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T01:27:16.038+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T01:27:16.038+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T01:27:28.199+11:00 level=INFO source=server.go:637 msg="llama runner started in 12.58 seconds"
+[GIN] 2025/10/18 - 01:27:45 | 200 | 31.502606014s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T01:33:16.070+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="21.3 GiB"
+time=2025-10-18T01:33:16.243+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="923.0 GiB" free_swap="0 B"
+time=2025-10-18T01:33:16.243+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="21.3 GiB" memory.required.partial="21.3 GiB" memory.required.kv="858.0 MiB" memory.required.allocations="[21.3 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="7.8 GiB" memory.graph.partial="7.8 GiB"
+time=2025-10-18T01:33:16.308+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 32000 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 34101"
+time=2025-10-18T01:33:16.309+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T01:33:16.309+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T01:33:16.319+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T01:33:16.320+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T01:33:16.320+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:34101"
+time=2025-10-18T01:33:16.385+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+time=2025-10-18T01:33:16.570+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T01:33:30.862+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T01:33:30.980+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T01:33:30.980+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T01:33:30.980+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T01:33:30.980+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T01:33:30.980+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T01:33:30.989+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="7.9 GiB"
+time=2025-10-18T01:33:30.989+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T01:33:34.657+11:00 level=INFO source=server.go:637 msg="llama runner started in 18.35 seconds"
+[GIN] 2025/10/18 - 01:34:06 | 200 |  50.55791627s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:34:38 | 200 | 32.828090484s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:34:58 | 200 | 19.407214566s |       127.0.0.1 | POST     "/api/chat"
+[GIN] 2025/10/18 - 01:35:28 | 200 | 29.835192417s |       127.0.0.1 | POST     "/api/chat"
+time=2025-10-18T01:35:29.578+11:00 level=INFO source=sched.go:786 msg="new model will fit in available VRAM in single GPU, loading" model=/home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 gpu=GPU-fe588970-990d-b182-9775-97402c5d79a1 parallel=1 available=47340912640 required="14.9 GiB"
+time=2025-10-18T01:35:29.739+11:00 level=INFO source=server.go:135 msg="system memory" total="1006.9 GiB" free="922.9 GiB" free_swap="0 B"
+time=2025-10-18T01:35:29.739+11:00 level=INFO source=server.go:175 msg=offload library=cuda layers.requested=-1 layers.model=25 layers.offload=25 layers.split="" memory.available="[44.1 GiB]" memory.gpu_overhead="0 B" memory.required.full="14.9 GiB" memory.required.partial="14.9 GiB" memory.required.kv="300.0 MiB" memory.required.allocations="[14.9 GiB]" memory.weights.total="11.7 GiB" memory.weights.repeating="10.7 GiB" memory.weights.nonrepeating="1.1 GiB" memory.graph.full="2.0 GiB" memory.graph.partial="2.0 GiB"
+time=2025-10-18T01:35:29.802+11:00 level=INFO source=server.go:438 msg="starting llama server" cmd="/fs04/scratch2/lb64/ollama-bin/bin/ollama runner --ollama-engine --model /home/mvo1/lb64_scratch/ollama-models/blobs/sha256-b112e727c6f18875636c56a779790a590d705aec9e1c0eb5a97d51fc2a778583 --ctx-size 8192 --batch-size 512 --n-gpu-layers 25 --threads 64 --parallel 1 --port 37377"
+time=2025-10-18T01:35:29.803+11:00 level=INFO source=sched.go:481 msg="loaded runners" count=1
+time=2025-10-18T01:35:29.803+11:00 level=INFO source=server.go:598 msg="waiting for llama runner to start responding"
+time=2025-10-18T01:35:29.822+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server not responding"
+time=2025-10-18T01:35:29.814+11:00 level=INFO source=runner.go:925 msg="starting ollama engine"
+time=2025-10-18T01:35:29.814+11:00 level=INFO source=runner.go:983 msg="Server listening on 127.0.0.1:37377"
+time=2025-10-18T01:35:29.890+11:00 level=INFO source=ggml.go:92 msg="" architecture=gptoss file_type=MXFP4 name="" description="" num_tensors=315 num_key_values=30
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA A40, compute capability 8.6, VMM: yes
+load_backend: loaded CUDA backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cuda.so
+load_backend: loaded CPU backend from /fs04/scratch2/lb64/ollama-bin/lib/ollama/libggml-cpu-icelake.so
+time=2025-10-18T01:35:29.970+11:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,600,610,700,750,800,860,870,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-10-18T01:35:30.073+11:00 level=INFO source=server.go:632 msg="waiting for server to become available" status="llm server loading model"
+time=2025-10-18T01:35:30.282+11:00 level=INFO source=ggml.go:365 msg="offloading 24 repeating layers to GPU"
+time=2025-10-18T01:35:30.282+11:00 level=INFO source=ggml.go:371 msg="offloading output layer to GPU"
+time=2025-10-18T01:35:30.282+11:00 level=INFO source=ggml.go:376 msg="offloaded 25/25 layers to GPU"
+time=2025-10-18T01:35:30.282+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CUDA0 size="11.7 GiB"
+time=2025-10-18T01:35:30.282+11:00 level=INFO source=ggml.go:379 msg="model weights" buffer=CPU size="1.1 GiB"
+time=2025-10-18T01:35:30.290+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CUDA0 buffer_type=CUDA0 size="2.1 GiB"
+time=2025-10-18T01:35:30.290+11:00 level=INFO source=ggml.go:668 msg="compute graph" backend=CPU buffer_type=CPU size="5.6 MiB"
+time=2025-10-18T01:35:33.868+11:00 level=INFO source=server.go:637 msg="llama runner started in 4.06 seconds"
+[GIN] 2025/10/18 - 01:35:52 | 200 | 24.507702629s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:35:55 | 200 |  2.392664676s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:36:05 | 200 | 10.171032262s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:36:06 | 200 |  969.444726ms |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:36:31 | 200 | 24.786595271s |       127.0.0.1 | POST     "/v1/chat/completions"
+[GIN] 2025/10/18 - 01:36:33 | 200 |  2.096520511s |       127.0.0.1 | POST     "/v1/chat/completions"
