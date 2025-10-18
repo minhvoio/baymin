@@ -14,10 +14,6 @@ set -euo pipefail
 cd "$SLURM_SUBMIT_DIR"
 mkdir -p sbatch_log
 
-# stream wrapper logs to file + screen
-exec > >(tee -a "sbatch_log/${SLURM_JOB_NAME}-${SLURM_JOB_ID}.out")
-exec 2> >(tee -a "sbatch_log/${SLURM_JOB_NAME}-${SLURM_JOB_ID}.err" >&2)
-
 echo "[BOOT] $(date) host=$(hostname) job=${SLURM_JOB_ID}"
 export OLLAMA_HOST="127.0.0.1:11434"
 export PYTHONUNBUFFERED=1
