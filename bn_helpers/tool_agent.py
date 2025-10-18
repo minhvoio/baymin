@@ -397,7 +397,9 @@ def chat_with_tools(
         testing_log['final_answer'] = final_answer
     
     # Return answer and testing log if in testing mode
-    print(f"[DEBUG] chat_with_tools final_answer: type={type(final_answer)}, value={final_answer}")
+    if is_debug:
+        print(f"[DEBUG] chat_with_tools final_answer: type={type(final_answer)}, value={final_answer}")
+        
     if is_output_log:
         print(f"[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)")
         return final_answer, testing_log
