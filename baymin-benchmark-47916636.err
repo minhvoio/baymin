@@ -1,3 +1,0 @@
-srun: Job step aborted: Waiting up to 22 seconds for job step to finish.
-[2025-10-17T12:43:12.041] error: *** STEP 47916636.0 ON m3a100 CANCELLED AT 2025-10-17T12:43:12 DUE TO TIME LIMIT ***
-[2025-10-17T12:43:12.042] error: *** JOB 47916636 ON m3a100 CANCELLED AT 2025-10-17T12:43:12 DUE TO TIME LIMIT ***

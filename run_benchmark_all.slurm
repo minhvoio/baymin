@@ -7,8 +7,8 @@
 #SBATCH --time=4:00:00
 #SBATCH --constraint=r9
 #SBATCH --ntasks=1
-#SBATCH --output=%x-%j.out
-#SBATCH --error=%x-%j.err
+#SBATCH --output=sbatch_log/%x-%j.out
+#SBATCH --error=sbatch_log/%x-%j.err
 
 set -euo pipefail
 
@@ -20,7 +20,7 @@ source /home/mvo1/lb64_scratch/miniconda3/etc/profile.d/conda.sh
 conda activate llm-bn
 
 export OLLAMA_HOST="127.0.0.1:11434"
-LOG="ollama-${SLURM_JOB_ID}.log"
+LOG="sbatch_log/ollama-${SLURM_JOB_ID}.log"
 
 # 1) Start Ollama directly (no srun), in the background
 echo "[INFO] Starting ollama serve ..."
