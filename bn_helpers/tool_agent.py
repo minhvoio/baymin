@@ -200,7 +200,8 @@ def chat_with_tools(
             if chunk.get("done"):
                 break
         
-        print(f"[DEBUG] Final assistant_msg: {assistant_msg}")
+        if is_debug:
+            print(f"[DEBUG] Final assistant_msg: {assistant_msg}")
 
         messages.append(assistant_msg)
 
