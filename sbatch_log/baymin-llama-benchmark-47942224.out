@@ -1,0 +1,35 @@
+[BOOT] Sun Oct 19 08:11:33 PM AEDT 2025 host=m3a107 job=47942224
+[DBG] CUDA_VISIBLE_DEVICES=0
+Sun Oct 19 20:12:01 2025       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 535.230.02             Driver Version: 535.230.02   CUDA Version: 12.2     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA A40                     On  | 00000000:E3:00.0 Off |                    0 |
+|  0%   28C    P8              24W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+[CLEAN] Killing any leftover ollama (user=mvo1) ...
+[CLEAN] No ollama processes remain.
+===== CYCLE 1/12 @ Sun Oct 19 08:12:03 PM AEDT 2025 =====
+[CLEAN] Killing any leftover ollama (user=mvo1) ...
+[CLEAN] No ollama processes remain.
+[INFO] Ollama is up
+Loading Netica
+Loading nets from: /fs04/scratch2/lb64/projects/llm-bn/benchmarking/data
+Loaded 4 nets from /fs04/scratch2/lb64/projects/llm-bn/benchmarking/data/nets_dataset.parquet
+Attempt 1/6 for dependency_test
+Running dependency test for Net_5 with 30 questions
+Running question 1
+[Testing Mode] Question 1: Is changing the evidence of D going to change the probability of B?

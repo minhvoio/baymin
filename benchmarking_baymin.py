@@ -19,7 +19,7 @@ net_5, net_10, net_30, net_60 = load_nets_from_parquet(os.path.join(data_output,
 
 list_of_nets = [net_5, net_10, net_30, net_60]
 NUM_QUESTIONS = 30
-MAX_TOKENS = 200
+MAX_TOKENS = 1800
 IS_OUTPUT_LOG = True
 IS_DEBUG = False
 
@@ -27,7 +27,7 @@ MODEL_TEMPERATURE = 0.0
 MODEL_TOP_P = 1.0
 MODEL_QUIZ_TEMPERATURE = 0.7
 MODEL_QUIZ_TOP_P = 0.9
-MODEL='gpt-oss:latest'
+# MODEL='gpt-oss:latest'
 MODEL_QUIZ = 'gpt-oss:latest'
 
 QWEN_MODEL = "qwen3:8b"
