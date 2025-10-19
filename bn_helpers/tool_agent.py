@@ -154,7 +154,6 @@ def chat_with_tools(
     messages = [{"role":"system","content":system_prompt}, {"role":"user","content":prompt}]
     retries_left = max_rounds
 
-    # state to avoid repeating failed/attempted calls
     seen_calls = set()          # {(tool_name, normalized_args_json)}
     first_results = {}          # {(tool_name, normalized_args_json): first_result}
     recent_errors = []          # keep last few error messages for model guidance

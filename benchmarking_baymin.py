@@ -19,7 +19,7 @@ net_5, net_10, net_30, net_60 = load_nets_from_parquet(os.path.join(data_output,
 
 list_of_nets = [net_5, net_10, net_30, net_60]
 NUM_QUESTIONS = 30
-MAX_TOKENS = 1800
+MAX_TOKENS = 200
 IS_OUTPUT_LOG = True
 IS_DEBUG = False
 
@@ -32,7 +32,7 @@ MODEL_QUIZ = 'gpt-oss:latest'
 
 QWEN_MODEL = "qwen3:8b"
 LLAMA_MODEL = "llama3.1:70b"
-MODEL_LIST = [QWEN_MODEL, LLAMA_MODEL]
+MODEL_LIST = [LLAMA_MODEL]
 
 for MODEL in MODEL_LIST:
     COMMON_TEST_KWARGS = {
