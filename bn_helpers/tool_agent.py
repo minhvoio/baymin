@@ -698,6 +698,43 @@ def get_answer_from_tool_agent(net, prompt, model=MODEL, model_temperature=0.0, 
     text = text.replace('‚Äù', '"')  # Fix mangled quote
     text = text.replace('‚Äú', '"')  # Fix mangled quote
     
+    # Additional encoding fixes for common mangled characters
+    text = text.replace('Äì', '–')  # Fix Äì -> en-dash
+    text = text.replace('Äî', '—')  # Fix Äî -> em-dash
+    text = text.replace('Äë', '-')  # Fix Äë -> hyphen
+    text = text.replace('Äô', "'")  # Fix Äô -> apostrophe
+    text = text.replace('Äù', '"')  # Fix Äù -> quote
+    text = text.replace('Äú', '"')  # Fix Äú -> quote
+    text = text.replace('Äö', '"')  # Fix Äö -> quote
+    text = text.replace('Äò', "'")  # Fix Äò -> apostrophe
+    text = text.replace('Äñ', 'ñ')  # Fix Äñ -> ñ
+    text = text.replace('Äá', 'á')  # Fix Äá -> á
+    text = text.replace('Äé', 'é')  # Fix Äé -> é
+    text = text.replace('Äí', 'í')  # Fix Äí -> í
+    text = text.replace('Äó', 'ó')  # Fix Äó -> ó
+    text = text.replace('Äú', 'ú')  # Fix Äú -> ú
+    text = text.replace('Äü', 'ü')  # Fix Äü -> ü
+    text = text.replace('Äç', 'ç')  # Fix Äç -> ç
+    text = text.replace('Äà', 'à')  # Fix Äà -> à
+    text = text.replace('Äè', 'è')  # Fix Äè -> è
+    text = text.replace('Äì', 'ì')  # Fix Äì -> ì
+    text = text.replace('Äò', 'ò')  # Fix Äò -> ò
+    text = text.replace('Äù', 'ù')  # Fix Äù -> ù
+    
+    # Fix common double-encoded UTF-8 sequences
+    text = text.replace('â€', '')  # Remove common UTF-8 prefix
+    text = text.replace('â', '')   # Remove standalone â
+    text = text.replace('€', '')   # Remove standalone €
+    
+    # Fix more complex mangled sequences
+    text = text.replace('â€œ', '"')  # Fix left double quote
+    text = text.replace('â€', '"')   # Fix right double quote
+    text = text.replace('â€™', "'")  # Fix right single quote
+    text = text.replace('â€˜', "'")  # Fix left single quote
+    text = text.replace('â€"', '–')  # Fix en dash
+    text = text.replace('â€"', '—')  # Fix em dash
+    text = text.replace('â€¦', '…')  # Fix ellipsis
+    
     text = unicodedata.normalize('NFKC', text)
     if is_output_log:
         return text, testing_log
