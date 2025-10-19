@@ -165,7 +165,7 @@ def chat_with_tools(
                 "model": model,
                 "messages": messages,
                 "tools": tools,
-                "options": {"temperature": float(model_temperature), "num_predict": int(max_tokens), "top_p": float(model_top_p), "num_ctx": 32000},
+                "options": {"temperature": float(model_temperature), "num_predict": int(max_tokens), "top_p": float(model_top_p)},
             },
             stream=True,
         )

@@ -29,12 +29,12 @@ IS_OUTPUT_LOG = True
 QWEN_MODEL = "qwen3:8b"
 LLAMA_MODEL = "llama3.1:70b"
 GPT_OSS_MODEL = 'gpt-oss:latest'
-IBM_MODEL = 'ibm/granite4:micro'
+LLAMA_SMALL_MODEL = 'llama3.2:3b'
 
 MODEL_QUIZ = 'gpt-oss:latest'
 
 # MODEL_LIST = [GPT_OSS_MODEL, LLAMA_MODEL, QWEN_MODEL]
-MODEL_LIST = [IBM_MODEL]
+MODEL_LIST = [LLAMA_SMALL_MODEL]
 
 MODEL_TEMPERATURE = 0.0
 MODEL_TOP_P = 1.0
@@ -45,7 +45,7 @@ COMMON_TEST_KWARGS = {
     "num_questions": NUM_QUESTIONS,
     "max_tokens": MAX_TOKENS,
     "is_output_log": IS_OUTPUT_LOG,
-    "test_baymin_only": True,
+    "test_baymin_only": False,
     "model_temperature": MODEL_TEMPERATURE,
     "model_top_p": MODEL_TOP_P,
     "model_quiz_temperature": MODEL_QUIZ_TEMPERATURE,

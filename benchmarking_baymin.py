@@ -30,6 +30,8 @@ MODEL_QUIZ_TOP_P = 0.9
 # MODEL='gpt-oss:latest'
 MODEL_QUIZ = 'gpt-oss:latest'
 
+LLAMA_SMALL_MODEL = 'llama3.2:3b'
+
 QWEN_MODEL = "qwen3:8b"
 LLAMA_MODEL = "llama3.1:70b"
 MODEL_LIST = [LLAMA_MODEL]

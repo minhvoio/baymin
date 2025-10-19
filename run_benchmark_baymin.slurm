@@ -1,48 +1,102 @@
 #!/bin/bash
-#SBATCH --job-name=baymin-benchmark
-#SBATCH --qos=desktopq
-#SBATCH --partition=desktop
+#SBATCH --job-name=baymin-llama-benchmark
+#SBATCH --partition=gpu
 #SBATCH --gres=gpu:A40:1
 #SBATCH --mem=240000M
-#SBATCH --time=11:00:00
+#SBATCH --time=24:00:00
 #SBATCH --ntasks=1
 #SBATCH --constraint=r9
 #SBATCH --output=sbatch_log/%x-%j.out
 #SBATCH --error=sbatch_log/%x-%j.err
 
 set -euo pipefail
-
-echo "[INFO] Host: $(hostname)  JobID: ${SLURM_JOB_ID}  Time: $(date)"
 cd "$SLURM_SUBMIT_DIR"
+mkdir -p sbatch_log
 
-# env
+echo "[BOOT] $(date) host=$(hostname) job=${SLURM_JOB_ID}"
+export OLLAMA_HOST="127.0.0.1:11434"
+export PYTHONUNBUFFERED=1
+# module load cuda/12.1  # if required on your cluster
+
+# Conda for python only (avoid leaking CUDA libs into ollama env)
 source /home/mvo1/lb64_scratch/miniconda3/etc/profile.d/conda.sh
 conda activate llm-bn
 
-export OLLAMA_HOST="127.0.0.1:11434"
-LOG="sbatch_log/ollama-${SLURM_JOB_ID}.log"
+echo "[DBG] CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-<unset>}"
+nvidia-smi || true
 
-# 1) Start Ollama directly (no srun), in the background
-echo "[INFO] Starting ollama serve ..."
-ollama serve >"$LOG" 2>&1 &
-OLLAMA_PID=$!
-trap 'echo "[INFO] Stopping ollama"; kill -TERM ${OLLAMA_PID} 2>/dev/null || true' EXIT
+# ---------- helpers ----------
+safe_kill_ollama() {
+  echo "[CLEAN] Killing any leftover ollama (user=$USER) ..."
+  # Try exact executable name, then command line match
+  pkill -u "$USER" -TERM -x ollama 2>/dev/null || true
+  pkill -u "$USER" -TERM -f 'ollama serve' 2>/dev/null || true
+  # Give it a moment to exit cleanly
+  sleep 2
+  # Force kill if anything remains
+  pkill -u "$USER" -KILL -x ollama 2>/dev/null || true
+  pkill -u "$USER" -KILL -f 'ollama serve' 2>/dev/null || true
+  # Show what’s left (if anything)
+  pgrep -a -u "$USER" ollama || echo "[CLEAN] No ollama processes remain."
+}
 
-# 2) Wait for it to come up
-for i in {1..60}; do
-  if curl -fsS "http://${OLLAMA_HOST}/api/tags" >/dev/null 2>&1; then
-    echo "[INFO] Ollama is up."
-    break
-  fi
-  sleep 3
-  if [[ $i -eq 60 ]]; then
-    echo "[ERROR] Ollama did not start in time. See $LOG" >&2
-    exit 1
+trap 'echo "[TRAP] Exiting—final ollama cleanup"; safe_kill_ollama' EXIT
+
+TOTAL_HOURS=48
+INTERVAL_HOURS=4   # ← change this to 3 if you want every 3 hours
+ITERATIONS=$(( TOTAL_HOURS / INTERVAL_HOURS ))
+
+# Pre-flight cleanup in case a prior run left processes
+safe_kill_ollama
+
+for ((cycle=1; cycle<=ITERATIONS; cycle++)); do
+  CYCLE_LOG="sbatch_log/ollama-${SLURM_JOB_ID}-cycle${cycle}.log"
+  echo "===== CYCLE ${cycle}/${ITERATIONS} @ $(date) =====" | tee -a "$CYCLE_LOG"
+
+  # Extra safety: kill before (re)starting this cycle
+  safe_kill_ollama
+
+  # Start ollama with a clean env (avoid conda's LD_LIBRARY_PATH)
+  export OLLAMA_LOG_LEVEL=DEBUG
+  export OLLAMA_NUM_GPU=1
+  (
+    unset LD_LIBRARY_PATH CONDA_PREFIX CONDA_DEFAULT_ENV
+    # module load cuda/12.1  # if your site needs it for ollama
+    exec ollama serve
+  ) >"$CYCLE_LOG" 2>&1 &
+  OLLAMA_PID=$!
+
+  # readiness probe
+  for i in {1..60}; do
+    if curl -fsS "http://${OLLAMA_HOST}/api/tags" >/dev/null 2>&1; then
+      echo "[INFO] Ollama is up" | tee -a "$CYCLE_LOG"
+      break
+    fi
+    sleep 3
+    if [[ $i -eq 60 ]]; then
+      echo "[ERROR] Ollama not ready" | tee -a "$CYCLE_LOG"
+      kill -TERM "$OLLAMA_PID" 2>/dev/null || true
+      wait "$OLLAMA_PID" 2>/dev/null || true
+      exit 1
+    fi
+  done
+
+  # Run benchmark (conda Python)
+  python -u /home/mvo1/lb64_scratch/projects/llm-bn/benchmarking_baymin.py | tee -a "$CYCLE_LOG"
+
+  # Stop this cycle's ollama PID
+  echo "[STOP] Stopping ollama PID ${OLLAMA_PID}" | tee -a "$CYCLE_LOG"
+  kill -TERM "$OLLAMA_PID" 2>/dev/null || true
+  wait "$OLLAMA_PID" 2>/dev/null || true
+
+  # Post-cycle cleanup (catches any helper/runners)
+  safe_kill_ollama
+
+  # Sleep to the next window
+  if (( cycle < ITERATIONS )); then
+    echo "[INFO] Sleeping ${INTERVAL_HOURS}h" | tee -a "$CYCLE_LOG"
+    sleep $((INTERVAL_HOURS*3600))
   fi
 done
 
-# 3) Run your benchmark with srun (binds the GPU/CPUs cleanly)
-echo "[INFO] Running benchmark ..."
-srun python /home/mvo1/lb64_scratch/projects/llm-bn/benchmarking_baymin.py
-
-echo "[INFO] Done at $(date)"
+echo "[INFO] All cycles completed @ $(date)"
