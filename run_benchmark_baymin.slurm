@@ -42,7 +42,7 @@ safe_kill_ollama() {
 
 trap 'echo "[TRAP] Exiting—final ollama cleanup"; safe_kill_ollama' EXIT
 
-TOTAL_HOURS=24
+TOTAL_HOURS=48
 INTERVAL_HOURS=4   # ← change this to 3 if you want every 3 hours
 ITERATIONS=$(( TOTAL_HOURS / INTERVAL_HOURS ))
 
