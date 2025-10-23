@@ -1,42 +1,45 @@
-% Required packages:
-% \usepackage{booktabs}  % for \toprule, \midrule, \bottomrule
-% \usepackage{multirow}  % for \multirow
-% \usepackage{makecell} % for \thead
-
-\begin{table*}[htbp]
-\centering
-\caption{Performance Comparison}
-\label{tab:performance}
-
-\begin{tabular}{lccccccc}
-\toprule
- &  & \multicolumn{3}{c}{Raw} & \multicolumn{3}{c}{BayMin} \\
-Question Type & Network Size & gpt-oss:20b & llama3.1:70b & qwen3:8b & gpt-oss:20b & llama3.1:70b & qwen3:8b \\
-\midrule
-Blocked Evidence & 5 & 11.7 & 13.3 & 13.3 & 83.3 & 85.0 & 48.3 \\
-Blocked Evidence & 10 & --- & --- & --- & 86.7 & 86.7 & 50.0 \\
-Blocked Evidence & 30 & --- & --- & --- & 86.7 & 96.7 & 56.7 \\
-Blocked Evidence & 60 & --- & --- & --- & 93.3 & 93.3 & 80.0 \\
-Common Cause & 5 & 40.0 & 23.3 & 33.3 & 93.3 & 90.0 & 95.0 \\
-Common Cause & 10 & --- & --- & --- & 100.0 & 93.3 & 100.0 \\
-Common Cause & 30 & --- & --- & --- & 100.0 & 100.0 & 93.3 \\
-Common Cause & 60 & --- & --- & --- & 100.0 & 100.0 & 86.7 \\
-Common Effect & 5 & 33.3 & 20.0 & 33.3 & 93.3 & 70.0 & 96.7 \\
-Common Effect & 10 & --- & --- & --- & 90.0 & 80.0 & 90.0 \\
-Common Effect & 30 & --- & --- & --- & 86.7 & 60.0 & 90.0 \\
-Common Effect & 60 & --- & --- & --- & 90.0 & 70.0 & 96.7 \\
-Dependency & 5 & 36.7 & 23.3 & 38.3 & 98.3 & 76.7 & 96.7 \\
-Dependency & 10 & --- & --- & --- & 90.0 & 93.3 & 100.0 \\
-Dependency & 30 & --- & --- & --- & 93.3 & 90.0 & 100.0 \\
-Dependency & 60 & --- & --- & --- & 90.0 & 86.7 & 100.0 \\
-Evidence Change Relationship & 5 & 36.7 & 26.7 & 31.7 & 83.3 & 90.0 & 88.3 \\
-Evidence Change Relationship & 10 & --- & --- & --- & 80.0 & 96.7 & 83.3 \\
-Evidence Change Relationship & 30 & --- & --- & --- & 80.0 & 73.3 & 90.0 \\
-Evidence Change Relationship & 60 & --- & --- & --- & 83.3 & 46.7 & 93.3 \\
-Probability & 5 & 20.0 & 1.7 & 1.7 & 95.0 & 1.7 & 55.0 \\
-Probability & 10 & --- & --- & --- & 96.7 & 0.0 & 26.7 \\
-Probability & 30 & --- & --- & --- & 90.0 & 3.3 & 43.3 \\
-Probability & 60 & --- & --- & --- & 90.0 & 0.0 & 33.3 \\
-\bottomrule
-\end{tabular}
+\begin{table*}[t]
+  \centering
+  \caption{Accuracy Comparison across Models and Network Sizes.}
+  \label{tab:performance}
+  \small
+  \begin{tabular}{llccc|ccc}
+  \toprule
+   &  & \multicolumn{3}{c}{\textbf{Raw}} & \multicolumn{3}{c}{\textbf{BayMin}} \\
+  \cmidrule(lr){3-5}
+  \cmidrule(lr){6-8}
+  \textbf{Question Type} & \textbf{Net} & \textbf{gpt-oss:20b} & \textbf{llama3.1:70b} & \textbf{qwen3:8b} & \textbf{gpt-oss:20b} & \textbf{llama3.1:70b} & \textbf{qwen3:8b} \\
+  \midrule
+  \multirow{4}{*}{Blocked Evidence} & 5 & 23.3 & 26.7 & 26.7 & 76.7 & 86.7 & 53.3 \\
+   & 10 & --- & --- & --- & 86.7 & 86.7 & 50.0 \\
+   & 30 & --- & --- & --- & 86.7 & 96.7 & 56.7 \\
+   & 60 & --- & --- & --- & 93.3 & 93.3 & 80.0 \\
+  \midrule
+  \multirow{4}{*}{Common Cause} & 5 & 80.0 & 46.7 & 66.7 & 90.0 & 86.7 & 93.3 \\
+   & 10 & --- & --- & --- & 100 & 93.3 & 100 \\
+   & 30 & --- & --- & --- & 100 & 100 & 93.3 \\
+   & 60 & --- & --- & --- & 100 & 100 & 86.7 \\
+  \midrule
+  \multirow{4}{*}{Common Effect} & 5 & 66.7 & 40.0 & 66.7 & 93.3 & 70.0 & 93.3 \\
+   & 10 & --- & --- & --- & 90.0 & 80.0 & 90.0 \\
+   & 30 & --- & --- & --- & 86.7 & 60.0 & 90.0 \\
+   & 60 & --- & --- & --- & 90.0 & 70.0 & 96.7 \\
+  \midrule
+  \multirow{4}{*}{Dependency} & 5 & 73.3 & 46.7 & 76.7 & 96.7 & 90.0 & 93.3 \\
+   & 10 & --- & --- & --- & 90.0 & 93.3 & 100 \\
+   & 30 & --- & --- & --- & 93.3 & 90.0 & 100 \\
+   & 60 & --- & --- & --- & 90.0 & 86.7 & 100 \\
+  \midrule
+  \multirow{4}{*}{Evidence Change Relationship} & 5 & 73.3 & 53.3 & 63.3 & 86.7 & 90.0 & 80.0 \\
+   & 10 & --- & --- & --- & 80.0 & 96.7 & 83.3 \\
+   & 30 & --- & --- & --- & 80.0 & 73.3 & 90.0 \\
+   & 60 & --- & --- & --- & 83.3 & 46.7 & 93.3 \\
+  \midrule
+  \multirow{4}{*}{Probability} & 5 & 40.0 & 3.3 & 3.3 & 93.3 & 0.0 & 60.0 \\
+   & 10 & --- & --- & --- & 96.7 & 0.0 & 26.7 \\
+   & 30 & --- & --- & --- & 90.0 & 3.3 & 43.3 \\
+   & 60 & --- & --- & --- & 90.0 & 0.0 & 33.3 \\
+  \bottomrule
+  \end{tabular}
+  \normalsize
 \end{table*}
