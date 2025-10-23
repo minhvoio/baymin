@@ -1,0 +1,133 @@
+// ~->[DNET-1]->~
+
+// File created by someone at MonashU using Netica 5.18 on Apr 22, 2021 at 00:53:41.
+
+bnet earthquake {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1619016818;
+
+visual V1 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "Arial"; size= 9;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	windowposn = (26, 26, 836, 296);
+	resolution = 72;
+	drawingbounds = (1659, 921);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00C0C0C0;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00F8EED2;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00D3CAA6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00C8C8C8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00FFFFFF;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00FFFFB4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00FFBDBD;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00DEE8FF;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00F0FAFA;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00FFFFFF;};
+	PrinterSetting A {
+		margins = (1270, 1270, 1270, 1270);
+		magnify = 1;
+		};
+	};
+
+node Burglary {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (True, False);
+	parents = ();
+	probs = 
+		// True         False        
+		  (0.01,        0.99);
+	title = "Burglary";
+	whenchanged = 1619011011;
+	belief = (0.01, 0.99);
+	visual V1 {
+		center = (192, 66);
+		height = 1;
+		};
+	};
+
+node Earthquake {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (True, False);
+	parents = ();
+	probs = 
+		// True         False        
+		  (0.02,        0.98);
+	title = "Earthquake";
+	whenchanged = 1619013558;
+	belief = (0.02, 0.98);
+	visual V1 {
+		center = (426, 66);
+		height = 2;
+		};
+	};
+
+node Alarm {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (True, False);
+	parents = (Burglary, Earthquake);
+	probs = 
+		// True         False         // Burglary Earthquake 
+		  (0.95,        0.05,         // True     True       
+		   0.94,        0.06,         // True     False      
+		   0.29,        0.71,         // False    True       
+		   0.001,       0.999);       // False    False      ;
+	title = "Alarm";
+	whenchanged = 1619016367;
+	belief = (0.0161142, 0.9838858);
+	visual V1 {
+		center = (312, 168);
+		height = 3;
+		};
+	};
+
+node WatsonCalls {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (True, False);
+	parents = (Alarm);
+	probs = 
+		// True         False         // Alarm 
+		  (0.7,         0.3,          // True  
+		   0.01,        0.99);        // False ;
+	title = "WatsonCalls";
+	whenchanged = 1619016818;
+	belief = (0.0211188, 0.9788812);
+	visual V1 {
+		center = (312, 264);
+		height = 4;
+		};
+	};
+
+node RadioNews {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Yes, No);
+	parents = (Earthquake);
+	probs = 
+		// Yes          No            // Earthquake 
+		  (0.9,         0.1,          // True       
+		   0.01,        0.99);        // False      ;
+	numcases = 1;
+	whenchanged = 1619013548;
+	belief = (0.0278, 0.9722);
+	visual V1 {
+		center = (516, 168);
+		height = 5;
+		};
+	};
+ElimOrder = (WatsonCalls, RadioNews, Burglary, Earthquake, Alarm);
+};

@@ -799,13 +799,70 @@ class BnToolBox():
             
             if details["before"] == False and details["after"] == True:
                 # Changed from separated to connected - evidence opened a path
-                # Check if any evidence node is a common effect (collider)
+                # Check if any evidence node is a common effect (collider) or opens a path through collider structure
                 for ev_node in display_items:
-                    if self.is_common_effect(net, node1, node2, ev_node):
-                        path = get_path(net, node1, node2)
-                        path_str = " → ".join(path) if path else "unknown path"
+                    # print(f"[DEBUG] Checking if {ev_node} is common effect of {node1} and {node2}")
+                    common_effects = self.get_common_effect(net, node1, node2)
+                    # print(f"[DEBUG] Common effects of {node1} and {node2}: {common_effects}")
+                    is_ce = self.is_common_effect(net, node1, node2, ev_node)
+                    # print(f"[DEBUG] Is {ev_node} a common effect? {is_ce}")
+                    
+                    if is_ce:
+                        # Get path with evidence to see the actual opened path
+                        # Set evidence to first state of the evidence node
+                        ev_node_obj = net.node(ev_node)
+                        first_state = ev_node_obj.state(0).name()  # Get first state
+                        evidence_dict = {ev_node: first_state}
+                        path = get_path(net, node1, node2, evidence_dict)
+                        # print(f"[DEBUG] Path from {node1} to {node2} with evidence {ev_node}={first_state}: {path}")
+                        path_str = ", ".join(path) if path else "unknown path"
                         change_explanation = f" This happens because {ev_node} is a common effect (collider) of {node1} and {node2}. Observing {ev_node} opens the path: {path_str}."
                         break
+                    else:
+                        # Check if ev_node opens a path through a collider structure
+                        # Look for colliders that are descendants of ev_node or ev_node itself
+                        # Get path with evidence to see the actual opened path
+                        ev_node_obj = net.node(ev_node)
+                        first_state = ev_node_obj.state(0).name()  # Get first state
+                        evidence_dict = {ev_node: first_state}
+                        path = get_path(net, node1, node2, evidence_dict)
+                        # print(f"[DEBUG] Path from {node1} to {node2} with evidence {ev_node}={first_state}: {path}")
+                        
+                        if path and len(path) > 2:
+                            # Check if ev_node is in the path and acts as a collider
+                            ev_index = None
+                            for i, node_name in enumerate(path):
+                                if node_name == ev_node:
+                                    ev_index = i
+                                    break
+                            
+                            if ev_index is not None and ev_index > 0 and ev_index < len(path) - 1:
+                                # ev_node is in the middle of the path - check if it's a collider
+                                prev_node = path[ev_index - 1]
+                                next_node = path[ev_index + 1]
+                                
+                                # Check if ev_node is a collider (has both prev and next as parents)
+                                ev_node_obj = net.node(ev_node)
+                                ev_parents = [p.name() for p in ev_node_obj.parents()]
+                                
+                                if prev_node in ev_parents and next_node in ev_parents:
+                                    path_str = ", ".join(path)
+                                    change_explanation = f" This happens because {ev_node} is a collider with parents {prev_node} and {next_node}. Observing {ev_node} opens the path: {path_str}."
+                                    break
+                                elif prev_node in ev_parents or next_node in ev_parents:
+                                    # ev_node is part of a chain that includes a collider
+                                    path_str = ", ".join(path)
+                                    if prev_node in ev_parents:
+                                        change_explanation = f" This happens because {ev_node} is a child of {prev_node} in the path. Observing {ev_node} opens the path: {path_str}."
+                                    else:
+                                        change_explanation = f" This happens because {ev_node} is a child of {next_node} in the path. Observing {ev_node} opens the path: {path_str}."
+                                    break
+                        
+                        # If no specific collider structure found, provide general explanation
+                        if not change_explanation:
+                            path_str = ", ".join(path) if path else "unknown path"
+                            change_explanation = f" This happens because observing {ev_node} opens a path between {node1} and {node2}: {path_str}."
+                            break
             
             elif details["before"] == True and details["after"] == False:
                 # Changed from connected to separated - evidence blocked a path
@@ -816,7 +873,7 @@ class BnToolBox():
                         break
                     elif self.is_chain(net, node1, ev_node) and self.is_chain(net, ev_node, node2):
                         path = get_path(net, node1, node2)
-                        path_str = " → ".join(path) if path else "unknown path"
+                        path_str = ", ".join(path) if path else "unknown path"
                         change_explanation = f" This happens because the path from {node1} to {node2} goes through {ev_node} as a chain. Observing {ev_node} blocks the chain: {path_str}."
                         break
             
@@ -825,7 +882,12 @@ class BnToolBox():
                 f"Before observing {{ev_str}}, they were {before}. After observing all evidence, they are {after}."
                 f"{change_explanation}{flip_note}"
             )
-            answer = raw_template.format(node1=node1, node2=node2, ev_str=ev_str, before=before, after=after)
+            # print(f"[DEBUG] details: {details}")
+            # print(f"[DEBUG] raw_template: {raw_template}")
+            # print(f"[DEBUG] change_explanation: {change_explanation}")
+            # print(f"[DEBUG] flip_note: {flip_note}")
+            answer = raw_template.format(node1=node1, node2=node2, ev_str=ev_str, before=before, after=after, 
+            change_explanation=change_explanation, flip_note=flip_note)
 
         else:
             raw_template = (

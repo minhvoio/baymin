@@ -411,10 +411,16 @@ def findAllDConnectedNodes(bn, source_node, dest_node, o=None):
     ordered_nodes.sort(key=lambda dn: (depth.get(dn.id, 10**9), dn.id))
     return [bn.node(dn.id) for dn in ordered_nodes]
 
-def get_path(net, source_node, dest_node):
+def get_path(net, source_node, dest_node, evidence=None):
     """
-    Find a consistent path from source_node to dest_node.
+    Find a consistent path from source_node to dest_node, optionally considering evidence.
     Returns a list of node names representing the path.
+    
+    Args:
+        net: The Bayesian network
+        source_node: Source node (string or node object)
+        dest_node: Destination node (string or node object)
+        evidence: Optional dict of evidence to set before finding path
     """
     if isinstance(source_node, str):
         source_node = net.node(source_node)
@@ -424,7 +430,17 @@ def get_path(net, source_node, dest_node):
     if source_node is dest_node:
         return [source_node.name()]
     
-    return findAllDConnectedNodes(net, source_node, dest_node, o={"returnPath": True})
+    # Temporarily set evidence if provided
+    if evidence:
+        # print(f"[DEBUG] Setting evidence: {evidence}")
+        with temporarily_set_findings(net, evidence):
+            path = findAllDConnectedNodes(net, source_node, dest_node, o={"returnPath": True})
+            # print(f"[DEBUG] Path found with evidence: {path}")
+            return path
+    else:
+        path = findAllDConnectedNodes(net, source_node, dest_node, o={"returnPath": True})
+        # print(f"[DEBUG] Path found without evidence: {path}")
+        return path
 
 
 # helper to get minmal blockers

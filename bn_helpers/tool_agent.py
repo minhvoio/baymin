@@ -91,6 +91,7 @@ def chat_with_tools(
     ollama_url: str = OLLAMA_CHAT_URL,
     is_debug: bool = False,
     is_output_log: bool = False,    
+    show_tool_calls: bool = False,
 ):
     fns = get_tools_map(net)
     bn_str = get_BN_node_states(net)
@@ -236,9 +237,10 @@ def chat_with_tools(
                             "content": json.dumps(payload)
                         })
                         continue
-
-                if is_debug:
+                
+                if show_tool_calls:
                     print(f"[BayMin] tool_call #{i}: {fn_name}({args})")
+                if is_debug:
                     debug_tool_calls.append(f"{fn_name}({args})")
                 if is_output_log and testing_log:
                     testing_log['tool_calls'].append(f"{fn_name}({args})")
@@ -266,8 +268,11 @@ def chat_with_tools(
                         # Store the first error result as well
                         first_results[call_key] = payload
 
-                if is_debug:
+                if show_tool_calls:
                     print(f"[BayMin] tool_result #{i}: {payload}")
+                    print()
+
+                if is_debug:                    
                     debug_tool_results.append(str(payload))
                 if is_output_log and testing_log:
                     testing_log['tool_results'].append(str(payload))
@@ -403,7 +408,6 @@ def chat_with_tools(
         print(f"[DEBUG] chat_with_tools returning tuple: (final_answer, testing_log)")
         return final_answer, testing_log
     else:
-        print(f"[DEBUG] chat_with_tools returning single value: final_answer")
         return final_answer
 
 def make_explain_d_connected_tool(net):
@@ -606,7 +610,7 @@ def extract_text(answer: str) -> str:
         try:
             obj = json.loads(answer)
         except json.JSONDecodeError as e:
-            print(f"[ERROR] extract_text JSON decode failed: {e}, answer: {answer}")
+            # print(f"[ERROR] extract_text JSON decode failed: {e}, answer: {answer}")
             # Not JSON; return as-is
             return answer
 
@@ -623,8 +627,8 @@ def extract_text(answer: str) -> str:
     # If list or other JSON, stringify it
     return json.dumps(obj, ensure_ascii=False)
 
-def get_answer_from_tool_agent(net, prompt, model=MODEL, model_temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, \
-    ollama_url=OLLAMA_CHAT_URL, is_output_log=False, is_debug=False, model_top_p=1.0):
+def get_answer_from_tool_agent(net, prompt, model=MODEL, temperature=0.0, max_tokens=1000, max_rounds=5, require_tool=True, \
+    ollama_url=OLLAMA_CHAT_URL, is_output_log=False, is_debug=False, model_top_p=1.0, show_tool_calls=False):
     import re
     import unicodedata
     import codecs
@@ -638,7 +642,7 @@ def get_answer_from_tool_agent(net, prompt, model=MODEL, model_temperature=0.0, 
         net=net,
         prompt=formatted_prompt,
         model=model,
-        model_temperature=model_temperature,
+        model_temperature=temperature,
         max_tokens=max_tokens,
         model_top_p=model_top_p,
         max_rounds=max_rounds,
@@ -646,6 +650,7 @@ def get_answer_from_tool_agent(net, prompt, model=MODEL, model_temperature=0.0, 
         ollama_url=ollama_url,
         is_debug=is_debug,
         is_output_log=is_output_log,
+        show_tool_calls=show_tool_calls,
     )
     
     if is_debug:
