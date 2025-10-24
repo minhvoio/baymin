@@ -1,6 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=all-models-benchmark
-#SBATCH --partition=gpu
+#SBATCH --job-name=net60
+#SBATCH --qos=desktopq
+#SBATCH --partition=desktop
 #SBATCH --gres=gpu:A40:1
 #SBATCH --mem=240000M
 #SBATCH --time=36:00:00

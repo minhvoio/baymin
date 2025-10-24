@@ -17,7 +17,7 @@ data_output = os.path.join(project_root, "benchmarking", "data")
 print(f"Loading nets from: {data_output}")
 net_5, net_10, net_30, net_60 = load_nets_from_parquet(os.path.join(data_output, "nets_dataset.parquet"))
 
-list_of_nets = [net_5, net_10, net_30]
+list_of_nets = [net_10, net_30]
 
 IS_DEBUG = False 
 
