@@ -345,11 +345,13 @@ def elementary_test(
     num_questions=30,
     is_output_log=False,
     test_baymin_only=False,
+    test_raw_model_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
     is_debug: bool = False,
+    output_file: str = None,
 ):
     raw_model_total_score = 0
     baymin_total_score = 0
@@ -409,6 +411,28 @@ def elementary_test(
             raw_model_score, raw_model_answer = 0, "N/A (BayMin only)"
             raw_model_runtime = None
             baymin_total_score += baymin_score
+        elif test_raw_model_only:
+            # Only run raw model test
+            start_time = time.time()
+            raw_model_score, raw_model_answer = raw_model_test(
+                prompt,
+                quiz,
+                y,
+                model=model,
+                max_tokens=max_tokens,
+                model_quiz=model_quiz,
+                is_output_log=is_output_log,
+                quiz_dict=quiz_dict,
+                model_temperature=model_temperature,
+                model_quiz_temperature=model_quiz_temperature,
+                model_top_p=model_top_p,
+                model_quiz_top_p=model_quiz_top_p,
+                is_debug=is_debug,
+            )
+            raw_model_runtime = time.time() - start_time
+            baymin_score, baymin_answer = 0, "N/A (Raw model only)"
+            baymin_runtime = None
+            raw_model_total_score += raw_model_score
         else:
             # Run both tests
             start_time = time.time()
@@ -452,7 +476,8 @@ def elementary_test(
             baymin_total_score += baymin_score
         
         # Log test result
-        output_file = 'baymin_test_log.csv' if test_baymin_only else 'test_log.csv'
+        if output_file is None:
+            output_file = 'baymin_test_log.csv' if test_baymin_only else 'test_log.csv'
         log_test_result(
             test_type='elementary_test',
             question_set_name=question_set_name,
@@ -499,11 +524,13 @@ def dependency_test(
     num_questions=30,
     is_output_log=False,
     test_baymin_only=False,
+    test_raw_model_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
     is_debug: bool = False,
+    output_file: str = None,
 ):
     return elementary_test(
         net,
@@ -515,11 +542,13 @@ def dependency_test(
         num_questions=num_questions,
         is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
+        test_raw_model_only=test_raw_model_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
         is_debug=is_debug,
+        output_file=output_file,
     )
 
 def common_cause_test(
@@ -531,11 +560,13 @@ def common_cause_test(
     num_questions=30,
     is_output_log=False,
     test_baymin_only=False,
+    test_raw_model_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
     is_debug: bool = False,
+    output_file: str = None,
 ):
     return elementary_test(
         net,
@@ -547,11 +578,13 @@ def common_cause_test(
         num_questions=num_questions,
         is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
+        test_raw_model_only=test_raw_model_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
         is_debug=is_debug,
+        output_file=output_file,
     )
 
 def common_effect_test(
@@ -563,11 +596,13 @@ def common_effect_test(
     num_questions=30,
     is_output_log=False,
     test_baymin_only=False,
+    test_raw_model_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
     is_debug: bool = False,
+    output_file: str = None,
 ):
     return elementary_test(
         net,
@@ -579,11 +614,13 @@ def common_effect_test(
         num_questions=num_questions,
         is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
+        test_raw_model_only=test_raw_model_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
         is_debug=is_debug,
+        output_file=output_file,
     )
 
 def blocked_evidence_test(
@@ -595,11 +632,13 @@ def blocked_evidence_test(
     num_questions=30,
     is_output_log=False,
     test_baymin_only=False,
+    test_raw_model_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
     is_debug: bool = False,
+    output_file: str = None,
 ):
     return elementary_test(
         net,
@@ -611,11 +650,13 @@ def blocked_evidence_test(
         num_questions=num_questions,
         is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
+        test_raw_model_only=test_raw_model_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
         is_debug=is_debug,
+        output_file=output_file,
     )
 
 def evidence_change_relationship_test(
@@ -628,11 +669,13 @@ def evidence_change_relationship_test(
     has_evidence=True,
     is_output_log=False,
     test_baymin_only=False,
+    test_raw_model_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
     is_debug: bool = False,
+    output_file: str = None,
 ):
     return elementary_test(
         net,
@@ -645,11 +688,13 @@ def evidence_change_relationship_test(
         has_evidence=has_evidence,
         is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
+        test_raw_model_only=test_raw_model_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
         is_debug=is_debug,
+        output_file=output_file,
     )
 
 def numerical_test(
@@ -664,11 +709,13 @@ def numerical_test(
     num_questions=30,
     is_output_log=False,
     test_baymin_only=False,
+    test_raw_model_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
     is_debug: bool = False,
+    output_file: str = None,
 ):
     
     raw_model_total_score = 0
@@ -729,6 +776,28 @@ def numerical_test(
             raw_model_score, raw_model_answer = 0, "N/A (BayMin only)"
             raw_model_runtime = None
             baymin_total_score += baymin_score
+        elif test_raw_model_only:
+            # Only run raw model test
+            start_time = time.time()
+            raw_model_score, raw_model_answer = raw_model_test(
+                prompt,
+                quiz,
+                y,
+                model=model,
+                max_tokens=max_tokens,
+                model_quiz=model_quiz,
+                is_output_log=is_output_log,
+                quiz_dict=quiz_dict,
+                model_temperature=model_temperature,
+                model_quiz_temperature=model_quiz_temperature,
+                model_top_p=model_top_p,
+                model_quiz_top_p=model_quiz_top_p,
+                is_debug=is_debug,
+            )
+            raw_model_runtime = time.time() - start_time
+            baymin_score, baymin_answer = 0, "N/A (Raw model only)"
+            baymin_runtime = None
+            raw_model_total_score += raw_model_score
         else:
             # Run both tests
             start_time = time.time()
@@ -772,7 +841,8 @@ def numerical_test(
             baymin_total_score += baymin_score
         
         # Log test result
-        output_file = 'baymin_test_log.csv' if test_baymin_only else 'test_log.csv'
+        if output_file is None:
+            output_file = 'baymin_test_log.csv' if test_baymin_only else 'test_log.csv'
         log_test_result(
             test_type='numerical_test',
             question_set_name=question_set_name,
@@ -819,11 +889,13 @@ def probability_test(
     has_evidence=True,
     is_output_log=False,
     test_baymin_only=False,
+    test_raw_model_only=False,
     model_temperature: float = 0.0,
     model_quiz_temperature: float = 0.7,
     model_top_p: float = 1.0,
     model_quiz_top_p: float = 0.9,
     is_debug: bool = False,
+    output_file: str = None,
 ):
     return numerical_test(
         net,
@@ -836,11 +908,13 @@ def probability_test(
         has_evidence=has_evidence,
         is_output_log=is_output_log,
         test_baymin_only=test_baymin_only,
+        test_raw_model_only=test_raw_model_only,
         model_temperature=model_temperature,
         model_quiz_temperature=model_quiz_temperature,
         model_top_p=model_top_p,
         model_quiz_top_p=model_quiz_top_p,
         is_debug=is_debug,
+        output_file=output_file,
     )
 
 def highest_impact_evidence_test(

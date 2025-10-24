@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=baymin-llama-benchmark
+#SBATCH --job-name=all-models-benchmark
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:A40:1
 #SBATCH --mem=240000M
-#SBATCH --time=18:00:00
+#SBATCH --time=36:00:00
 #SBATCH --ntasks=1
 #SBATCH --constraint=r9
 #SBATCH --output=sbatch_log/%x-%j.out
@@ -82,8 +82,7 @@ for ((cycle=1; cycle<=ITERATIONS; cycle++)); do
   done
 
   # Run benchmark (conda Python)
-  python -u /home/mvo1/lb64_scratch/projects/llm-bn/benchmarking_all_models.py | tee -a "$CYCLE_LOG"
-  python -u /home/mvo1/lb64_scratch/projects/llm-bn/benchmarking_baymin.py | tee -a "$CYCLE_LOG"
+  python -u /home/mvo1/lb64_scratch/projects/llm-bn/benchmarking_all_models_net60.py | tee -a "$CYCLE_LOG"
 
   # Stop this cycle's ollama PID
   echo "[STOP] Stopping ollama PID ${OLLAMA_PID}" | tee -a "$CYCLE_LOG"
