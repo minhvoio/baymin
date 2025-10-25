@@ -5,10 +5,35 @@ from bni_netica.bni_netica import Net
 
 
 def _dirichlet(alphas):
-    # alpha > 1: right-skewed
-    # alpha < 1: left-skewed
-    # alpha = 1: uniform
+    """
+    Generate a random sample from a Dirichlet distribution.
+    
+    The Dirichlet distribution is used to generate random probability distributions
+    that sum to 1.0, which is perfect for creating conditional probability tables (CPTs)
+    in Bayesian networks. Each node's CPT rows are generated using this function to
+    ensure they represent valid probability distributions.
+    
+    Args:
+        alphas (list): Concentration parameters for the Dirichlet distribution.
+                      Each element corresponds to one state of the node.
+                      - alpha > 1: Creates right-skewed distributions (concentrated near 1)
+                      - alpha < 1: Creates left-skewed distributions (concentrated near 0) 
+                      - alpha = 1: Creates uniform distributions (equal probabilities)
+                      - alpha = 0.5: Creates sparse distributions (some states very likely, others unlikely)
+    
+    Returns:
+        list: A probability distribution (list of floats that sum to 1.0)
+              representing the conditional probabilities for one row of a CPT.
+    
+    Example:
+        For a binary node with states ["False", "True"]:
+        - _dirichlet([1, 1]) might return [0.3, 0.7] (uniform-ish)
+        - _dirichlet([0.5, 0.5]) might return [0.9, 0.1] (sparse)
+        - _dirichlet([2, 2]) might return [0.6, 0.4] (concentrated)
+    """
+    # Generate gamma-distributed values for each state
     vals = [random.gammavariate(a, 1.0) for a in alphas]
+    # Normalize to create a valid probability distribution
     s = sum(vals) or 1.0
     return [v / s for v in vals]
 

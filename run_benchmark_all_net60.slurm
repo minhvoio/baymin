@@ -1,10 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=net60
-#SBATCH --qos=desktopq
-#SBATCH --partition=desktop
-#SBATCH --gres=gpu:A40:1
+#SBATCH --partition=gpu
+#SBATCH --gres=gpu:A100:1
 #SBATCH --mem=240000M
-#SBATCH --time=36:00:00
+#SBATCH --time=24:00:00
 #SBATCH --ntasks=1
 #SBATCH --constraint=r9
 #SBATCH --output=sbatch_log/%x-%j.out

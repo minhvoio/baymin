@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=net51030
+#SBATCH --job-name=net1030
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:A40:1
+#SBATCH --gres=gpu:A100:1
 #SBATCH --mem=240000M
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1

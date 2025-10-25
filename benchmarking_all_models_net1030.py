@@ -24,7 +24,7 @@ IS_DEBUG = False
 NUM_QUESTIONS = 30
 MAX_TOKENS = 1800
 IS_OUTPUT_LOG = True
-OUTPUT_FILE = 'raw_model_test_log.csv'  
+OUTPUT_FILE = 'raw_model_test_log_net1030.csv'  
 TEST_RAW_MODEL_ONLY = True
 
 

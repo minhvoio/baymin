@@ -204,6 +204,7 @@ def utilsTests():
 	from bni_netica.bni_netica import Net
 	from bni_netica import bni_utils
 	from bn_helpers.get_structures_print_tools import getNetCPTStrings
+	from bn_helpers.get_structures_print_tools import printNet, get_BN_node_states
 	myNet = Net(netDir+"NF_V1.dne")
 
 	print('[d-connected nodes between PesticideUse]')
@@ -211,6 +212,53 @@ def utilsTests():
 	print([n.name() for n in nodes])
 
 	print(getNetCPTStrings(myNet))
+
+	anotherNetDir = "./nets/collection/"
+	carNet = Net(anotherNetDir+"CarDiagnosis.neta")
+	print('CarDiagnosis.neta:')
+	printNet(carNet)
+	node_states = get_BN_node_states(carNet)
+	print(node_states)
+
+	carNet.retractFindings()  # clean slate
+
+	evidence = {
+			# Electrical symptoms
+			'HL': 'off',          # Headlights are off
+			'BV': 'dead',         # Battery voltage is dead
+			'BA': 'very_old',     # Battery is very old
+			'CC': 'False',        # Car does not crank
+
+			# Rule-out a fuse issue so the posterior points elsewhere
+			'MF': 'okay',         # Main fuse okay
+
+			# Starter suspected faulty in this scenario
+			'SS': 'Faulty',       # Starter system faulty
+
+			# Assume fuel/air are OK to isolate electrical & starter chain
+			'FS': 'Okay',
+			'AS': 'Okay',
+
+			# Optional extra symptoms you might want to include:
+			# 'PV': 'none',       # No voltage at plug
+			# 'SQ': 'very_bad',   # Spark quality very bad
+	}
+
+	for node_name, state_name in evidence.items():
+			carNet.node(node_name).finding(state_name)
+
+	# 3) Query P(Car does NOT start)
+	st_node = carNet.node('ST')                       # ST has states ['True','False']  (Car starts?)
+	st_beliefs = st_node.beliefs()                 # posterior over ['True','False'] in state order
+	st_states  = st_node.stateNames()              # ['True','False'] (names from the net)
+	post = dict(zip(st_states, st_beliefs))        # {'True': p, 'False': q}
+
+	print("Posterior over ST (Car starts):", post)
+	print("P(Car DOESN'T start) = P(ST='False') =", post['False'])
+
+	# If you want the joint probability of all findings too:
+	print("P(all entered findings) =", carNet.findingsProbability())
+	# print(getNetCPTStrings(anotherNet))
 
 	# print('[d-connected nodes between PesticideUse and Rainfall]')
 
