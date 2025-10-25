@@ -94,6 +94,9 @@ async def get_answer_from_ollama(prompt, model=MODEL, max_tokens=1000, temperatu
                     **({"top_p": top_p} if top_p is not None else {}),
                     **({"seed": seed} if seed is not None else {}),
                     "num_predict": max_tokens,
+                    "num_gpu": 999,
+                    "num_batch": 512,
+                    "low_vram": False,
                 }
             }
             

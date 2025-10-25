@@ -3,7 +3,7 @@
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:A100:1
 #SBATCH --mem=240000M
-#SBATCH --time=24:00:00
+#SBATCH --time=12:00:00
 #SBATCH --ntasks=1
 #SBATCH --constraint=r9
 #SBATCH --output=sbatch_log/%x-%j.out
