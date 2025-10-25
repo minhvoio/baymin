@@ -360,8 +360,12 @@ def elementary_test(
     question_set_name = create_quiz_function.__name__.replace('create_', '').replace('_quiz', '')
     network_size = len(net.nodes())
     
+    # Determine output file name
+    if output_file is None:
+        output_file = 'baymin_test_log.csv' if test_baymin_only else 'test_log.csv'
+    
     # Check for already completed questions
-    completed_questions = get_completed_questions('elementary_test', question_set_name, model, model_quiz, network_size, test_baymin_only)
+    completed_questions = get_completed_questions('elementary_test', question_set_name, model, model_quiz, network_size, test_baymin_only, test_raw_model_only, output_file)
     
     print(f"Running {question_set_name} test for Net_{network_size} with {num_questions} questions")
     if completed_questions:
@@ -476,8 +480,6 @@ def elementary_test(
             baymin_total_score += baymin_score
         
         # Log test result
-        if output_file is None:
-            output_file = 'baymin_test_log.csv' if test_baymin_only else 'test_log.csv'
         log_test_result(
             test_type='elementary_test',
             question_set_name=question_set_name,
@@ -725,8 +727,12 @@ def numerical_test(
     question_set_name = create_quiz_function.__name__.replace('create_', '').replace('_quiz', '')
     network_size = len(net.nodes())
     
+    # Determine output file name
+    if output_file is None:
+        output_file = 'baymin_test_log.csv' if test_baymin_only else 'test_log.csv'
+    
     # Check for already completed questions
-    completed_questions = get_completed_questions('numerical_test', question_set_name, model, model_quiz, network_size, test_baymin_only)
+    completed_questions = get_completed_questions('numerical_test', question_set_name, model, model_quiz, network_size, test_baymin_only, test_raw_model_only, output_file)
     
     print(f"Running {question_set_name} test for Net_{network_size} with {num_questions} questions")
     if completed_questions:
@@ -841,8 +847,6 @@ def numerical_test(
             baymin_total_score += baymin_score
         
         # Log test result
-        if output_file is None:
-            output_file = 'baymin_test_log.csv' if test_baymin_only else 'test_log.csv'
         log_test_result(
             test_type='numerical_test',
             question_set_name=question_set_name,

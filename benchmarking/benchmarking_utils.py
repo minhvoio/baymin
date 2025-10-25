@@ -402,7 +402,7 @@ def generate_fake_highest_impact_evidence_answer(structured_data, fake_evidence_
     return fake_answer
 
 
-def get_completed_questions(test_type, question_set_name, model, model_quiz, network_size, test_baymin_only=False):
+def get_completed_questions(test_type, question_set_name, model, model_quiz, network_size, test_baymin_only=False, test_raw_model_only=False, output_file=None):
     """
     Get list of already completed question indices from the CSV log.
     
@@ -413,12 +413,20 @@ def get_completed_questions(test_type, question_set_name, model, model_quiz, net
         model_quiz: Model used for taking the quiz
         network_size: Number of nodes in the network
         test_baymin_only: Whether to check baymin_test_log.csv instead of test_log.csv
+        test_raw_model_only: Whether the test is running in raw model only mode
+        output_file: Custom output file name (overrides default file selection)
         
     Returns:
         Set of completed question indices
     """
     try:
-        csv_file = 'baymin_test_log.csv' if test_baymin_only else 'test_log.csv'
+        # Determine which CSV file to read from based on test mode
+        if output_file:
+            csv_file = output_file
+        elif test_baymin_only:
+            csv_file = 'baymin_test_log.csv'
+        else:
+            csv_file = 'test_log.csv'
         completed_questions = set()
         
         with open(csv_file, 'r', encoding='utf-8') as f:
