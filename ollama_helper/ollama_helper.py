@@ -61,7 +61,7 @@ def answer_this_prompt(
                 display(Markdown(full))
         return full
 
-async def get_answer_from_ollama(prompt, model=MODEL, max_tokens=1000, temperature=0.3, stream=False, show_thinking=False, top_p=None, seed=None):
+async def get_answer_from_ollama(prompt, model=MODEL, max_tokens=1000, temperature=0.3, stream=False, show_thinking=False, top_p=None, seed=None, output_type=AnswerStructure):
     import re
     
     try:
@@ -70,7 +70,7 @@ async def get_answer_from_ollama(prompt, model=MODEL, max_tokens=1000, temperatu
             model=model,
             max_tokens=max_tokens,
             temperature=temperature,
-            output_type=AnswerStructure,
+            output_type=output_type,
             stream=stream,
             top_p=top_p,
             seed=seed,

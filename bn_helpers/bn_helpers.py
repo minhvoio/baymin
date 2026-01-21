@@ -717,14 +717,48 @@ class BnToolBox():
             return impact_data, impact_text
 
         def _format_probability_answer(X, evidence, net, new_dist_text, original_dist_text, conclusion_text, impact_text):
-            """Format the final probability answer string."""
-            cond = ", ".join(f"{k}={_state_label(net, k, v)}" for k, v in evidence.items()) or "∅"
+            """
+            Format the final probability answer string in natural language for non‑experts.
+            Example:
+                "The probability of Cancer given Smoking = Yes is 0.85 (85%)."
+            """
+            # Human‑readable description of the evidence
+            if not evidence:
+                evidence_str = "no other information"
+            else:
+                ev_parts = [
+                    f"{k} = {_state_label(net, k, v)}"
+                    for k, v in evidence.items()
+                ]
+                if len(ev_parts) == 1:
+                    evidence_str = ev_parts[0]
+                else:
+                    evidence_str = ", ".join(ev_parts[:-1]) + f" and {ev_parts[-1]}"
+
+            node = net.node(X)
+
+            # Build a short summary sentence focusing on the most likely state
+            best_idx = max(range(len(node.states())), key=lambda i: new[i])
+            best_state = node.state(best_idx).name()
+            best_prob = new[best_idx]
+
+            summary_line = (
+                f"The probability that {X} is '{best_state}' "
+                f"given {evidence_str} is {best_prob:.4f} "
+                f"({best_prob * 100:.1f}%)."
+            )
+
+            # Rephrase the detailed distributions in a slightly more friendly way
+            friendly_new_header = f"\nCurrent belief about {X}:"
+            friendly_original_header = f"\nPrevious belief about {X} (before this evidence):"
+
             answer = (
-                f"P({X} | {cond}):\n"
+                f"{summary_line}\n"
+                f"{friendly_new_header}\n"
                 f"{new_dist_text}\n"
-                f"\nOriginal distribution:\n"
+                f"{friendly_original_header}\n"
                 f"{original_dist_text}\n"
-                f"\nConclusion:\n"
+                f"\nHow things changed:\n"
                 f"{conclusion_text}"
                 f"{impact_text}"
             )
@@ -904,3 +938,16 @@ class BnToolBox():
             answer += f" Sequence: {steps}."
         
         return answer, raw_template
+
+    def get_children_of_node(self, net, node):
+        return names(net.node(node).children())
+
+    def check_if_evidences_children_of_node(self, net, node, list_of_nodes: List[str]):
+        self._validate_nodes_exist(net, node)
+        children = self.get_children_of_node(net, node)
+
+        ans = []
+        for ev in list_of_nodes:
+            if ev in children:
+                ans.append(ev)
+        return ans

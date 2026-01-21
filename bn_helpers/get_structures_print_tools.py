@@ -44,6 +44,9 @@ def printNet(net):
     for node in net.nodes():
         print(f"{node.name()} -> {[child.name() for child in node.children()]}")
 
+def get_BN_node_names(net):
+    return [node.name() for node in net.nodes()]
+
 def get_BN_structure(net):
     structure = ""
     for node in net.nodes():

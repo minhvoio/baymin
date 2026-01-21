@@ -83,6 +83,7 @@ def chat_with_tools(
     net: Net,
     prompt: str,
     model: str = MODEL,    
+    tools_map: dict = None,
     model_temperature: float = 0.0,
     max_tokens: int = 500,
     model_top_p: float = 1.0,
@@ -93,7 +94,7 @@ def chat_with_tools(
     is_output_log: bool = False,    
     show_tool_calls: bool = False,
 ):
-    fns = get_tools_map(net)
+    fns = tools_map if tools_map else get_tools_map(net)
     bn_str = get_BN_node_states(net)
     tools = [function_to_tool_schema(fn, name=name) for name, fn in fns.items()]
     
@@ -116,7 +117,8 @@ def chat_with_tools(
 
     # system_prompt = """
     # You are a tool-using Bayesian Network assistant. Your task is to call tools when needed and return their results in clear, readable language.
-
+# "3) After receiving tool results, return it as-is.\n"
+# "5) Read the query carefully, think step by step, getting the correct tools.\n"
     # Rules:
     # 1) Always use a tool if it can plausibly answer the query. Don’t compute or act manually.
     # 2) After getting tool results, rewrite them into a human-readable summary, not raw JSON.
@@ -128,17 +130,17 @@ def chat_with_tools(
 
     # Goal: Produce a polished, complete, human-readable report faithfully reflecting tool outputs.
     # """
+
     system_prompt = (
         "You are a tool-calling grammar-checking assistant.\n"
         "Rules:\n"
         "1) Do NOT perform calculations or external actions yourself.\n"
         "2) Read the query carefully then ALWAYS quickly call the most related tool.\n"
-        # "3) After receiving tool results, return it as-is.\n"
         "3) After receiving tool results, if the return value is grammatically correct, return it exactly as the tool output; \n"
         "   otherwise fix only the grammar and return the grammar-corrected output.\n"
         "4) Do NOT verify factual correctness of the tool outputs — only grammar.\n"
         "5) Do NOT miss any information from the tool output. Any information from the tool output should be included in the final answer.\n"
-        # "5) Read the query carefully, think step by step, getting the correct tools.\n"
+        
     )
 
     # Give the model the “catalog” of node/state names to extract from
@@ -584,17 +586,31 @@ def get_highest_impact_evidence_contribute_to_node_given_background_evidence_too
             return {"get_highest_impact_evidence_contribute_to_node_given_background_evidence": None, "error": f"{type(e).__name__}: {e}"}
     return get_highest_impact_evidence_contribute_to_node_given_background_evidence
 
+def check_if_evidences_children_of_node_tool(net):
+    def check_if_evidences_children_of_node(node: str, list_of_nodes: List[str]):
+        """Check if the evidences are children of the node.
+        KEYWORDS: children, children of, children of the node, children of the node, children of the node
+        """
+        try:
+            bn_tool_box = BnToolBox()
+            ans = bn_tool_box.check_if_evidences_children_of_node(net, node, list_of_nodes)
+            return ans
+        except Exception as e:
+            return {"check_if_evidences_children_of_node": None, "error": f"{type(e).__name__}: {e}"}
+    return check_if_evidences_children_of_node
+
 def get_tools_map(net):
     return {
-        "check_d_connected": make_explain_d_connected_tool(net),
-        "check_common_cause": make_explain_common_cause_tool(net),
-        "check_common_effect": make_explain_common_effect_tool(net),
-        "get_prob_node": get_prob_node_tool(net),
-        "get_prob_node_given_any_evidence": get_prob_node_given_any_evidence_tool(net),
-        "get_highest_impact_evidence_contribute_to_node": get_highest_impact_evidence_contribute_to_node_tool(net),
-        "get_highest_impact_evidence_contribute_to_node_given_evidence_knowledge": get_highest_impact_evidence_contribute_to_node_given_background_evidence_tool(net),
-        "check_evidences_change_relationship_between_two_nodes": check_evidences_change_relationship_between_two_nodes_tool(net),
-        "get_evidences_block_two_nodes": get_evidences_block_two_nodes_tool(net),
+        # "check_d_connected": make_explain_d_connected_tool(net),
+        # "check_common_cause": make_explain_common_cause_tool(net),
+        # "check_common_effect": make_explain_common_effect_tool(net),
+        # "get_prob_node": get_prob_node_tool(net),
+        # "get_prob_node_given_any_evidence": get_prob_node_given_any_evidence_tool(net),
+        # "get_highest_impact_evidence_contribute_to_node": get_highest_impact_evidence_contribute_to_node_tool(net),
+        # "get_highest_impact_evidence_contribute_to_node_given_evidence_knowledge": get_highest_impact_evidence_contribute_to_node_given_background_evidence_tool(net),
+        # "check_evidences_change_relationship_between_two_nodes": check_evidences_change_relationship_between_two_nodes_tool(net),
+        # "get_evidences_block_two_nodes": get_evidences_block_two_nodes_tool(net),
+        "check_if_evidences_children_of_node": check_if_evidences_children_of_node_tool(net),
     }
 
 def extract_text(answer: str) -> str:
