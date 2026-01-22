@@ -601,15 +601,15 @@ def check_if_evidences_children_of_node_tool(net):
 
 def get_tools_map(net):
     return {
-        # "check_d_connected": make_explain_d_connected_tool(net),
-        # "check_common_cause": make_explain_common_cause_tool(net),
-        # "check_common_effect": make_explain_common_effect_tool(net),
-        # "get_prob_node": get_prob_node_tool(net),
-        # "get_prob_node_given_any_evidence": get_prob_node_given_any_evidence_tool(net),
-        # "get_highest_impact_evidence_contribute_to_node": get_highest_impact_evidence_contribute_to_node_tool(net),
-        # "get_highest_impact_evidence_contribute_to_node_given_evidence_knowledge": get_highest_impact_evidence_contribute_to_node_given_background_evidence_tool(net),
-        # "check_evidences_change_relationship_between_two_nodes": check_evidences_change_relationship_between_two_nodes_tool(net),
-        # "get_evidences_block_two_nodes": get_evidences_block_two_nodes_tool(net),
+        "check_d_connected": make_explain_d_connected_tool(net),
+        "check_common_cause": make_explain_common_cause_tool(net),
+        "check_common_effect": make_explain_common_effect_tool(net),
+        "get_prob_node": get_prob_node_tool(net),
+        "get_prob_node_given_any_evidence": get_prob_node_given_any_evidence_tool(net),
+        "get_highest_impact_evidence_contribute_to_node": get_highest_impact_evidence_contribute_to_node_tool(net),
+        "get_highest_impact_evidence_contribute_to_node_given_evidence_knowledge": get_highest_impact_evidence_contribute_to_node_given_background_evidence_tool(net),
+        "check_evidences_change_relationship_between_two_nodes": check_evidences_change_relationship_between_two_nodes_tool(net),
+        "get_evidences_block_two_nodes": get_evidences_block_two_nodes_tool(net),
         "check_if_evidences_children_of_node": check_if_evidences_children_of_node_tool(net),
     }
 
