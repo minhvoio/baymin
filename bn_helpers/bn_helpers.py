@@ -3,7 +3,7 @@ from bni_netica.bni_utils import findAllDConnectedNodes
 from bn_helpers.utils import (output_distribution, ensure_keys, logical_or, \
     logical_and, logical_xor, logical_xnor, fit_noisy_or, fit_noisy_and, fit_additive, _rmse, temporarily_set_findings, \
         names, resolve_state_index, state_names_by_indices, find_minimal_blockers, reduce_to_minimal_blocking_set, \
-            is_independent_given, get_path, _state_label)
+            is_independent_given, get_path, _state_label, _format_evidence_list, _format_impact_level)
 import json
 import re
 from itertools import product
@@ -308,13 +308,26 @@ class BnToolBox():
     # PROBABILITIES
     def get_prob_X(self, net, X=None):
         """
-        Returns string output of prob_X
+        Returns string output of prob_X in natural language format.
         """
         node_X = net.node(X)
         beliefs = node_X.beliefs()
-        output = f"P({X}):\n"
+
+        # Find most likely state
+        best_idx = max(range(len(beliefs)), key=lambda i: beliefs[i])
+        best_state = node_X.state(best_idx).name()
+        best_prob = beliefs[best_idx]
+
+        # Build natural language output
+        output = f"The probability distribution of {X} (with no evidence):\n\n"
+        output += f"The most likely state is '{best_state}' with probability {best_prob:.4f} ({best_prob * 100:.1f}%).\n"
+
+        # Full distribution with percentages
+        output += "\nFull distribution:\n"
         for i, p in enumerate(beliefs):
-            output += f"  P({X}={node_X.state(i).name()}) = {p:.4f}\n"
+            state_name = node_X.state(i).name()
+            output += f"  P({X}={state_name}) = {p:.4f} ({p * 100:.1f}%)\n"
+
         return output, net
 
     def prob_X_given(self, net, X, evidence=None):
@@ -392,20 +405,33 @@ class BnToolBox():
         original, new, net_after, _ = self.prob_X_given(net, X, evidence)
         node = net_after.node(X)
 
-        cond = ", ".join(f"{k}={_state_label(net, k, v)}" for k, v in evidence.items()) or "∅"
-        out = f"P({X} | {cond}):\n"
+        # Natural language evidence description
+        evidence_str = _format_evidence_list(net, evidence)
 
-        # Updated vs Original distributions
+        # Find most likely state
+        best_idx = max(range(len(node.states())), key=lambda i: new[i])
+        best_state = node.state(best_idx).name()
+        best_prob = new[best_idx]
+
+        # Build natural language output
+        out = f"Which evidence most influences {X}?\n\n"
+        out += f"Given {evidence_str}, the most likely outcome for {X} is '{best_state}' "
+        out += f"with probability {best_prob:.4f} ({best_prob * 100:.1f}%).\n"
+
+        # Current belief
+        out += f"\nCurrent belief about {X}:\n"
         for i, p in enumerate(new):
-            out += f"  P({node.name()}={node.state(i).name()}) = {p:.4f}\n"
-        out += "\nOriginal distribution:\n"
+            out += f"  P({node.name()}={node.state(i).name()}) = {p:.4f} ({p * 100:.1f}%)\n"
+
+        # Previous belief
+        out += f"\nPrevious belief about {X} (before any evidence):\n"
         for i, p in enumerate(original):
-            out += f"  P({node.name()}={node.state(i).name()}) = {p:.4f}\n"
+            out += f"  P({node.name()}={node.state(i).name()}) = {p:.4f} ({p * 100:.1f}%)\n"
 
         # Overall conclusion (same style as get_prob_X_given)
         diffs = [n - o for n, o in zip(new, original)]
         max_change = max((abs(d) for d in diffs), default=0.0)
-        out += "\nConclusion:\n"
+        out += "\nHow things changed:\n"
         if max_change <= tol:
             out += "  No change detected — the updated beliefs are identical to the original.\n"
         else:
@@ -414,7 +440,7 @@ class BnToolBox():
                     sname = node.state(i).name()
                     out += f"  Belief in '{sname}' {'increased' if d > 0 else 'decreased'} by {abs(d):.4f}\n"
             if max_change <= threshold:
-                out += "  Overall, the update is minimal (all changes ≤ threshold).\n"
+                out += "  Overall, the update is minimal (all changes are small).\n"
             else:
                 out += f"  Largest overall per-state shift: {max_change:.4f}.\n"
 
@@ -455,16 +481,20 @@ class BnToolBox():
 
         ranked = sorted(impacts.items(), key=lambda kv: kv[1]["score"], reverse=True)
 
-        out += "\nEvidence impact (sequential add/remove):\n"
-        for ev, d in ranked:
-            add_l1 = d["add"]["l1"] if "add" in d else 0.0
-            rem_l1 = d["remove"]["l1"] if "remove" in d else 0.0
-            add_max = d["add"]["max_abs"] if "add" in d else 0.0
-            rem_max = d["remove"]["max_abs"] if "remove" in d else 0.0
-            out += (f"  - {ev}: "
-                    f"ADD  L1={add_l1:.4f}, max_abs={add_max:.4f} | "
-                    f"REMOVE L1={rem_l1:.4f}, max_abs={rem_max:.4f} | "
-                    f"score={d['score']:.4f}\n")
+        # Natural language evidence impact analysis
+        out += "\nEvidence impact analysis:\n"
+        for rank, (ev, d) in enumerate(ranked, 1):
+            add_max = d.get("add", {}).get("max_abs", 0)
+            remove_max = d.get("remove", {}).get("max_abs", 0)
+            impact_level = _format_impact_level(add_max)
+
+            if rank == 1:
+                out += f"  {rank}. {ev} has the HIGHEST impact\n"
+            else:
+                out += f"  {rank}. {ev} has a smaller impact\n"
+
+            out += f"     - Adding {ev} shifts beliefs by {add_max:.4f} ({impact_level} effect)\n"
+            out += f"     - Removing {ev} would shift beliefs by {remove_max:.4f}\n"
 
         # Prepare structured data for fake answer generation
         structured_data = {
@@ -487,11 +517,14 @@ class BnToolBox():
 
         if ranked:
             top_ev, top_stats = ranked[0]
-            # optional dominance callout similar to earlier
-            if len(ranked) == 1 or ranked[0][1]["score"] > 1.5 * ranked[1][1]["score"]:
-                out += f"  => Highest-impact evidence: {top_ev}.\n"
+            # Natural language conclusion
+            if len(ranked) == 1:
+                out += f"\nConclusion: {top_ev} has the strongest influence on {X}.\n"
+            elif ranked[0][1]["score"] > 1.5 * ranked[1][1]["score"]:
+                out += f"\nConclusion: {top_ev} has the strongest influence on {X} among the given evidence.\n"
             else:
-                out += f"  => Highest-impact evidence (tie-close): {top_ev}.\n"
+                second_ev = ranked[1][0]
+                out += f"\nConclusion: {top_ev} has the strongest influence on {X}, though {second_ev} has a similar level of impact.\n"
 
         return out, net_after, structured_data
 

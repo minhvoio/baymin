@@ -506,3 +506,67 @@ def grammar_plural(items):
     is_or_are = "are" if is_plural else "is"
     final_s = "s" if is_plural else ""
     return nums_items, is_or_are, final_s
+
+def _format_evidence_list(net, evidence: dict) -> str:
+    """
+    Convert evidence dict to natural language string.
+
+    Examples:
+        {} -> "no evidence"
+        {"Smoking": 0} -> "Smoking = Yes"
+        {"Smoking": 0, "Diet": 1} -> "Smoking = Yes and Diet = Healthy"
+        {"A": 0, "B": 1, "C": 2} -> "A = state0, B = state1, and C = state2"
+    """
+    if not evidence:
+        return "no evidence"
+
+    ev_parts = [f"{k} = {_state_label(net, k, v)}" for k, v in evidence.items()]
+
+    if len(ev_parts) == 1:
+        return ev_parts[0]
+    elif len(ev_parts) == 2:
+        return f"{ev_parts[0]} and {ev_parts[1]}"
+    else:
+        return ", ".join(ev_parts[:-1]) + f", and {ev_parts[-1]}"
+
+def _format_node_list(nodes: list) -> str:
+    """
+    Convert list of node names to natural language string.
+
+    Examples:
+        [] -> "none"
+        ["A"] -> "A"
+        ["A", "B"] -> "A and B"
+        ["A", "B", "C"] -> "A, B, and C"
+    """
+    if not nodes:
+        return "none"
+
+    if len(nodes) == 1:
+        return nodes[0]
+    elif len(nodes) == 2:
+        return f"{nodes[0]} and {nodes[1]}"
+    else:
+        return ", ".join(nodes[:-1]) + f", and {nodes[-1]}"
+
+def _format_impact_level(score: float) -> str:
+    """
+    Convert numeric impact score to qualitative description.
+
+    Examples:
+        0.001 -> "negligible"
+        0.05 -> "small"
+        0.15 -> "moderate"
+        0.30 -> "significant"
+        0.50 -> "very strong"
+    """
+    if score < 0.01:
+        return "negligible"
+    elif score < 0.10:
+        return "small"
+    elif score < 0.25:
+        return "moderate"
+    elif score < 0.40:
+        return "significant"
+    else:
+        return "very strong"

@@ -2,7 +2,7 @@ from tempfile import template
 import requests, json
 from bn_helpers.get_structures_print_tools import get_BN_node_states
 from bn_helpers.bn_helpers import BnToolBox
-from bn_helpers.utils import temporarily_set_findings, grammar_plural
+from bn_helpers.utils import temporarily_set_findings, grammar_plural, _format_node_list
 from bni_netica.bni_netica import Net
 from bn_helpers.constants import MODEL, OLLAMA_CHAT_URL
 from typing import List, Tuple, Dict, Any
@@ -593,8 +593,16 @@ def check_if_evidences_children_of_node_tool(net):
         """
         try:
             bn_tool_box = BnToolBox()
-            ans = bn_tool_box.check_if_evidences_children_of_node(net, node, list_of_nodes)
-            return ans
+            matching = bn_tool_box.check_if_evidences_children_of_node(net, node, list_of_nodes)
+
+            # Format as natural language
+            if matching:
+                _, is_or_are, _ = grammar_plural(matching)
+                matching_str = _format_node_list(matching)
+                return f"{matching_str} {is_or_are} children of {node}."
+            else:
+                checked_str = _format_node_list(list_of_nodes)
+                return f"None of the specified nodes ({checked_str}) are children of {node}."
         except Exception as e:
             return {"check_if_evidences_children_of_node": None, "error": f"{type(e).__name__}: {e}"}
     return check_if_evidences_children_of_node
