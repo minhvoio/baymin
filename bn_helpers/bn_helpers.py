@@ -753,7 +753,7 @@ class BnToolBox():
             """
             Format the final probability answer string in natural language for non‑experts.
             Example:
-                "The probability of Cancer given Smoking = Yes is 0.85 (85%)."
+                "The probability that Dyspnea is absent given no other information is 0.5640 (56.4%)."
             """
             # Human‑readable description of the evidence
             if not evidence:
@@ -770,7 +770,7 @@ class BnToolBox():
 
             node = net.node(X)
 
-            # Build a short summary sentence focusing on the most likely state
+            # Build a short summary sentence focusing on the most likely state (only output)
             best_idx = max(range(len(node.states())), key=lambda i: new[i])
             best_state = node.state(best_idx).name()
             best_prob = new[best_idx]
@@ -781,21 +781,7 @@ class BnToolBox():
                 f"({best_prob * 100:.1f}%)."
             )
 
-            # Rephrase the detailed distributions in a slightly more friendly way
-            friendly_new_header = f"\nCurrent belief about {X}:"
-            friendly_original_header = f"\nPrevious belief about {X} (before this evidence):"
-
-            answer = (
-                f"{summary_line}\n"
-                f"{friendly_new_header}\n"
-                f"{new_dist_text}\n"
-                f"{friendly_original_header}\n"
-                f"{original_dist_text}\n"
-                f"\nHow things changed:\n"
-                f"{conclusion_text}"
-                f"{impact_text}"
-            )
-            return answer
+            return summary_line
 
         if evidence is None:
             evidence = {}
