@@ -1,58 +1,17 @@
-"""
-Persistence layer for conversation state.
-
-This module provides optional persistence support for saving and
-loading conversation states. Currently supports SQLite for simple
-local storage, but the design allows easy extension to other backends.
-"""
-
 from typing import Optional, Dict, Any, List
 from datetime import datetime
 from pathlib import Path
-import json
-import sqlite3
+import json, sqlite3
 
 
 class SQLitePersistence:
-    """
-    SQLite-based persistence for conversation state.
-
-    Stores conversation states in a local SQLite database, enabling
-    conversation resumption across sessions.
-
-    Example:
-        ```python
-        from bn_helpers.langgraph import ConversationManager
-        from bn_helpers.langgraph.persistence import SQLitePersistence
-
-        # Setup persistence
-        db = SQLitePersistence("conversations.db")
-
-        # Create and use conversation
-        conv = ConversationManager(net)
-        answer = conv.ask("Is A connected to B?")
-
-        # Save for later
-        db.save(conv.conversation_id, conv.save_state(), "ChestClinic")
-
-        # Later, restore
-        saved = db.load(conv.conversation_id)
-        conv.load_state(saved)
-        ```
-    """
+    """SQLite-based persistence for conversation state."""
 
     def __init__(self, db_path: str = "bn_conversations.db"):
-        """
-        Initialize SQLite persistence.
-
-        Args:
-            db_path: Path to SQLite database file
-        """
         self.db_path = db_path
         self._init_db()
 
     def _init_db(self) -> None:
-        """Create tables if they don't exist."""
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS conversations (
@@ -74,14 +33,6 @@ class SQLitePersistence:
         state: Dict[str, Any],
         network_name: str
     ) -> None:
-        """
-        Save conversation state to database.
-
-        Args:
-            conversation_id: Unique conversation identifier
-            state: State dict from ConversationManager.save_state()
-            network_name: Name of the BN (for filtering)
-        """
         created_at = state.get("metadata", {}).get(
             "created_at",
             datetime.now().isoformat()
@@ -102,15 +53,6 @@ class SQLitePersistence:
             ))
 
     def load(self, conversation_id: str) -> Optional[Dict[str, Any]]:
-        """
-        Load conversation state from database.
-
-        Args:
-            conversation_id: Unique conversation identifier
-
-        Returns:
-            State dict if found, None otherwise
-        """
         with sqlite3.connect(self.db_path) as conn:
             row = conn.execute(
                 "SELECT state_json FROM conversations WHERE id = ?",
@@ -123,15 +65,6 @@ class SQLitePersistence:
         return None
 
     def delete(self, conversation_id: str) -> bool:
-        """
-        Delete a conversation from database.
-
-        Args:
-            conversation_id: Unique conversation identifier
-
-        Returns:
-            True if deleted, False if not found
-        """
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
                 "DELETE FROM conversations WHERE id = ?",
@@ -144,16 +77,6 @@ class SQLitePersistence:
         network_name: Optional[str] = None,
         limit: int = 100
     ) -> List[Dict[str, Any]]:
-        """
-        List saved conversations.
-
-        Args:
-            network_name: Filter by network name (optional)
-            limit: Maximum number of results
-
-        Returns:
-            List of conversation metadata dicts
-        """
         with sqlite3.connect(self.db_path) as conn:
             if network_name:
                 rows = conn.execute("""
@@ -182,15 +105,6 @@ class SQLitePersistence:
             ]
 
     def get_conversation_summary(self, conversation_id: str) -> Optional[Dict[str, Any]]:
-        """
-        Get a summary of a conversation without loading full state.
-
-        Args:
-            conversation_id: Unique conversation identifier
-
-        Returns:
-            Summary dict or None if not found
-        """
         state = self.load(conversation_id)
         if not state:
             return None
@@ -198,7 +112,6 @@ class SQLitePersistence:
         metadata = state.get("metadata", {})
         messages = state.get("messages", [])
 
-        # Extract user questions
         questions = [
             m.get("content", "")[:100]
             for m in messages
@@ -218,15 +131,9 @@ class SQLitePersistence:
 
 
 class InMemoryPersistence:
-    """
-    In-memory persistence for testing and ephemeral usage.
-
-    Stores conversations in a dict - useful for testing or when
-    persistence isn't needed beyond the current session.
-    """
+    """In-memory persistence for testing and ephemeral usage."""
 
     def __init__(self):
-        """Initialize empty storage."""
         self._storage: Dict[str, Dict[str, Any]] = {}
         self._metadata: Dict[str, Dict[str, str]] = {}
 
@@ -236,7 +143,6 @@ class InMemoryPersistence:
         state: Dict[str, Any],
         network_name: str
     ) -> None:
-        """Save state to memory."""
         self._storage[conversation_id] = state
         self._metadata[conversation_id] = {
             "network_name": network_name,
@@ -248,11 +154,9 @@ class InMemoryPersistence:
         }
 
     def load(self, conversation_id: str) -> Optional[Dict[str, Any]]:
-        """Load state from memory."""
         return self._storage.get(conversation_id)
 
     def delete(self, conversation_id: str) -> bool:
-        """Delete from memory."""
         if conversation_id in self._storage:
             del self._storage[conversation_id]
             del self._metadata[conversation_id]
@@ -264,7 +168,6 @@ class InMemoryPersistence:
         network_name: Optional[str] = None,
         limit: int = 100
     ) -> List[Dict[str, Any]]:
-        """List stored conversations."""
         results = []
         for conv_id, meta in self._metadata.items():
             if network_name and meta.get("network_name") != network_name:
@@ -276,11 +179,9 @@ class InMemoryPersistence:
                 "updated_at": meta.get("updated_at"),
             })
 
-        # Sort by updated_at descending
         results.sort(key=lambda x: x.get("updated_at", ""), reverse=True)
         return results[:limit]
 
     def clear(self) -> None:
-        """Clear all stored conversations."""
         self._storage.clear()
         self._metadata.clear()

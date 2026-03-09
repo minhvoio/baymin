@@ -1,62 +1,39 @@
-"""
-LangChain tool wrappers for existing BN tool functions.
-
-This module wraps the existing tool factory functions from bn_helpers.tool_agent
-as LangChain StructuredTool objects for use with LangGraph and ChatOllama.
-"""
-
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel, Field
 from langchain_core.tools import StructuredTool
 
 
-# ============================================================================
-# Input Schemas for each tool (Pydantic models for validation)
-# ============================================================================
-
+# INPUT SCHEMAS
 class DConnectedInput(BaseModel):
-    """Input schema for check_d_connected tool."""
     from_node: str = Field(description="Source node name")
     to_node: str = Field(description="Target node name")
 
-
 class CommonCauseInput(BaseModel):
-    """Input schema for check_common_cause tool."""
     node1: str = Field(description="First node name")
     node2: str = Field(description="Second node name")
-
 
 class CommonEffectInput(BaseModel):
-    """Input schema for check_common_effect tool."""
     node1: str = Field(description="First node name")
     node2: str = Field(description="Second node name")
 
-
 class ProbNodeInput(BaseModel):
-    """Input schema for get_prob_node tool."""
     node: str = Field(description="Node name to query probability")
 
-
 class ProbNodeGivenEvidenceInput(BaseModel):
-    """Input schema for get_prob_node_given_any_evidence tool."""
     node: str = Field(description="Target node to query probability")
     evidence: Optional[Dict[str, Any]] = Field(
         default=None,
         description="Evidence dict like {'Smoking': 'smoker', 'Age': 'young'}"
     )
 
-
 class HighestImpactInput(BaseModel):
-    """Input schema for get_highest_impact_evidence_contribute_to_node tool."""
     node: str = Field(description="Target node")
     evidence: Optional[Dict[str, Any]] = Field(
         default=None,
         description="Evidence dict to compare impacts"
     )
 
-
 class HighestImpactWithBackgroundInput(BaseModel):
-    """Input schema for get_highest_impact_evidence_with_background tool."""
     node: str = Field(description="Target node")
     new_evidence: Optional[Dict[str, Any]] = Field(
         default=None,
@@ -67,44 +44,23 @@ class HighestImpactWithBackgroundInput(BaseModel):
         description="Existing/background evidence already observed"
     )
 
-
 class EvidenceChangeRelationshipInput(BaseModel):
-    """Input schema for check_evidences_change_relationship tool."""
     node1: str = Field(description="First node")
     node2: str = Field(description="Second node")
     evidence: List[str] = Field(description="List of evidence node names")
 
-
 class EvidencesBlockInput(BaseModel):
-    """Input schema for get_evidences_block tool."""
     node1: str = Field(description="First node")
     node2: str = Field(description="Second node")
 
-
 class ChildrenCheckInput(BaseModel):
-    """Input schema for check_if_evidences_children_of_node tool."""
     node: str = Field(description="Parent node to check")
     list_of_nodes: List[str] = Field(description="Nodes to check if they are children")
 
 
-# ============================================================================
-# Tool Factory
-# ============================================================================
-
+# TOOL FACTORY
 def create_langchain_tools(net) -> List[StructuredTool]:
-    """
-    Create LangChain StructuredTool objects from existing BN tool functions.
-
-    This wraps the existing tool factory functions from bn_helpers.tool_agent,
-    preserving their exact behavior while making them compatible with LangChain's
-    tool binding and LangGraph.
-
-    Args:
-        net: Netica BN network instance
-
-    Returns:
-        List of StructuredTool objects ready for use with ChatOllama.bind_tools()
-    """
+    """Create LangChain StructuredTool objects from existing BN tool functions."""
     from bn_helpers.tool_agent import (
         make_explain_d_connected_tool,
         make_explain_common_cause_tool,
@@ -118,7 +74,6 @@ def create_langchain_tools(net) -> List[StructuredTool]:
         check_if_evidences_children_of_node_tool,
     )
 
-    # Get the bound tool functions
     bound_fns = {
         "check_d_connected": make_explain_d_connected_tool(net),
         "check_common_cause": make_explain_common_cause_tool(net),
@@ -232,13 +187,5 @@ def create_langchain_tools(net) -> List[StructuredTool]:
 
 
 def get_tools_by_name(tools: List[StructuredTool]) -> Dict[str, StructuredTool]:
-    """
-    Create a name -> tool mapping for quick lookup.
-
-    Args:
-        tools: List of StructuredTool objects
-
-    Returns:
-        Dict mapping tool names to tool objects
-    """
+    """Create a name -> tool mapping for quick lookup."""
     return {tool.name: tool for tool in tools}

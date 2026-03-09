@@ -1,54 +1,21 @@
-"""
-Graph node functions for LangGraph-based BN conversation.
-
-This module implements the node functions that make up the conversation graph:
-- route_input: Prepare state and add system context
-- call_model: Invoke LLM with bound tools
-- execute_tools: Run requested tools with caching
-- synthesize_answer: Format final response
-"""
-
 from typing import Dict, Any, List
 from datetime import datetime
-import json
-import hashlib
+import json, hashlib
 
 from langchain_core.messages import (
-    HumanMessage,
-    AIMessage,
-    ToolMessage,
-    SystemMessage,
-    BaseMessage,
+    HumanMessage, AIMessage, ToolMessage, SystemMessage, BaseMessage,
 )
 
 from .state import ConversationState
 
 
 def make_cache_key(tool_name: str, args: Dict[str, Any]) -> str:
-    """
-    Create a stable hash key for tool call deduplication and caching.
-
-    Args:
-        tool_name: Name of the tool
-        args: Tool arguments dict
-
-    Returns:
-        MD5 hash string as cache key
-    """
+    """Stable hash key for tool call dedup and caching."""
     key_data = json.dumps({"tool": tool_name, "args": args}, sort_keys=True)
     return hashlib.md5(key_data.encode()).hexdigest()
 
 
 def build_system_prompt(state: ConversationState) -> str:
-    """
-    Build the system prompt with network context.
-
-    Args:
-        state: Current conversation state
-
-    Returns:
-        System prompt string
-    """
     net_info = state.get("network_info", {})
     node_states = net_info.get("node_states", "")
 
@@ -71,27 +38,13 @@ If a query mentions multiple nodes, check for abbreviations first (e.g., 'Tuberc
 
 
 def route_input(state: ConversationState) -> ConversationState:
-    """
-    Prepare state for processing a new user input.
-
-    This node:
-    - Adds system prompt with network context if not present
-    - Initializes control flow flags
-
-    Args:
-        state: Current conversation state
-
-    Returns:
-        Updated state ready for model invocation
-    """
+    """Prepare state for processing a new user input."""
     messages = state.get("messages", [])
 
-    # Add system message if not present
     has_system = any(isinstance(m, SystemMessage) for m in messages)
     if not has_system:
         system_prompt = build_system_prompt(state)
         system_msg = SystemMessage(content=system_prompt)
-        # Prepend system message
         state["messages"] = [system_msg] + list(messages)
 
     # Reset control flow for new turn
@@ -104,34 +57,18 @@ def route_input(state: ConversationState) -> ConversationState:
 
 
 def call_model(state: ConversationState) -> ConversationState:
-    """
-    Invoke the LLM with bound tools.
-
-    This node:
-    - Creates ChatOllama instance with configured model
-    - Binds tools to the model
-    - Invokes model with current messages
-    - Extracts any tool calls from response
-
-    Args:
-        state: Current conversation state
-
-    Returns:
-        Updated state with model response and tool calls
-    """
+    """Invoke LLM with bound tools."""
     from langchain_ollama import ChatOllama
 
     metadata = state.get("metadata", {})
     model_name = metadata.get("model", "gpt-oss:latest")
     temperature = metadata.get("temperature", 0.0)
 
-    # Create model instance
     llm = ChatOllama(
         model=model_name,
         temperature=temperature,
     )
 
-    # Get tools from metadata (injected by ConversationManager)
     tools = metadata.get("_tools", [])
 
     if tools:
@@ -139,7 +76,6 @@ def call_model(state: ConversationState) -> ConversationState:
     else:
         llm_with_tools = llm
 
-    # Invoke model
     try:
         response = llm_with_tools.invoke(state["messages"])
     except Exception as e:
@@ -147,10 +83,8 @@ def call_model(state: ConversationState) -> ConversationState:
         state["should_continue"] = False
         return state
 
-    # Append response to messages
     state["messages"] = state.get("messages", []) + [response]
 
-    # Check for tool calls
     if hasattr(response, "tool_calls") and response.tool_calls:
         state["current_tool_calls"] = response.tool_calls
         state["should_continue"] = True
@@ -162,22 +96,7 @@ def call_model(state: ConversationState) -> ConversationState:
 
 
 def execute_tools(state: ConversationState) -> ConversationState:
-    """
-    Execute requested tools with caching.
-
-    This node:
-    - Iterates through current tool calls
-    - Checks cache before executing
-    - Executes tools and caches results
-    - Extracts artifacts from results
-    - Creates ToolMessage responses
-
-    Args:
-        state: Current conversation state
-
-    Returns:
-        Updated state with tool results appended to messages
-    """
+    """Execute requested tools with caching."""
     from .tools import get_tools_by_name
 
     tool_calls = state.get("current_tool_calls", [])
@@ -190,23 +109,20 @@ def execute_tools(state: ConversationState) -> ConversationState:
         cache = {}
         state["tool_results_cache"] = cache
 
-    tool_messages: List[ToolMessage] = []
+    tool_msgs: List[ToolMessage] = []
 
     for call in tool_calls:
         tool_name = call.get("name", "")
         args = call.get("args", {})
         call_id = call.get("id", "")
 
-        # Check cache
         cache_key = make_cache_key(tool_name, args)
 
         if cache_key in cache:
-            # Return cached result
             cached = cache[cache_key]
             cached["call_count"] = cached.get("call_count", 0) + 1
             result = cached["result"]
         else:
-            # Execute tool
             tool = tools_map.get(tool_name)
             if tool:
                 try:
@@ -216,14 +132,12 @@ def execute_tools(state: ConversationState) -> ConversationState:
             else:
                 result = {"error": "ToolNotFound", "detail": f"Tool '{tool_name}' not registered"}
 
-            # Cache result
             cache[cache_key] = {
                 "result": result,
                 "timestamp": datetime.now().isoformat(),
                 "call_count": 1,
             }
 
-        # Create ToolMessage
         if isinstance(result, str):
             content = result
         else:
@@ -232,18 +146,16 @@ def execute_tools(state: ConversationState) -> ConversationState:
             except (TypeError, ValueError):
                 content = str(result)
 
-        tool_messages.append(ToolMessage(
+        tool_msgs.append(ToolMessage(
             content=content,
             tool_call_id=call_id,
             name=tool_name,
         ))
 
-        # Extract artifacts from result
         _extract_artifacts(state, tool_name, args, result)
 
-    # Append tool messages
-    state["messages"] = state.get("messages", []) + tool_messages
-    state["pending_tool_results"] = tool_messages
+    state["messages"] = state.get("messages", []) + tool_msgs
+    state["pending_tool_results"] = tool_msgs
     state["current_tool_calls"] = []
 
     # Continue to call model with results
@@ -253,25 +165,12 @@ def execute_tools(state: ConversationState) -> ConversationState:
 
 
 def synthesize_answer(state: ConversationState) -> ConversationState:
-    """
-    Finalize the response after model produces text without tool calls.
-
-    This node:
-    - Updates turn count and timestamps
-    - Could apply post-processing if needed
-
-    Args:
-        state: Current conversation state
-
-    Returns:
-        Final state ready to return to user
-    """
+    """Finalize the response after model produces text without tool calls."""
     metadata = state.get("metadata", {})
     metadata["turn_count"] = metadata.get("turn_count", 0) + 1
     metadata["updated_at"] = datetime.now().isoformat()
     state["metadata"] = metadata
 
-    # Reset control flow
     state["should_continue"] = False
     state["current_tool_calls"] = []
     state["pending_tool_results"] = []
@@ -279,30 +178,19 @@ def synthesize_answer(state: ConversationState) -> ConversationState:
     return state
 
 
+# ARTIFACT EXTRACTION
 def _extract_artifacts(
     state: ConversationState,
     tool_name: str,
     args: Dict[str, Any],
     result: Any
 ) -> None:
-    """
-    Extract and store useful artifacts from tool results.
-
-    Artifacts are structured data that can be reused across turns,
-    such as computed probabilities or path information.
-
-    Args:
-        state: Current conversation state
-        tool_name: Name of the tool that was called
-        args: Arguments passed to the tool
-        result: Result returned by the tool
-    """
+    """Extract and store reusable artifacts from tool results."""
     artifacts = state.get("artifacts", {})
     if artifacts is None:
         artifacts = {}
         state["artifacts"] = artifacts
 
-    # Extract based on tool type
     if tool_name == "check_d_connected":
         from_node = args.get("from_node", "")
         to_node = args.get("to_node", "")
@@ -329,13 +217,11 @@ def _extract_artifacts(
     elif tool_name == "get_prob_node_given_any_evidence":
         node = args.get("node", "")
         evidence = args.get("evidence")
-        # Store as latest probability query
         artifacts["last_probability_query"] = {
             "node": node,
             "evidence": evidence,
             "result": result,
         }
-        # Also store with specific key
         evidence_key = json.dumps(evidence, sort_keys=True) if evidence else "none"
         key = f"prob_given:{node}|{evidence_key}"
         artifacts[key] = result
@@ -352,15 +238,9 @@ def _extract_artifacts(
         artifacts[key] = result
 
 
+# ROUTING FUNCTIONS
 def should_continue_to_tools(state: ConversationState) -> str:
-    """
-    Routing function to determine next step after call_model.
-
-    Returns:
-        - "execute_tools" if there are tool calls to execute
-        - "synthesize" if no tool calls (final answer)
-        - "error" if there's an error state
-    """
+    """Route after call_model: execute_tools / synthesize / error."""
     if state.get("error_state"):
         return "error"
 
@@ -371,12 +251,7 @@ def should_continue_to_tools(state: ConversationState) -> str:
 
 
 def should_continue_after_tools(state: ConversationState) -> str:
-    """
-    Routing function to determine next step after execute_tools.
-
-    Always returns to call_model to process tool results.
-    """
-    # Check turn limit
+    """Route after execute_tools: back to call_model or synthesize on turn limit."""
     metadata = state.get("metadata", {})
     max_turns = metadata.get("max_turns", 10)
     turn_count = metadata.get("turn_count", 0)
