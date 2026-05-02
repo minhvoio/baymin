@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from ollama_helper.ollama_helper import answer_this_prompt
+from llm_helper.llm_helper import answer_this_prompt
 from contextlib import contextmanager
 from bni_netica.bni_utils import findAllDConnectedNodes
 from bn_helpers.utils import (output_distribution, ensure_keys, logical_or, \

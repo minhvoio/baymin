@@ -1,5 +1,5 @@
-from ollama_helper.ollama_helper import answer_this_prompt
-from ollama_helper.structure_output import AnswerStructure
+from llm_helper.llm_helper import answer_this_prompt
+from llm_helper.structure_output import AnswerStructure
 from bn_helpers.bn_helpers import BnToolBox
 from bn_helpers.utils import get_path, grammar_plural
 import random as _random

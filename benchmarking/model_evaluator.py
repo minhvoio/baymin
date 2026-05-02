@@ -1,14 +1,14 @@
-from ollama_helper.ollama_helper import answer_this_prompt
-from ollama_helper.prompts import TAKE_QUIZ_PROMPT
+from llm_helper.llm_helper import answer_this_prompt
+from llm_helper.prompts import TAKE_QUIZ_PROMPT
 from bn_helpers.bn_helpers import BnToolBox
-from ollama_helper.structure_output import QuizAnswer
+from llm_helper.structure_output import QuizAnswer
 from bn_helpers.get_structures_print_tools import get_BN_structure, getNetCPTStrings
 from bn_helpers.tool_agent import get_answer_from_tool_agent
 from benchmarking.quiz_generator import (create_dependency_quiz, create_common_cause_quiz, create_common_effect_quiz, create_blocked_evidence_quiz, 
 create_evidence_change_relationship_quiz, create_probability_quiz, create_highest_impact_evidence_quiz)
 from benchmarking.benchmarking_utils import (pick_two_random_nodes, fake_random_nodes, 
 get_random_number_of_nodes, pick_one_random_node, generate_evidence_nodes, log_test_result, log_for_baymin_testing, get_completed_questions)
-from ollama_helper.ollama_helper import get_answer_from_ollama, get_quiz_answer_from_thinking_model_sync
+from llm_helper.llm_helper import get_answer_from_ollama, get_quiz_answer_from_thinking_model_sync
 import asyncio
 import time
 from bn_helpers.constants import MODEL, MODEL_QUIZ

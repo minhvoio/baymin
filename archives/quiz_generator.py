@@ -1,4 +1,4 @@
-from ollama_helper.ollama_helper import answer_this_prompt
+from llm_helper.llm_helper import answer_this_prompt
 from bn_helpers.bn_helpers import AnswerStructure, BnToolBox
 from bn_helpers.utils import get_path
 import random as _random

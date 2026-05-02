@@ -1,8 +1,37 @@
+import os
 import math
 import numpy as np
 from contextlib import contextmanager
 from itertools import product
 from bni_netica import *
+from bn_helpers.constants import MODEL, LLM_PROVIDER, OLLAMA_URL
+
+
+def get_model(model_name=None):
+    name = model_name or MODEL
+
+    if LLM_PROVIDER == "openai":
+        from pydantic_ai.models.openai import OpenAIChatModel
+        from pydantic_ai.providers.openai import OpenAIProvider
+        return OpenAIChatModel(
+            model_name=name,
+            provider=OpenAIProvider(api_key=os.getenv("OPENAI_API_KEY")),
+        )
+
+    if LLM_PROVIDER == "anthropic":
+        from pydantic_ai.models.anthropic import AnthropicModel
+        from pydantic_ai.providers.anthropic import AnthropicProvider
+        return AnthropicModel(
+            model_name=name,
+            provider=AnthropicProvider(api_key=os.getenv("ANTHROPIC_API_KEY")),
+        )
+
+    from pydantic_ai.models.ollama import OllamaModel
+    from pydantic_ai.providers.ollama import OllamaProvider
+    return OllamaModel(
+        model_name=name,
+        provider=OllamaProvider(base_url=OLLAMA_URL + "v1"),
+    )
 
 def names(nodes):
   return {n.name() for n in nodes}

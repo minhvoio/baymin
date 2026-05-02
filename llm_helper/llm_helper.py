@@ -2,10 +2,9 @@ import requests, json
 from IPython.display import display, Markdown, clear_output
 import asyncio
 from pydantic_ai import Agent
-from pydantic_ai.models.openai import OpenAIChatModel
-from pydantic_ai.providers.ollama import OllamaProvider
-from bn_helpers.constants import MODEL, OLLAMA_URL
-from ollama_helper.structure_output import AnswerStructure, QuizAnswer
+from bn_helpers.constants import MODEL
+from bn_helpers.utils import get_model
+from llm_helper.structure_output import AnswerStructure, QuizAnswer
 try:
     import nest_asyncio
     nest_asyncio.apply()
@@ -229,11 +228,7 @@ def get_quiz_answer_from_thinking_model_sync(prompt, model=MODEL, max_tokens=100
         )
 
 async def _run_ollama_agent(prompt, model, max_tokens, temperature, output_type, stream=False, top_p=None, seed=None):
-    ollama_model = OpenAIChatModel(
-        model_name=model,
-        provider=OllamaProvider(base_url=OLLAMA_URL + 'v1'),  
-    )
-    agent = Agent(ollama_model, output_type=output_type)
+    agent = Agent(get_model(model), output_type=output_type)
     return await agent.run(
         prompt,
         model_settings={
